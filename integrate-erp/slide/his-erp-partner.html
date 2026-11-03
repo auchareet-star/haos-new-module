@@ -444,9 +444,9 @@ th,td{text-align:left;vertical-align:top}
 <section class="slide">
   <div class="head"><div><h2>สิ่งที่อยากได้จากการคุยครั้งนี้</h2><p class="sub">เอกสารนี้เป็นข้อเสนอเริ่มต้นจากฝั่ง HIS ทุกข้อปรับได้ตามความสามารถของ ERP</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
   <div class="body"><div class="vpn">
-    <div class="card o-v"><div class="big">1</div><h4>ตกลงขอบเขต</h4><p>interface ไหนต้องเชื่อม ทิศทางไหน และข้อมูลชุดไหนระบบใดเป็นเจ้าของ</p><div class="go">หน้า 4–7</div></div>
-    <div class="card o-p"><div class="big">2</div><h4>ตกลงรูปแบบ API</h4><p>flow ของแต่ละเรื่อง field ที่ส่งและที่ตอบกลับ สัญญาข้อความกลาง การยืนยันตัวตน และการจัดการ error</p><div class="go">หน้า 8–17</div></div>
-    <div class="card o-n"><div class="big">3</div><h4>วางขั้นต่อไป</h4><p>API spec สภาพแวดล้อมทดสอบ workshop ตาราง mapping และ PoC</p><div class="go">หน้า 18</div></div>
+    <div class="card o-v"><div class="big">1</div><h4>ตกลงขอบเขต</h4><p>interface ไหนต้องเชื่อม ทิศทางไหน และข้อมูลชุดไหนระบบใดเป็นเจ้าของ</p><div class="go">หน้า 4–7 · 16–20</div></div>
+    <div class="card o-p"><div class="big">2</div><h4>ตกลงรูปแบบ API</h4><p>flow ของแต่ละเรื่อง field ที่ส่งและที่ตอบกลับ สัญญาข้อความกลาง การยืนยันตัวตน และการจัดการ error</p><div class="go">หน้า 8–15 · 21–22</div></div>
+    <div class="card o-n"><div class="big">3</div><h4>วางขั้นต่อไป</h4><p>API spec สภาพแวดล้อมทดสอบ workshop ตาราง mapping และ PoC</p><div class="go">หน้า 23</div></div>
   </div></div>
 </section>
 
@@ -469,8 +469,8 @@ th,td{text-align:left;vertical-align:top}
     <tr><td class="k">ผู้ขาย PO รับของ ต้นทุน</td><td><span class="own-erp">ERP</span></td><td>HIS รับรายการรับของ (lot ราคาทุน วันหมดอายุ) มาเข้าคลัง</td></tr>
     <tr><td class="k">วัสดุ / ยา และหน่วยนับ</td><td><span class="own-erp">ERP</span></td><td>HIS ผูกรหัสวัสดุของ ERP เข้ากับรายการค่าใช้จ่ายของตัวเอง</td></tr>
     <tr><td class="k">คลังย่อย การเบิก การจ่ายยาผู้ป่วย</td><td><span class="own-his">HIS</span></td><td>ERP รับการตัดจ่ายและการโอนไปลดสต็อกและบันทึกต้นทุน</td></tr>
-    <tr><td class="k">บุคลากร แพทย์ หน่วยงาน</td><td><span class="own-hr">HR</span></td><td>HIS ใช้ทำผู้ใช้ระบบ แพทย์ผู้รักษา และหน่วยงาน</td></tr>
-    <tr><td class="k">ค่าตอบแทนแพทย์ (DF)</td><td><span class="own-his">HIS</span> คำนวณ</td><td>Payroll จ่ายแพทย์ในสังกัด ส่วน AP ของ ERP จ่ายแพทย์ภายนอกและบันทึกค่าใช้จ่าย</td></tr>
+    <tr><td class="k">บุคลากร แพทย์ หน่วยงาน</td><td><span class="own-hr">HRM</span></td><td>HRM ของอโยเดีย (หรือ HR ของ ERP ตามที่ตกลง) · HIS ใช้ทำผู้ใช้ระบบ แพทย์ผู้รักษา และหน่วยงาน</td></tr>
+    <tr><td class="k">ค่าตอบแทนแพทย์ (DF)</td><td><span class="own-his">HIS</span> คำนวณ</td><td>HIS ส่งยอดให้ HRM จ่ายพร้อมเงินเดือนและหักภาษี แล้ว HRM ส่งบัญชีเงินเดือนเข้า ERP</td></tr>
   </table></div></div>
 </section>
 
@@ -487,7 +487,7 @@ th,td{text-align:left;vertical-align:top}
 <rect class="vm" x="240" y="20" width="220" height="410" rx="10"/><text class="t" x="350" y="48" text-anchor="middle">Integration Layer</text><text class="s" x="350" y="66" text-anchor="middle">อโยเดียพัฒนาและดูแล</text>
 <text class="s" x="258" y="104">① ยืนยันตัวตน · rate limit</text><text class="s" x="258" y="136">② แปลง JSON กลาง ⇄ ภาษา ERP</text><text class="s" x="258" y="168">③ mapping รหัส</text><text class="s" x="258" y="200">④ queue · retry · dead letter</text><text class="s" x="258" y="232">⑤ กันส่งซ้ำด้วยเลขเอกสาร HIS</text><text class="s" x="258" y="264">⑥ log ข้อความดิบ · audit</text><text class="s" x="258" y="296">⑦ กระจายไปทุก site</text><text class="s" x="258" y="328">⑧ รายงานกระทบยอดรายวัน</text><text class="s" x="258" y="360">⑨ แจ้งเตือนเมื่อค้าง</text>
 <rect class="ext" x="530" y="20" width="170" height="230" rx="10"/><text class="t" x="615" y="48" text-anchor="middle">ERP</text><text class="s" x="615" y="70" text-anchor="middle">GL · AR · AP</text><text class="s" x="615" y="90" text-anchor="middle">PO · คลังกลาง · งบ</text><text class="s" x="615" y="130" text-anchor="middle">ผ่าน adapter ของ</text><text class="s" x="615" y="150" text-anchor="middle">ERP: SOAP / REST / file</text>
-<rect class="ext" x="530" y="280" width="170" height="150" rx="10"/><text class="t" x="615" y="308" text-anchor="middle">HR / Payroll</text><text class="s" x="615" y="330" text-anchor="middle">บุคลากร · DF</text>
+<rect class="ext" x="530" y="280" width="170" height="150" rx="10"/><text class="t" x="615" y="308" text-anchor="middle">HRM</text><text class="s" x="615" y="330" text-anchor="middle">ของอโยเดีย</text><text class="s" x="615" y="350" text-anchor="middle">บุคลากร · DF</text><text class="s" x="615" y="370" text-anchor="middle">เงินเดือน → ERP</text>
 <path class="ln" d="M156 228 H238" marker-end="url(#ah2)"/><text class="lbl" x="197" y="220" text-anchor="middle">async</text>
 <path class="ln dash" d="M238 350 H158" marker-end="url(#ah2)"/><text class="lbl" x="197" y="342" text-anchor="middle">push</text>
 <path class="ln" d="M460 120 H528" marker-end="url(#ah2)"/><path class="ln dash" d="M528 190 H462" marker-end="url(#ah2)"/>
@@ -570,7 +570,7 @@ th,td{text-align:left;vertical-align:top}
 </section>
 
 <section class="slide">
-  <div class="head"><div><div class="sec">ขอบเขต</div><h2>รายการ interface</h2><p class="sub"><span class="chg same">มีต้นแบบ</span> ใช้งานจริงแล้วกับ ERP เดิม · <span class="chg new">ใหม่</span> ยังต้องออกแบบร่วมกัน</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
+  <div class="head"><div><div class="sec">ขอบเขต</div><h2>รายการ interface</h2><p class="sub"><span class="chg same">มีต้นแบบ</span> ใช้งานจริงแล้วกับ ERP เดิม · รายการที่เสนอเพิ่มอยู่หน้า 19</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
   <div class="body"><div class="card"><table class="tbl it">
     <tr><th>รหัส</th><th>เรื่อง</th><th>ทิศทาง</th><th>เกิดเมื่อ</th><th>จังหวะ</th><th></th></tr>
     <tr><td class="k mono">GLI01</td><td>ส่งบัญชี GL</td><td class="mono">HIS → ERP</td><td>สั่งส่งเอกสารการเงินที่อนุมัติแล้ว</td><td>ทันที รอผล</td><td><span class="chg same">มีต้นแบบ</span></td></tr>
@@ -581,9 +581,7 @@ th,td{text-align:left;vertical-align:top}
     <tr><td class="k mono">MMI04</td><td>บิลเตรียมจ่ายเจ้าหนี้</td><td class="mono">HIS → ERP</td><td>ยืนยันบิล Dental Lab / วัสดุพิเศษ</td><td>ทันที รอผล</td><td><span class="chg same">มีต้นแบบ</span></td></tr>
     <tr><td class="k mono">Master × 7</td><td>บุคลากร วัสดุ หน่วยนับ ผู้ขาย ศูนย์ต้นทุน IO functional area</td><td class="mono">ERP → HIS</td><td>ข้อมูลเปลี่ยนใน ERP</td><td>push</td><td><span class="chg same">มีต้นแบบ</span></td></tr>
     <tr><td class="k mono">MMO03</td><td>รับของจาก PO / จ่ายตามใบเบิก</td><td class="mono">ERP → HIS</td><td>รับหรือจ่ายของใน ERP</td><td>push</td><td><span class="chg same">มีต้นแบบ</span></td></tr>
-    <tr><td class="k">ค่าตอบแทนแพทย์</td><td>ยอด DF รายแพทย์รายงวด</td><td class="mono">HIS → Payroll / AP</td><td>ปิดงวด DF</td><td>รอบเดือน</td><td><span class="chg new">ใหม่</span></td></tr>
-    <tr><td class="k">งบประมาณ</td><td>ตรวจและกันงบตอนขอซื้อ</td><td class="mono">HIS ⇄ ERP</td><td>ขอซื้อเริ่มที่ HIS</td><td>ทันที</td><td><span class="chg new">ใหม่</span></td></tr>
-  </table></div></div>
+          </table></div></div>
 </section>
 
 <section class="slide">
@@ -910,6 +908,81 @@ th,td{text-align:left;vertical-align:top}
 </section>
 
 <section class="slide">
+  <style>
+.cyc{display:flex;flex-direction:column;gap:10px;flex:1}
+.cyc .row{display:grid;grid-template-columns:138px 1fr;gap:12px;align-items:center}
+.cyc .lab{font-weight:700;color:var(--navy);font-size:15px;line-height:1.25}
+.cyc .lab small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.cyc .ch{display:flex;align-items:stretch}
+.cyc .st{flex:1;border-radius:9px;padding:6px 10px;font-size:12.5px;line-height:1.3;border:1.5px solid var(--rule);background:var(--card);color:var(--ink-2)}
+.cyc .st b{display:block;font-size:13.5px;color:var(--ink)}
+.cyc .st .c{display:inline-block;margin-top:3px;font:700 11px var(--f-mono);padding:1px 6px;border-radius:5px}
+.cyc .st.post{background:var(--blue-soft);border-color:var(--blue)}
+.cyc .st.post .c{background:var(--navy);color:#fff}
+.cyc .st.trk{background:var(--slate-soft)}
+.cyc .st.trk .c{background:var(--rule);color:var(--ink-2)}
+.cyc .st.gap{background:var(--red-soft);border:1.5px dashed var(--red)}
+.cyc .st.gap .c{background:var(--red);color:#fff}
+.cyc .st.erp{background:var(--indigo-soft);border-color:var(--indigo)}
+.cyc .st.erp .c{background:var(--indigo);color:#fff}
+.cyc .st.hrm{background:var(--teal-soft);border-color:var(--teal)}
+.cyc .st.hrm .c{background:var(--teal);color:#fff}
+.cyc .ar{flex:none;width:20px;align-self:center;text-align:center;color:var(--muted);font-size:15px}
+.cyc .lg{display:flex;gap:18px;font-size:12.5px;color:var(--ink-2);margin-top:2px;padding-left:150px}
+.cyc .lg span{display:inline-flex;align-items:center;gap:6px}
+.cyc .lg i{width:18px;height:12px;border-radius:3px;display:inline-block;border:1.5px solid}
+.lv{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.lv .card{padding:14px 18px;border-top:6px solid var(--oc);display:flex;flex-direction:column;gap:6px}
+.lv .n{font:800 30px var(--f-body);color:var(--oc)}
+.lv h4{margin:0;font-size:17px}
+.lv p{margin:0;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+.lv .when{margin-top:auto;font-size:12.5px;font-weight:700;color:var(--navy)}
+.gp td{vertical-align:top}
+</style>
+  <div class="head"><div><div class="sec">วงจรเงินและต้นทุน</div><h2>วงจรเงินระหว่าง HIS, HRM และ ERP</h2><p class="sub">HIS เป็นที่เกิดรายการ ERP เป็นสมุดบัญชี ขั้นที่มีผลทางบัญชีต้องไปถึง ERP ส่วนขั้นติดตามอยู่ใน HIS ได้</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
+  <div class="body"><div class="card cyc" style="padding:16px 18px"><div class="row"><div class="lab">ผู้ป่วยจ่ายเอง<small>เงินสด โอน บัตร QR</small></div><div class="ch"><div class="st trk"><b>รับบริการ</b>HIS คิดค่ารักษาตามสิทธิ<span class="c">ไม่ลงบัญชี</span></div><div class="ar">→</div><div class="st post"><b>ออกใบเสร็จ</b>รายได้ + เงินสด/ธนาคาร<span class="c">ส่งแล้ว</span></div><div class="ar">→</div><div class="st post"><b>ยกเลิกใบเสร็จ</b>กลับรายการ<span class="c">ส่งแล้ว</span></div><div class="ar">→</div><div class="st gap"><b>ยอดรับเงินรายวัน</b>แยกช่องทาง ไว้กระทบ statement<span class="c">ยังไม่มี</span></div></div></div><div class="row"><div class="lab">เงินมัดจำ<small>ผู้ป่วยใน / หัตถการ</small></div><div class="ch"><div class="st post"><b>รับเงินมัดจำ</b>เงินรับล่วงหน้า<span class="c">ส่งแล้ว</span></div><div class="ar">→</div><div class="st post"><b>หักค่ารักษา</b>โอนเป็นรายได้<span class="c">ส่งแล้ว</span></div><div class="ar">→</div><div class="st post"><b>คืนเงินส่วนเหลือ</b>ผ่านใบเสร็จ / ยกเลิก<span class="c">ส่งแล้ว</span></div></div></div><div class="row"><div class="lab">ลูกหนี้สิทธิ<small>กองทุน บริษัทคู่สัญญา</small></div><div class="ch"><div class="st post"><b>ตั้งหนี้</b>ลูกหนี้ + รายได้<span class="c">ส่งแล้ว</span></div><div class="ar">→</div><div class="st trk"><b>ส่งเบิก</b>สถานะติดตาม<span class="c">ไม่ลงบัญชี</span></div><div class="ar">→</div><div class="st trk"><b>วางบิล</b>สถานะติดตาม<span class="c">ไม่ลงบัญชี</span></div><div class="ar">→</div><div class="st gap"><b>ถูกตัดยอด / ปฏิเสธ</b>ปรับลด / ตัดจำหน่าย<span class="c">ยังไม่มี</span></div><div class="ar">→</div><div class="st post"><b>รับเงิน ตัดหนี้</b>ล้างลูกหนี้<span class="c">ส่งแล้ว</span></div></div></div><div class="row"><div class="lab">ปิดสิ้นเดือน<small>งานของฝ่ายบัญชี</small></div><div class="ch"><div class="st gap"><b>ผู้ป่วยในยังไม่จำหน่าย</b>รายได้ค้างรับ ณ สิ้นเดือน<span class="c">ยังไม่มี</span></div><div class="ar">→</div><div class="st trk"><b>ยอดลูกหนี้ค้างตามคู่สัญญา</b>แยกสถานะ ส่งเบิก / วางบิล / ปฏิเสธ<span class="c">รายงาน · ยังไม่มี</span></div><div class="ar">→</div><div class="st gap"><b>ปริมาณงานรายหน่วยงาน</b>visit วันนอน หัตถการ ใช้คิดต้นทุน<span class="c">ยังไม่มี</span></div></div></div><div class="row"><div class="lab">วัสดุ ยา เจ้าหนี้<small>จัดซื้ออยู่ใน ERP</small></div><div class="ch"><div class="st erp"><b>PO · รับของ</b>ทำใน ERP แล้วส่งให้ HIS<span class="c">ERP → HIS</span></div><div class="ar">→</div><div class="st post"><b>เบิก โอน จ่ายยา</b>ต้นทุนตามหน่วยงาน<span class="c">ส่งแล้ว</span></div><div class="ar">→</div><div class="st post"><b>บิลแล็บ / วัสดุพิเศษ</b>ตั้งเจ้าหนี้รอจ่าย<span class="c">ส่งแล้ว</span></div></div></div><div class="row"><div class="lab">แพทย์ บุคลากร<small>HRM ของอโยเดีย</small></div><div class="ch"><div class="st trk"><b>คำนวณ DF</b>HIS ตามหัตถการและเวร<span class="c">ใน HIS</span></div><div class="ar">→</div><div class="st gap"><b>ส่งยอด DF</b>HIS → HRM รายงวด<span class="c">ยังไม่มี</span></div><div class="ar">→</div><div class="st hrm"><b>จ่ายพร้อมเงินเดือน</b>HRM หักภาษี ณ ที่จ่าย<span class="c">HRM</span></div><div class="ar">→</div><div class="st gap"><b>บัญชีเงินเดือน · ค่าแรง</b>HRM → ERP ตามหน่วยงาน<span class="c">ต้องยืนยัน</span></div></div></div><div class="lg"><span><i style="background:var(--blue-soft);border-color:var(--blue)"></i>ส่งเข้า ERP แล้ว</span><span><i style="background:var(--slate-soft);border-color:var(--rule)"></i>ข้อมูลติดตาม ไม่ใช่รายการบัญชี</span><span><i style="background:var(--red-soft);border-color:var(--red);border-style:dashed"></i>ยังไม่มี · เสนอเพิ่ม</span><span><i style="background:var(--indigo-soft);border-color:var(--indigo)"></i>เกิดใน ERP</span><span><i style="background:var(--teal-soft);border-color:var(--teal)"></i>เกิดใน HRM</span></div></div></div>
+</section>
+
+<section class="slide">
+  <div class="head"><div><div class="sec">วงจรเงินและต้นทุน</div><h2>ERP ต้องแปลงรหัสของ HIS เป็นเลขบัญชีเอง</h2><p class="sub">ทุกบรรทัดบัญชีที่ HIS ส่งไปมีรหัสจำแนกชุดนี้ ERP ต้องมีตาราง mapping ของแต่ละรหัส</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
+  <div class="body"><div class="rgrid" style="grid-template-columns:1.5fr 1fr">
+    <div class="card"><table class="tbl it">
+      <tr><th>รหัสที่ HIS ส่ง</th><th>ความหมาย</th><th>ERP ใช้แปลงเป็น</th></tr><tr><td class="k mono">revenueCenter</td><td>คลินิก / หน่วยบริการ</td><td>ศูนย์ต้นทุน · profit center</td></tr><tr><td class="k mono">transactionType · lineType</td><td>ประเภทธุรกรรม · ประเภทบรรทัด</td><td>บัญชีรายได้ ลูกหนี้ หรือเงินรับล่วงหน้า</td></tr><tr><td class="k mono">rightCode</td><td>สิทธิการรักษา</td><td>บัญชีลูกหนี้ตามกองทุน / คู่สัญญา</td></tr><tr><td class="k mono">activityCode</td><td>กิจกรรม / หมวดค่าใช้จ่าย</td><td>บัญชีรายได้ย่อยตามหมวด</td></tr><tr><td class="k mono">receiveType</td><td>ช่องทางรับเงิน</td><td>บัญชีเงินสด ธนาคาร บัตร QR</td></tr><tr><td class="k mono">visitType · debtorType</td><td>OPD / IPD · ประเภทลูกหนี้</td><td>แยกบัญชี OPD / IPD และลูกหนี้</td></tr><tr><td class="k mono">doctorGroup · specialty</td><td>กลุ่มแพทย์ · สาขา</td><td>มิติรายงาน</td></tr><tr><td class="k mono">shift</td><td>เวรที่รับเงิน</td><td>กระทบยอดรายเวร</td></tr>
+    </table></div>
+    <div class="card box3"><h4><i style="background:var(--amber)">!</i>สิ่งที่ต้องรู้</h4><ul>
+      <li>HIS <b>ไม่ส่งเลขบัญชีและ cost center</b> ส่งรหัสธุรกิจแต่ละบรรทัดแทน</li>
+      <li>ERP เป็นเจ้าของผังบัญชี จึงเป็นฝ่ายแปลงรหัสเป็นเลขบัญชี</li>
+      <li>HIS ส่ง master ของรหัสทุกชุดให้ ERP ได้ เพื่อใช้ตั้งตาราง</li>
+      <li>รหัสใหม่ใน HIS ที่ยังไม่มีในตาราง ERP ต้องตอบ error รายบรรทัด ห้ามลงบัญชีพัก</li>
+      <li>ทำตารางร่วมกับฝ่ายบัญชีของโรงพยาบาล ก่อนเริ่ม PoC</li></ul></div>
+  </div></div>
+</section>
+
+<section class="slide">
+  <div class="head"><div><div class="sec">วงจรเงินและต้นทุน</div><h2>การคิดต้นทุน: ทำได้เมื่อไรและใช้ข้อมูลจากไหน</h2><p class="sub">ต้องทำระดับ 1 ให้ได้ก่อน และระดับ 1 ทำได้หลังปิดบัญชีสิ้นเดือน เพราะค่าใช้จ่ายหลายตัวรู้ยอดจริงตอนนั้น</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
+  <div class="body" style="gap:12px"><div class="lv">
+    <div class="card o-v"><div class="n">1</div><h4>ต้นทุนรายหน่วยงาน</h4><p>รวมต้นทุนทางตรงของแต่ละหน่วย แล้วกระจายต้นทุนหน่วยสนับสนุน (ซักฟอก โภชนาการ ธุรการ) ไปหน่วยบริการตามเกณฑ์ เช่น กิโลผ้า มื้ออาหาร จำนวนคน</p><div class="when">หลังปิดเดือน · ทำใน ERP (CO)</div></div>
+    <div class="card o-p"><div class="n">2</div><h4>ต้นทุนต่อหน่วยบริการ</h4><p>ต้นทุนหน่วยงาน ÷ ปริมาณงาน เช่น ต้นทุนต่อ visit ต่อวันนอน ต่อการผ่าตัด</p><div class="when">หลังข้อ 1 · ERP หรือระบบรายงานกลาง</div></div>
+    <div class="card o-n"><div class="n">3</div><h4>ต้นทุนรายผู้ป่วย / ราย DRG</h4><p>ต้นทุนต่อหน่วยคูณกับสิ่งที่ผู้ป่วยแต่ละคนใช้ ใช้ดูกำไรขาดทุนราย case และต่อรองราคากับกองทุน</p><div class="when">ERP ส่งต้นทุนต่อหน่วยกลับมา · คำนวณฝั่ง HIS</div></div>
+  </div>
+  <div class="card"><table class="tbl it">
+    <tr><th>ข้อมูลที่ต้องใช้</th><th>แหล่ง</th><th>ถึง ERP แล้วหรือยัง</th></tr><tr><td>ค่าแรง เงินเดือน DF</td><td><span class="own-hr">HRM</span></td><td>HRM → ERP ต้องยืนยัน</td></tr><tr><td>วัสดุ ยาที่หน่วยงานใช้</td><td><span class="own-his">HIS</span></td><td>ส่งแล้ว</td></tr><tr><td>รายได้ตามคลินิก</td><td><span class="own-his">HIS</span></td><td>ส่งแล้ว · revenueCenter</td></tr><tr><td>ค่าเสื่อม สาธารณูปโภค จัดซื้อ</td><td><span class="own-erp">ERP</span></td><td>อยู่ใน ERP</td></tr><tr><td>ปริมาณงาน visit วันนอน หัตถการ lab กิโลผ้า มื้ออาหาร</td><td><span class="own-his">HIS</span></td><td><b style="color:var(--red)">ยังไม่มี</b></td></tr>
+  </table></div></div>
+</section>
+
+<section class="slide">
+  <div class="head"><div><div class="sec">วงจรเงินและต้นทุน</div><h2>รายการที่เสนอเพิ่ม 7 เรื่อง</h2><p class="sub">ทุกเรื่องใช้โครงข้อความกลางเดียวกับ interface อื่น · คอลัมน์ขวาคือสิ่งที่เกิดถ้าไม่ทำ</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
+  <div class="body"><div class="card"><table class="tbl it gp">
+    <tr><th>เรื่อง</th><th>ทิศทาง</th><th>เกิดเมื่อ</th><th>ข้อมูลหลัก</th><th>ถ้าไม่ทำ</th></tr><tr><td colspan="5" style="background:var(--slate-soft);font-weight:700;color:var(--navy)">ทำให้ยอดตรงกัน</td></tr><tr><td class="k">ส่งยอด DF ให้ HRM</td><td class="mono">HIS → HRM</td><td>ปิดงวด DF</td><td>แพทย์ · งวด · ยอด · ประเภทเวร · หน่วยงาน</td><td>HRM จ่ายไม่ได้ หรือต้องกรอกยอดเอง</td></tr><tr><td class="k">บัญชีเงินเดือน · ค่าแรง</td><td class="mono">HRM → ERP</td><td>ปิดงวดเงินเดือน</td><td>ยอดตามบัญชีและศูนย์ต้นทุน</td><td>ค่าแรงไม่อยู่ในต้นทุนหน่วยงาน</td></tr><tr><td class="k">ปรับยอดลูกหนี้ที่เบิกไม่ได้</td><td class="mono">HIS → ERP</td><td>เมื่อบันทึกผลปฏิเสธ / ตัดยอด</td><td>เลขหนี้ · สิทธิ · ยอดปรับ · เหตุผล</td><td>ลูกหนี้ใน ERP ค้างสูงกว่า HIS</td></tr><tr><td class="k">รายได้ค้างรับผู้ป่วยใน</td><td class="mono">HIS → ERP</td><td>สิ้นเดือน · กลับรายการต้นเดือน</td><td>ยอดตามสิทธิและหน่วยงาน</td><td>รายได้เดือนนั้นต่ำกว่าจริง</td></tr><tr><td colspan="5" style="background:var(--slate-soft);font-weight:700;color:var(--navy)">ของเสริม</td></tr><tr><td class="k">ยอดรับเงินรายวัน</td><td class="mono">HIS → ERP</td><td>ปิดวัน</td><td>วันที่ · ช่องทาง · ยอด · จำนวนใบ</td><td>กระทบ statement ด้วยมือ</td></tr><tr><td class="k">ยอดลูกหนี้ค้างตามคู่สัญญา</td><td class="mono">HIS → ERP</td><td>สิ้นเดือน (รายงาน)</td><td>คู่สัญญา · สถานะ · อายุหนี้ · ยอด</td><td>ตั้งค่าเผื่อหนี้สูญไม่ได้</td></tr><tr><td class="k">ปริมาณงานรายหน่วยงาน</td><td class="mono">HIS → ERP</td><td>สิ้นเดือน</td><td>หน่วยงาน · ตัวชี้วัด · จำนวน</td><td>คิดต้นทุนระดับ 2–3 ไม่ได้</td></tr>
+  </table></div></div>
+</section>
+
+<section class="slide">
+  <div class="head"><div><div class="sec">วงจรเงินและต้นทุน</div><h2>เรื่องวงจรเงินที่ต้องตกลงร่วมกัน</h2><p class="sub">คำตอบแต่ละข้อเปลี่ยนจำนวน interface ในหน้าก่อน</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
+  <div class="body"><div class="qlist" style="grid-template-columns:1fr 1fr"><div class="card qrow"><div class="n">1</div><div class="t">ใครกดขอซื้อ และขอในระบบไหน<span class="hint">ถ้าหน่วยงานขอซื้อจาก HIS ต้องเพิ่มการถามงบคงเหลือจาก ERP ก่อนส่ง (ตรวจและกันงบ) ถ้าขอใน ERP ไม่ต้องเชื่อม</span><span class="why">กำหนดว่าต้องมี interface งบหรือไม่</span></div></div><div class="card qrow"><div class="n">2</div><div class="t">แพทย์ที่ไม่ใช่พนักงาน จ่ายทางไหน<span class="hint">จ่ายผ่าน HRM เหมือนแพทย์ในสังกัด หรือตั้งเจ้าหนี้ใน ERP แทน · หักภาษีที่ระบบใด</span><span class="why">DF มีปลายทางเดียวหรือสองทาง</span></div></div><div class="card qrow"><div class="n">3</div><div class="t">master พนักงานต้นทางอยู่ที่ไหน<span class="hint">HRM ของอโยเดีย หรือ HR ของ ERP · ถ้าเป็น HRM ต้องย้ายต้นทางของข้อมูลบุคลากร</span><span class="why">ทิศทาง master บุคลากร</span></div></div><div class="card qrow"><div class="n">4</div><div class="t">คิดต้นทุนถึงระดับไหน<span class="hint">ระดับ 1 หน่วยงาน · 2 ต่อหน่วยบริการ · 3 รายผู้ป่วย / DRG · ใช้เกณฑ์กระจายตัวไหน</span><span class="why">จำนวนตัวชี้วัดที่ HIS ต้องส่ง</span></div></div><div class="card qrow"><div class="n">5</div><div class="t">รายได้ค้างรับและหนี้ที่เบิกไม่ได้ บันทึกอย่างไร<span class="hint">ส่งเป็นรายการบัญชีอัตโนมัติ หรือฝ่ายบัญชีบันทึกเองจากรายงาน HIS</span><span class="why">มี interface ใหม่หรือแค่รายงาน</span></div></div><div class="card qrow"><div class="n">6</div><div class="t">HRM ส่งบัญชีเงินเดือนผ่านเส้นไหน<span class="hint">ผ่าน Integration Layer ตัวเดียวกับ HIS หรือต่อ ERP ตรง</span><span class="why">จุดดูแลและ log รวมที่เดียว</span></div></div></div></div>
+</section>
+
+<section class="slide">
   <div class="head"><div><div class="sec">สัญญาข้อความ</div><h2>โครงข้อความกลางที่เสนอ</h2><p class="sub">ใช้โครงเดียวกันทุก interface และทั้งสองทิศทาง ต่างกันแค่ field ใน items ตามหน้าก่อนหน้า</p></div><span class="logo" role="img" aria-label="Ayodia"></span></div>
   <div class="body"><div class="three" style="grid-template-columns:1fr 1fr 1.1fr">
     <div class="card pcard"><div class="plh"><span class="dir out">ส่งไป</span>request</div><pre class="json">{
@@ -970,7 +1043,7 @@ th,td{text-align:left;vertical-align:top}
       <li><b>ระดับการส่งบัญชี</b> บรรทัด GL สรุป หรือเอกสารลูกหนี้รายใบใน ERP</li>
       <li><b>เจ้าของ PR / PO และคลังกลาง</b> อยู่ที่ระบบเดียว</li>
       <li><b>การจ่ายยา</b> สรุปรายวัน หรือ real-time</li>
-      <li><b>ค่าตอบแทนแพทย์</b> จ่ายผ่าน Payroll หรือ AP และหักภาษีที่ระบบใด</li>
+      <li><b>เรื่องวงจรเงินและต้นทุน</b> 6 ข้อในหน้า 20</li>
       <li><b>adapter</b> อยู่ฝั่ง Integration Layer หรือฝั่ง ERP</li>
       <li><b>ยกเลิก กลับรายการ ปิดงวด</b> ทำอย่างไร</li></ul></div>
     <div class="card box3"><h4><i style="background:var(--teal)">→</i>ขั้นต่อไป</h4><ul class="nsteps">

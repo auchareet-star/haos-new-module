@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ใบยา Refill OPD</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
 <style>
 /* Styled after HA.OS itself: white portlets on #f2f3f8, black/grey controls, green #419700 accent. Single light look to match the real product. */
 :root{
@@ -40,7 +41,7 @@ code{font-family:Consolas,monospace;font-size:13px;background:var(--soft);border
 .guide h2{font-size:19px;margin-bottom:4px}
 .guide p{margin:4px 0 0;color:var(--ink)}
 .guide .who{display:inline-block;font-size:12px;font-weight:700;border-radius:3px;padding:0 8px;margin-right:6px;color:#fff;background:#111}
-.guide .who.ph{background:var(--blue)}
+.guide .who.phx{background:var(--blue)}
 
 /* portlet */
 .port{background:var(--paper);border-radius:4px;box-shadow:0 0 13px rgba(82,63,105,.05)}
@@ -142,14 +143,146 @@ tr.dim td{color:#aaa}
 ul.tight{margin:4px 0;padding-left:20px}
 ul.tight li{margin:2px 0}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}
+
+/* ===== HA.OS app frame: values copied from WebClient assets/sass/custom (theme ehr-12 default, ehr-13 black) ===== */
+.hx{--main:#4600BF;--soft:#E9DCFF;--dark:#24008A;--bdin:#9F8BC2;--hline:#ebedf2;background:#f3f3f3;color:#595d6e;font:16px/1.5 "Sarabun",sans-serif;border:1px solid #d9d9d9;border-radius:6px;overflow:hidden;position:relative}
+body.th-black .hx{--main:#000;--soft:#dedede;--dark:#000;--bdin:#000}
+.hx *{box-sizing:border-box}
+.hx-top{height:56px;background:#fff;display:flex;align-items:center;gap:14px;padding:0 20px;border-bottom:1px solid var(--hline)}
+.hx-top .lg{width:34px;height:34px;border-radius:50%;background:var(--main);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:700}
+.hx-top .mn{display:flex;gap:4px;flex-wrap:wrap}
+.hx-top .mn span{padding:6px 12px;border-radius:4px;font-size:15px;color:#6c7293}
+.hx-top .mn span.on{background:var(--soft);color:var(--main);font-weight:500}
+.hx-top .us{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px}
+.hx-top .us i{font-size:26px;color:var(--main)}
+.hx-sub{display:flex;align-items:center;gap:8px;padding:10px 20px;font-size:14px;color:#959cb6}
+.hx-sub b{font-size:19px;color:#434349;font-weight:500;margin-right:8px}
+.hx-body{padding:0 20px 20px;display:grid;gap:20px}
+.hx-tb{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.hx-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:1100px){.hx-row{grid-template-columns:minmax(0,1fr)}}
+.hx .i{font-size:20px;vertical-align:-3px}
+
+/* mat-raised-button + color="btn-*" */
+.mb{border:1px solid transparent;border-radius:4px;height:36px;padding:0 16px;font:300 16px/34px "Sarabun",sans-serif;letter-spacing:.35px;min-width:100px;background:#fff;color:rgba(0,0,0,.87);box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);cursor:pointer;white-space:nowrap;position:relative}
+.mb.sm{min-width:0;height:32px;line-height:30px;padding:0 12px}
+.mb.save{background:var(--main);border-color:var(--main);color:#fff}
+.mb.green{background:var(--soft);border-color:#f0f7eb;color:var(--main)}
+.mb.blue{background:#f1f6fd;border-color:#f1f6fd;color:#4a90e2}
+.mb.yellow{background:#fff8ee;border-color:#fff8ee;color:#ffab2b}
+.mb.basic{background:#fff;border-color:var(--main);color:var(--main)}
+.mb.accept{background:var(--main);border-color:var(--main);color:#fff;height:40px;line-height:28px}
+.mb.red{background:#fdecec;border-color:#fdecec;color:#e53935}
+.mb.icon{min-width:0;padding:0 10px}
+.mb .cnt{position:absolute;top:-8px;right:-8px;background:#fd397a;color:#fff;border-radius:10px;font-size:12px;line-height:18px;min-width:20px;height:20px;font-weight:600;text-align:center;padding:0 5px;border:1px solid #fff}
+
+/* kt-portlet */
+.kp{background:#fff;border-radius:4px;box-shadow:0 0 13px 0 rgba(82,63,105,.05);display:flex;flex-direction:column;min-width:0}
+.kp-h{min-height:60px;padding:0 20px;border-bottom:1px solid var(--hline);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kp-h h3{font-size:20px;font-weight:600;color:var(--main);margin:0 auto 0 0}
+.kp-b{padding:16px 20px;display:grid;gap:12px;align-content:start}
+
+/* nav-tabs-line-bold */
+.ntabs{display:flex;align-self:stretch;margin-bottom:-1px}
+.ntabs span{min-width:150px;text-align:center;padding:16px 10px;color:#000;font-weight:600;font-size:16px;border-bottom:2px solid transparent;cursor:default}
+.ntabs span.on{border-bottom-color:var(--main);color:var(--main)}
+
+/* forms */
+.hx label.lb{display:block;color:var(--main);font-size:15px;margin-bottom:4px}
+.fc{height:38px;border:1px solid var(--bdin);border-radius:4px;background:#fff;padding:0 12px;font:400 15px/36px "Sarabun",sans-serif;color:#495057;width:100%;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fc.sel{position:relative;padding-right:28px}
+.fc.sel::after{content:"\f107";font-family:"Line Awesome Free";font-weight:900;position:absolute;right:10px;top:0;color:#999}
+.fc.ro{background:#f7f8fa}
+.fc.fph{color:#bfbfbf}
+select.fc{padding:0 8px}
+.fgrid{display:grid;gap:10px 14px;grid-template-columns:repeat(12,minmax(0,1fr))}
+.c2{grid-column:span 2}.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media (max-width:700px){.fgrid>*{grid-column:span 12}}
+.chkline{display:flex;gap:16px;flex-wrap:wrap;font-size:15px}
+.chkline span::before{content:"";display:inline-block;width:16px;height:16px;border:2px solid #0000008a;border-radius:2px;vertical-align:-3px;margin-right:6px}
+
+/* table-input-style1 table-set-sm */
+.ts{border-collapse:collapse;width:100%}
+.ts th{background:var(--soft);color:var(--main);padding:10px;font-size:16px;font-weight:500;line-height:20px;text-align:left;white-space:nowrap}
+.ts td{padding:4px 10px;font-size:16px;font-weight:400;height:35px;background:#fff;border-bottom:1px solid #f2f3f7;vertical-align:middle;color:#595d6e}
+.ts td{white-space:nowrap}
+.ts td.n,.ts th.n{text-align:right}
+.ts td .sub{font-size:13.5px;color:#959cb6;line-height:1.3}
+.ts td.ic i{font-size:20px;color:#959cb6;margin-right:6px}
+.ts tr.sel td{background:var(--soft)}
+.ts tr.dim td{color:#b4b8c9}
+.tsc{overflow-x:auto}
+
+/* patient-opd-design19 */
+.pc{display:flex;gap:16px;padding:16px 20px;border-bottom:1px solid var(--hline);align-items:center}
+.pc .av{width:84px;height:84px;border-radius:50%;background:#e4e6ef url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23b5b8c8'%3E%3Ccircle cx='12' cy='8' r='4.2'/%3E%3Cpath d='M3.5 21c.8-4.6 4.2-7 8.5-7s7.7 2.4 8.5 7z'/%3E%3C/svg%3E") center/70% no-repeat;flex-shrink:0}
+.pc .nm{font-size:20px;color:var(--main);font-weight:500}
+.pc .nm i{color:#5d78ff;font-size:24px}
+.pc .kv{display:grid;grid-template-columns:auto auto;gap:0 30px;font-size:16px}
+.pc .kv span b{color:var(--main);font-weight:400}
+.pr{display:flex;flex-wrap:wrap;gap:6px 20px;padding:10px 20px;border-bottom:1px solid var(--hline);font-size:15px;align-items:center}
+.pr b{color:var(--main);font-weight:400;margin-right:6px}
+.pd{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;padding:12px 20px 16px}
+
+/* appointment row in รายการยา */
+.nx{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#f7f8fa;border-radius:4px;padding:8px 10px}
+.nx h5{margin:0;font-size:16px;color:var(--main);font-weight:500}
+.mchk{display:inline-flex;align-items:center;gap:8px;font-size:16px;color:#212529;cursor:pointer}
+.mchk input{width:18px;height:18px;accent-color:var(--main);margin:0}
+
+/* new parts on an existing screen */
+.nz{outline:2px dashed #fd397a;outline-offset:3px;border-radius:4px;position:relative}
+.nz::before{content:"ใหม่";position:absolute;top:-12px;left:6px;background:#fd397a;color:#fff;font-size:11px;font-weight:700;padding:0 6px;border-radius:3px;line-height:18px;z-index:2}
+
+/* refill chips & sheets */
+.chip{display:inline-block;font-size:13px;font-weight:600;border-radius:12px;padding:0 10px;line-height:22px;white-space:nowrap}
+.chip.rf{background:var(--soft);color:var(--main)}
+.chip.ok{background:#e6f9f3;color:#0abb87}
+.chip.wt{background:#fff4de;color:#e0a100}
+.chip.x{background:#fdecec;color:#fd397a}
+.chip.old{background:#f2f3f7;color:#74788d}
+.shs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:800px){.shs{grid-template-columns:minmax(0,1fr)}}
+.sh{border:1px solid var(--hline);border-radius:4px;padding:10px 12px;background:#fff;display:grid;gap:2px}
+.sh.s1{border-top:3px solid #0abb87}.sh.sr{border-top:3px solid var(--main)}
+.sh h4{margin:0;font-size:16px;color:#434349;font-weight:600}
+.sh .d{font-size:14px;color:#959cb6}
+.sh .big{font-size:22px;font-weight:600;color:#434349}
+.alert{border-radius:4px;padding:10px 14px;font-size:15px}
+.alert.in{background:#eef1ff;color:#3d4ba8}
+.alert.wa{background:#fff8ec;color:#8a5d00}
+.alert.ok{background:#e6f9f3;color:#067a58}
+.alert.er{background:#fdecec;color:#b3163a}
+
+/* mat-dialog over a dimmed page */
+.ov{position:absolute;inset:56px 0 0 0;background:rgba(0,0,0,.32);display:flex;align-items:flex-start;justify-content:center;padding:30px 16px;z-index:5;overflow:auto}
+.md{background:#fff;border-radius:4px;box-shadow:0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);width:100%;max-width:1150px;padding:24px;display:grid;gap:14px}
+.md-t{display:flex;align-items:center;gap:10px}
+.md-t h2{margin:0 auto 0 0;font-size:20px;font-weight:600;color:var(--main)}
+.md-t i{font-size:22px;color:#999;cursor:pointer}
+.md-a{display:flex;justify-content:flex-end;gap:10px;padding-top:4px}
+.md-2{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px}
+@media (max-width:900px){.md-2{grid-template-columns:minmax(0,1fr)}}
+.rc{border:1px solid var(--hline);border-radius:4px;padding:10px 12px;cursor:pointer;display:grid;gap:2px;background:#fff}
+.rc:hover{border-color:var(--bdin)}
+.rc.on{border-color:var(--main);background:var(--soft)}
+.rc.off{opacity:.55;cursor:not-allowed}
+.rc .t{display:flex;gap:8px;align-items:center;font-weight:600;color:#434349;flex-wrap:wrap}
+.rc .s{font-size:14px;color:#959cb6}
+.hx-dim{filter:none}
+.themebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
+.themebar button{border:1px solid #ccc;background:#fff;border-radius:14px;padding:2px 12px;font-size:13.5px}
+.themebar button.on{border-color:#111;background:#111;color:#fff}
 </style>
 </head>
 <body>
 <div class="app">
 <nav class="nav">
   <div class="brand"><div class="blogo">HA.OS</div><div><b>ใบยา Refill OPD</b><span>แผนแก้โค้ด + Wireframe</span></div></div>
+  <div class="themebar">ธีม: <button class="on" data-t="purple">ม่วง (ค่าเริ่มต้น)</button><button data-t="black">ดำ</button></div>
   <h4>ภาพรวม</h4>
   <button class="nb on" data-p="p0"><span class="k">0</span>สรุป flow และกติกา</button>
+  <button class="nb" data-p="pa"><span class="k">A</span>Activity Diagram</button>
   <button class="nb" data-p="p1"><span class="k">1</span>แผนจุดที่ต้องแก้</button>
   <h4>แพทย์ (เมนูสั่งยา OPD)</h4>
   <button class="nb" data-p="w1"><span class="k">W1</span>สั่งยา + ติ๊ก Refill</button>
@@ -173,7 +306,7 @@ ul.tight li{margin:2px 0}
       <div class="fstep s1"><h4>02/11/2569 · พบแพทย์</h4><p>แพทย์สั่งยา นัดครั้งถัดไป 02/04/2570 แล้วติ๊ก Refill</p><p><span class="tag t-re">ใบที่ 1</span> 30 วัน ใบสั่งยาปกติ <b>คิดเงินวันนี้</b></p></div>
       <div class="fstep sr"><h4>Refill ครั้งที่ 2/3</h4><p>วัน Refill 02/12/2569 (62 วัน)</p><p><span class="tag t-wait">รอแปลง</span> ยังไม่เกิด Finance</p></div>
       <div class="fstep sr"><h4>Refill ครั้งที่ 3/3</h4><p>วัน Refill 02/02/2570 (59 วัน)</p><p><span class="tag t-wait">รอแปลง</span> ยังไม่เกิด Finance</p></div>
-      <div class="fstep sp"><h4>วันคนไข้มารับยา</h4><p>ลงทะเบียนคลินิกไหนก็ได้ แล้วเภสัชกด <b>Refill</b> เลือกใบ ระบบนำยาเข้าฟอร์ม จากนั้นกดบันทึก → ใบสั่งยาปกติ</p></div>
+      <div class="fstep sp"><h4>วันคนไข้มารับยา</h4><p>ลงทะเบียนคลินิกไหนก็ได้ แล้วเภสัชกด <b>ดึงใบ Refill</b> เลือกใบ ระบบนำยาเข้าฟอร์ม จากนั้นกดบันทึก → ใบสั่งยาปกติ</p></div>
     </div>
   </div></div>
 
@@ -181,6 +314,8 @@ ul.tight li{margin:2px 0}
     <table>
       <tr><th>เรื่อง</th><th>กติกา</th></tr>
       <tr><td>การซอยใบ</td><td>ใบละไม่เกิน 2 เดือน <b>เศษเดือนใส่ใบแรก</b>: 6 เดือน = 2+2+2, 5 เดือน = 1+2+2, 3 เดือน = 1+2, ≤ 2 เดือน = ไม่มี Refill</td></tr>
+      <tr><td>จำนวนใบคิดจากอะไร</td><td><b>คิดจากยาที่สั่งยาวที่สุด ไม่ผูกกับวันนัด</b> ใบสุดท้ายจึงมียาเสมอ ไม่มีใบว่าง · วันนัดใช้เป็นวันนัดอย่างเดียว ถ้ายาหมดก่อนหรือเกินวันนัดแค่ขึ้นข้อความแจ้ง · ไม่มีนัดก็ใช้ได้ ไม่ต้องกรอกระยะเวลารวม · ค่าเริ่มต้นจำนวนวันของยามาจากวันนัด (หน้าเดิม) แพทย์แก้ จน. วัน ของยาได้</td></tr>
+      <tr><td>ยาแต่ละตัวยาวไม่เท่ากัน</td><td>ยาแต่ละตัวเติมลงใบตามลำดับจนครบจำนวนวันที่สั่ง ยาที่สั้นกว่า (เช่น ยาฆ่าเชื้อ 14 วัน) จึงอยู่แค่ใบแรก ๆ · ยาที่กรอกจำนวนเองแบ่งตามสัดส่วนวันภายในช่วงของมัน</td></tr>
       <tr><td>หน้าตาใบ Refill</td><td>เหมือนใบสั่งยาผู้ป่วยนอก มีหัว "REFILL ครั้งที่ n/N วันที่มารับยา ..."</td></tr>
       <tr><td>วัน Refill</td><td>นับเดือนตามปฏิทิน ถ้าตรงเสาร์/อาทิตย์ <b>เลื่อนเป็นศุกร์ก่อนหน้า</b> ไม่นับวันนักขัตฤกษ์ <span class="tag t-warn">ข้อเสนอ รอยืนยัน</span></td></tr>
       <tr><td>ช่วงที่แปลงได้</td><td>มาก่อนวัน Refill ได้ตลอด <b>ไม่มีวันหมดอายุ</b> ใบที่คนไข้ไม่มารับจะค้างสถานะ "รอแปลง" ไว้เป็นหลักฐาน</td></tr>
@@ -200,6 +335,138 @@ ul.tight li{margin:2px 0}
       <li>ใบที่ 1 ที่แพทย์สั่งใช้ "ใบสั่งยาผู้ป่วยนอก" เดิม ควรพิมพ์ "ใบที่ 1/N" บนหัวด้วยไหม</li>
     </ul>
   </div></div>
+</section>
+
+<!-- ================= PA ACTIVITY ================= -->
+<section class="page" id="pa">
+  <div class="guide"><h2>Activity Diagram · ใครทำอะไร</h2>
+    <p>แบ่งช่องตามผู้รับผิดชอบ บนคือ <b>วันพบแพทย์</b> ล่างคือ <b>วันมารับยา Refill</b> (วนจนครบทุกใบ) สีบอกว่าขั้นตอนไหนเหมือนเดิม ใหม่ หรือปรับจากเดิม</p></div>
+  <div class="port"><div class="ph"><h3>Flow ใบยา Refill OPD</h3><div class="legend" style="gap:16px"><span><span class="tag" style="background:#fff;border:1.5px solid #b5b8c8;color:#434349">เดิม</span> ใช้ของเดิม ไม่ต้องแก้</span><span><span class="tag" style="background:#fdeef4;border:1.5px solid #fd397a;color:#7a1236">ใหม่</span> ขั้นตอน/หน้าจอ/ข้อมูลใหม่</span><span><span class="tag" style="background:#fff4e0;border:1.5px solid #e0a100;color:#6b4a00">ปรับจากเดิม</span> ต่อยอดของเดิม</span><span><span class="tag" style="background:#fff;border:1.5px dashed #fd397a;color:#7a1236">ทำเมื่อไรก็ได้</span> ไม่อยู่ในลำดับหลัก</span></div></div>
+    <div class="pb" style="overflow-x:auto"><svg viewBox="0 0 1180 2222" width="100%" style="max-width:1180px;font-family:Sarabun,sans-serif" role="img" aria-label="Activity diagram ใบยา Refill">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#74788d"/></marker></defs>
+<rect x="0" y="0" width="236" height="2222" fill="#ffffff" stroke="#e4e6ef"/>
+<rect x="0" y="0" width="236" height="46" fill="#2d2f3a"/>
+<text text-anchor="middle" font-size="15" font-weight="600" fill="#fff"><tspan x="118" y="28">คนไข้</tspan></text>
+<rect x="236" y="0" width="236" height="2222" fill="#fafbfd" stroke="#e4e6ef"/>
+<rect x="236" y="0" width="236" height="46" fill="#2d2f3a"/>
+<text text-anchor="middle" font-size="15" font-weight="600" fill="#fff"><tspan x="354" y="28">แพทย์</tspan></text>
+<rect x="472" y="0" width="236" height="2222" fill="#ffffff" stroke="#e4e6ef"/>
+<rect x="472" y="0" width="236" height="46" fill="#2d2f3a"/>
+<text text-anchor="middle" font-size="15" font-weight="600" fill="#fff"><tspan x="590" y="28">ระบบ HA.OS</tspan></text>
+<rect x="708" y="0" width="236" height="2222" fill="#fafbfd" stroke="#e4e6ef"/>
+<rect x="708" y="0" width="236" height="46" fill="#2d2f3a"/>
+<text text-anchor="middle" font-size="15" font-weight="600" fill="#fff"><tspan x="826" y="28">เภสัชกร</tspan></text>
+<rect x="944" y="0" width="236" height="2222" fill="#ffffff" stroke="#e4e6ef"/>
+<rect x="944" y="0" width="236" height="46" fill="#2d2f3a"/>
+<text text-anchor="middle" font-size="15" font-weight="600" fill="#fff"><tspan x="1062" y="28">การเงิน</tspan></text>
+<rect x="0" y="1100" width="1180" height="58" fill="#eef1ff" stroke="#5d78ff" stroke-dasharray="5 4"/>
+<text text-anchor="middle" font-size="14.5" font-weight="600" fill="#2c3e9e"><tspan x="590" y="1134">วันมารับยา Refill · มาก่อนวันที่ระบุได้ · ไม่มีวันหมดอายุ · ไม่ต้องพบแพทย์</tspan></text>
+<text text-anchor="middle" font-size="13" font-weight="600" fill="#2c3e9e"><tspan x="178" y="69">วันพบแพทย์</tspan></text>
+<path d="M118,104 V141" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M118,193 V201 H354 V215" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M354,267 V289" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M354,341 V357" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M354,421 V437" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="362" y="435" font-size="13" font-weight="700" fill="#434349">ใช่</text>
+<path d="M429,389 H714 V685 H690" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="437" y="383" font-size="13" font-weight="700" fill="#434349">ไม่</text>
+<path d="M354,489 V497 H590 V511" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,563 V571 H354 V585" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M354,637 V645 H590 V659" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,711 V733" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,785 V807" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,859 V867 H1062 V881" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M1062,933 V941 H826 V955" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M826,1007 V1015 H118 V1029" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M118,1081 V1177" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M118,1229 V1251" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M118,1303 V1311 H826 V1325" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M826,1377 V1399" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M826,1451 V1459 H590 V1473" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,1525 V1533 H826 V1547" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M826,1599 V1601 H590 V1615" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,1679 V1695" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="598" y="1693" font-size="13" font-weight="700" fill="#434349">ใช่</text>
+<path d="M665,1647 H726" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="675" y="1641" font-size="13" font-weight="700" fill="#434349">ไม่</text>
+<path d="M590,1747 V1769" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M590,1821 V1829 H1062 V1843" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M1062,1895 V1903 H826 V1917" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M826,1969 V1977 H118 V1991" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M118,2043 V2059" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M118,2123 V2152" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="126" y="2137" font-size="13" font-weight="700" fill="#434349">ไม่</text>
+<path d="M43,2091 H10 V1203 H18" fill="none" stroke="#74788d" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="13" y="2085" font-size="13" font-weight="700" fill="#434349">ใช่</text>
+<circle cx="118.0" cy="93.0" r="11" fill="#111"/>
+<text x="136.0" y="98.0" font-size="13.5" fill="#434349">มาตามนัดติดตามอาการ</text>
+<rect x="18.0" y="141.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="118" y="172">ลงทะเบียน / ส่งตรวจ</tspan></text>
+<rect x="254.0" y="215.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="354" y="246">ตรวจ ประเมินอาการ</tspan></text>
+<rect x="254.0" y="289.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#434349"><tspan x="354" y="312">สั่งยาตามปกติ</tspan><tspan x="354" y="328">ที่หน้าสั่งยา OPD</tspan></text>
+<polygon points="354.0,357.0 429.0,389.0 354.0,421.0 279.0,389.0" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a1236"><tspan x="354" y="386">ให้ยานาน</tspan><tspan x="354" y="402">เกิน 2 เดือน?</tspan></text>
+<rect x="254.0" y="437.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="354" y="460">ติ๊ก ☑ Refill</tspan><tspan x="354" y="476">(คิดจากยาที่สั่งยาวที่สุด)</tspan></text>
+<rect x="490.0" y="511.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="590" y="534">ซอยใบละ ≤ 2 เดือน · ใบแรกได้เศษ</tspan><tspan x="590" y="550">คำนวณวัน Refill (ส./อา. → ศ.)</tspan></text>
+<rect x="254.0" y="585.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="354" y="608">ตรวจ/แก้จำนวนต่อใบ</tspan><tspan x="354" y="624">แล้วกดยืนยัน</tspan></text>
+<rect x="490.0" y="659.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#434349"><tspan x="590" y="682">บันทึกใบที่ 1 = ใบสั่งยาปกติ</tspan><tspan x="590" y="698">+ TB_FINANCES (คิดเงินวันนี้)</tspan></text>
+<rect x="490.0" y="733.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="590" y="756">(ถ้าติ๊ก Refill) บันทึกใบ Refill</tspan><tspan x="590" y="772">สถานะ &quot;รอแปลง&quot; · ยังไม่คิดเงิน</tspan></text>
+<rect x="490.0" y="807.0" width="200" height="52" rx="8" fill="#fff4e0" stroke="#e0a100" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#6b4a00"><tspan x="590" y="830">พิมพ์ใบสั่งยา + ใบ Refill (ถ้ามี)</tspan><tspan x="590" y="846">หัว REFILL ครั้งที่ n/N</tspan></text>
+<rect x="962.0" y="881.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="1062" y="912">ชำระเงินใบที่ 1</tspan></text>
+<rect x="726.0" y="955.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#434349"><tspan x="826" y="978">คัดกรอง / Sticker / robot</tspan><tspan x="826" y="994">จ่ายยาใบที่ 1</tspan></text>
+<rect x="18.0" y="1029.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="118" y="1060">รับยา + ถือใบ Refill กลับบ้าน</tspan></text>
+<rect x="18.0" y="1177.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="118" y="1200">มารับยาตามใบ Refill</tspan><tspan x="118" y="1216">(ไม่พบแพทย์)</tspan></text>
+<rect x="18.0" y="1251.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="118" y="1282">ลงทะเบียน คลินิกไหนก็ได้</tspan></text>
+<rect x="254.0" y="1251.0" width="200" height="52" rx="2" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="354" y="1274">ก่อนแปลง แพทย์ดู/แก้/ยกเลิก</tspan><tspan x="354" y="1290">ใบ Refill ได้ (แท็บใบ Refill)</tspan></text>
+<rect x="726.0" y="1325.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="826" y="1356">เปิดหน้าสั่งยา/จ่ายยา OPD</tspan></text>
+<rect x="726.0" y="1399.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="826" y="1422">กด &quot;ดึงใบ Refill&quot;</tspan><tspan x="826" y="1438">เลือกใบที่รอแปลง</tspan></text>
+<rect x="490.0" y="1473.0" width="200" height="52" rx="8" fill="#fff4e0" stroke="#e0a100" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#6b4a00"><tspan x="590" y="1496">นำยาเข้าฟอร์ม · ราคา/สิทธิวันนี้</tspan><tspan x="590" y="1512">แพทย์ = ผู้สั่งเดิม</tspan></text>
+<rect x="726.0" y="1547.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#434349"><tspan x="826" y="1578">ตรวจ/แก้รายการ แล้วกดบันทึก</tspan></text>
+<polygon points="590.0,1615.0 665.0,1647.0 590.0,1679.0 515.0,1647.0" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a1236"><tspan x="590" y="1644">ใบยัง</tspan><tspan x="590" y="1660">รอแปลงอยู่?</tspan></text>
+<rect x="726.0" y="1621.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="826" y="1644">แจ้ง &quot;ใบนี้ถูกแปลงแล้ว&quot;</tspan><tspan x="826" y="1660">ไม่บันทึก</tspan></text>
+<rect x="490.0" y="1695.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#434349"><tspan x="590" y="1718">สร้างใบสั่งยา + TB_FINANCES</tspan><tspan x="590" y="1734">ของวันนี้</tspan></text>
+<rect x="490.0" y="1769.0" width="200" height="52" rx="8" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13" font-weight="400" fill="#7a1236"><tspan x="590" y="1792">ตั้งใบ Refill = &quot;แปลงแล้ว&quot;</tspan><tspan x="590" y="1808">(โยงด้วย RefillId)</tspan></text>
+<rect x="962.0" y="1843.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="1062" y="1874">ชำระเงิน</tspan></text>
+<rect x="726.0" y="1917.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="826" y="1948">Sticker / robot / จ่ายยา</tspan></text>
+<rect x="18.0" y="1991.0" width="200" height="52" rx="8" fill="#ffffff" stroke="#b5b8c8" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="13.5" font-weight="400" fill="#434349"><tspan x="118" y="2022">รับยา</tspan></text>
+<polygon points="118.0,2059.0 193.0,2091.0 118.0,2123.0 43.0,2091.0" fill="#fdeef4" stroke="#fd397a" stroke-width="1.8"/>
+<text text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a1236"><tspan x="118" y="2088">ยังมีใบ Refill</tspan><tspan x="118" y="2104">เหลือ?</tspan></text>
+<circle cx="118.0" cy="2165.0" r="13" fill="#fff" stroke="#111" stroke-width="2"/><circle cx="118.0" cy="2165.0" r="8" fill="#111"/>
+<text x="140.0" y="2170.0" font-size="13.5" fill="#434349">ครบทุกใบ → พบแพทย์ตามนัดครั้งถัดไป</text>
+</svg></div></div>
+  <div class="port"><div class="ph"><h3>สรุปตามผู้ใช้</h3></div><div class="pb tw"><table>
+    <tr><th>ผู้ใช้</th><th>เหมือนเดิม</th><th>ใหม่ / ปรับ</th></tr>
+    <tr><td>คนไข้</td><td>ลงทะเบียน ชำระเงิน รับยา</td><td>ถือใบ Refill กลับบ้าน · มารับยาโดยไม่ต้องพบแพทย์ (ลงทะเบียนคลินิกไหนก็ได้)</td></tr>
+    <tr><td>แพทย์</td><td>ตรวจ สั่งยาที่หน้าสั่งยา OPD</td><td>ติ๊ก Refill (จำนวนใบคิดจากยาที่สั่งยาวที่สุด ไม่ผูกกับนัด) · ยืนยันการซอยใบ · ดู/แก้/ยกเลิกใบที่ค้างในแท็บใบ Refill</td></tr>
+    <tr><td>ระบบ</td><td>บันทึกใบสั่งยา + TB_FINANCES · ราคา/สิทธิ · ฉลาก</td><td>ซอยใบ คำนวณวัน Refill · ตาราง Refill (รอแปลง/แปลงแล้ว/ยกเลิก) · กันแปลงซ้ำ · ใส่แพทย์ผู้สั่งเดิม · report ใบ Refill</td></tr>
+    <tr><td>เภสัชกร</td><td>คัดกรอง Sticker robot จ่ายยา · กดบันทึกใบสั่งยา</td><td>ปุ่ม "ดึงใบ Refill" เลือกใบที่รอแปลงเข้าฟอร์ม</td></tr>
+    <tr><td>การเงิน</td><td>ชำระเงินตามปกติทั้งสองวัน</td><td>ไม่มี (ใบ Refill ไม่เกิดค่าใช้จ่ายจนกว่าจะแปลง)</td></tr>
+  </table></div></div>
 </section>
 
 <!-- ================= P1 PLAN ================= -->
@@ -243,11 +510,11 @@ ul.tight li{margin:2px 0}
   <div class="port"><div class="ph"><h3>Frontend (Angular)</h3></div><div class="pb tw">
     <table class="plan">
       <tr><th>สถานะ</th><th>ไฟล์ / จุด</th><th>งาน</th></tr>
-      <tr><td><span class="tag t-mod">แก้</span></td><td><code>log-drug.component.html</code> แถวนัดครั้งถัดไป (968-993)</td><td>เพิ่ม checkbox <b>Refill</b> (แสดงเฉพาะ OPD + module doctor) และแถบ preview ใบที่จะถูกซอย (W1)</td></tr>
-      <tr><td><span class="tag t-mod">แก้</span></td><td><code>log-drug.component.ts</code> <code>calculateDateCount/calculateDate/setQtyAllInList</code> (3177-3222)</td><td>เมื่อติ๊ก Refill ให้ <code>buildRefillSheets()</code> คำนวณวัน Refill ถอยหลังจากวันนัดทีละ 2 เดือน (วันนัดไม่ลงตัวเดือนก็ยังทำงาน) เลื่อนเสาร์/อาทิตย์เป็นศุกร์ ใบแรกได้เศษ และถ้าใบแรกสั้นกว่า 7 วันให้รวมเข้ากับใบถัดไป แล้วตั้ง duration ของ <code>inputModel.drugList</code> = จำนวนวันของใบที่ 1</td></tr>
-      <tr><td><span class="tag t-mod">แก้</span></td><td><code>onSaveDrugOrder()</code> (1351)</td><td>ถ้าติ๊ก Refill ให้เปิด dialog ยืนยัน (W2) แล้ว clone drugList ต่อใบ ตั้ง duration แล้วเรียก <code>onChangeCalculateQuantityDrugList</code> (3715) + <code>setDrugLabelList</code> (3362) จากนั้นใส่ <code>inputModel.refillSheets</code> หักยาเหลือ (drugLeft) เฉพาะใบที่ 1 เมื่อบันทึกสำเร็จให้พิมพ์ใบสั่งยา + ใบ Refill ทุกใบ</td></tr>
-      <tr><td><span class="tag t-new">ใหม่</span></td><td>ปุ่ม <b>Refill</b> ข้าง Re-Med (html:344) + <code>refill-select</code> dialog (โครงตาม <code>re-med</code>)</td><td>แสดงใบ Refill ของคนไข้ เลือกใบที่รอแปลงได้ 1 ใบ แล้ว map items เข้าฟอร์มแบบเดียวกับ <code>onOpenReMed</code> (2132-2165): ใช้ rightId/serviceId ของ visit นี้ แต่<b>แพทย์ = แพทย์ผู้สั่งในใบ Refill</b> (ต่างจาก Re-Med ที่ใช้แพทย์ของ visit) ตั้ง <code>refillId</code> ต่อรายการ แล้วผ่าน <code>submitDrugFromFormula</code> เพื่อคำนวณราคา จากนั้นเภสัชกดบันทึกปกติ (W5, W6)</td></tr>
-      <tr><td><span class="tag t-new">ใหม่</span></td><td><code>refill-manage</code> dialog</td><td>แพทย์ดู/แก้/ยกเลิก/พิมพ์ซ้ำใบ Refill (W4) เปิดจากปุ่ม Refill ใน module doctor</td></tr>
+      <tr><td><span class="tag t-mod">แก้</span></td><td><code>log-drug.component.html</code> แถวนัดครั้งถัดไป (968-993)</td><td>เพิ่ม checkbox <b>Refill</b> (แสดงเฉพาะ OPD + module doctor) และแถบ preview ใบที่จะถูกซอย (W1) · ไม่มีช่องระยะเวลารวม เพราะคิดจากยาที่สั่ง</td></tr>
+      <tr><td><span class="tag t-mod">แก้</span></td><td><code>log-drug.component.ts</code> <code>calculateDateCount/calculateDate/setQtyAllInList</code> (3177-3222)</td><td>เมื่อติ๊ก Refill ให้ <code>buildRefillSheets()</code> หาจำนวนวันของยาที่ยาวที่สุดใน <code>inputModel.drugList</code> (ไม่ใช้ <code>countAppointDate</code>) แล้วคำนวณวัน Refill ถอยหลังจากวันที่ยาตัวนั้นหมดทีละ 2 เดือน เลื่อนเสาร์/อาทิตย์เป็นศุกร์ ใบแรกได้เศษ ถ้าใบแรกสั้นกว่า 7 วันให้รวมเข้ากับใบถัดไป · เปรียบเทียบกับวันนัดเพื่อขึ้นข้อความแจ้งเท่านั้น · คำนวณใหม่ทุกครั้งที่เพิ่ม/ลบ/แก้ยา</td></tr>
+      <tr><td><span class="tag t-mod">แก้</span></td><td><code>onSaveDrugOrder()</code> (1351)</td><td>แพทย์สั่งด้วย<b>จำนวนรวม</b> (duration ต่อยาตามที่แพทย์สั่ง ค่าเริ่มต้นมาจากวันนัดตามที่ <code>setQtyAllInList</code> ทำอยู่แล้ว) ถ้าติ๊ก Refill ให้เปิด dialog ยืนยัน (W2) แล้ว clone drugList ต่อใบ: ยาเม็ดตั้ง duration ของใบแล้วเรียก <code>onChangeCalculateQuantityDrugList</code> (3715) โดยยาแต่ละตัวเติมลงใบตามลำดับจนครบจำนวนวันที่สั่ง (ยาสั้นจึงอยู่แค่ใบแรก ๆ) ส่วนยาที่กรอกจำนวนเองแบ่งตามสัดส่วนวันแบบ largest remainder (ผลรวมเท่าจำนวนรวม) แล้ว <code>setDrugLabelList</code> (3362) และคิดราคาใหม่ของใบที่ 1 · ส่งใบที่ 1 เป็น drugList และใบที่เหลือใส่ <code>inputModel.refillSheets</code> หักยาเหลือ (drugLeft) เฉพาะใบที่ 1 เมื่อบันทึกสำเร็จให้พิมพ์ใบสั่งยา + ใบ Refill ทุกใบ</td></tr>
+      <tr><td><span class="tag t-new">ใหม่</span></td><td>ปุ่ม <b>ดึงใบ Refill</b> ข้าง Re-Med (html:344) <b>แสดงเฉพาะ module pharmacy</b> + <code>refill-select</code> dialog (โครงตาม <code>re-med</code>)</td><td>แสดงใบ Refill ของคนไข้ เลือกใบที่รอแปลงได้ 1 ใบ แล้ว map items เข้าฟอร์มแบบเดียวกับ <code>onOpenReMed</code> (2132-2165): ใช้ rightId/serviceId ของ visit นี้ แต่<b>แพทย์ = แพทย์ผู้สั่งในใบ Refill</b> (ต่างจาก Re-Med ที่ใช้แพทย์ของ visit) ตั้ง <code>refillId</code> ต่อรายการ แล้วผ่าน <code>submitDrugFromFormula</code> เพื่อคำนวณราคา จากนั้นเภสัชกดบันทึกปกติ (W5, W6)</td></tr>
+      <tr><td><span class="tag t-new">ใหม่</span></td><td><code>refill-manage</code> dialog</td><td>แพทย์ดู/แก้/ยกเลิก/พิมพ์ซ้ำใบ Refill (W4) เปิดจากแท็บใหม่ "ใบ Refill" ใน portlet แท็บ Lab Monitor/นัดหมาย/ใบสั่งยา (แสดงเฉพาะ module doctor)</td></tr>
       <tr><td><span class="tag t-mod">แก้</span></td><td>เมนูพิมพ์ (html:12-85) + <code>print-report.service.ts</code></td><td>เพิ่มรายการ "ใบสั่งยา Refill" ตาม pattern <code>Order_Drug_opd</code> (2128-2145)</td></tr>
       <tr><td><span class="tag t-mod">แก้</span></td><td><code>core/api</code> (models + drug.service)</td><td>gen client ใหม่สำหรับ endpoint และ model ที่เพิ่ม</td></tr>
     </table>
@@ -261,7 +528,7 @@ ul.tight li{margin:2px 0}
       <li>วันนัดที่ไม่ลงตัวเดือน และวันสิ้นเดือน (31 → เดือนที่มี 30 หรือ 28 วัน)</li>
       <li>แพทย์ใน order ที่แปลง = แพทย์ผู้สั่งเดิม: ตรวจว่าการเช็กยาจำกัดสิทธิแพทย์ (<code>CheckValidateDrugOrderBeforeSave</code>, DrugService.cs:1047) ผ่านด้วยแพทย์คนนั้น และสถิติ/DF ของแพทย์จะนับในวันที่แปลง ไม่ใช่วันที่สั่ง</li>
       <li>ใบที่ไม่มีวันหมดอายุจะสะสมไปเรื่อย ๆ: หน้าเลือกใบควรเรียงใบใหม่ไว้บน และแสดงจำนวนวันที่เลยวัน Refill มาแล้วให้เภสัชตัดสินใจ</li>
-      <li>ยาที่ไม่ใช่เม็ด (dosageFormMeaning ≠ 1): สูตรเดิมไม่คำนวณจำนวนให้ ต้องให้แพทย์กรอกจำนวนต่อใบเองใน W2</li>
+      <li>ยาที่กรอกจำนวนเอง (dosageFormMeaning ≠ 1) แบ่งตามสัดส่วนวัน: ถ้าจำนวนรวมน้อยกว่าจำนวนใบ (เช่น ยาทา 2 หลอด 3 ใบ) จะมีใบที่ได้ 0 ต้องแสดงให้แพทย์เห็นใน W2</li>
       <li>ยาที่มี DUE หรือยานอกบัญชีที่ต้องกรอกเหตุผล: ตอนนำเข้าจะเด้ง dialog เหมือน Re-Med</li>
     </ul>
   </div></div>
@@ -270,86 +537,98 @@ ul.tight li{margin:2px 0}
 <!-- ================= W1 DOCTOR ORDER ================= -->
 <section class="page" id="w1">
   <div class="guide"><span class="who">แพทย์</span><h2 style="display:inline">W1 · สั่งยา OPD + ติ๊ก Refill</h2>
-    <p>หน้าเดิม <code>medical/logsdrug</code> ส่วนที่เพิ่มคือกรอบประสีม่วง ลองติ๊ก/ยกเลิก Refill หรือเปลี่ยนวันนัดเพื่อดูการซอยใบ</p></div>
-
-  <div class="pbar"><div class="av">ภ</div>
-    <div><span class="r">ผู้ป่วย</span><b>นาย ตัวอย่าง ทดสอบระบบ</b></div>
-    <div><span class="r">HN</span><b>1234/69</b></div><div><span class="r">อายุ</span><b>62 ปี</b></div>
-    <div><span class="r">สิทธิ</span><b>ข้าราชการ (จ่ายตรง)</b></div><div><span class="r">ห้องตรวจ</span><b>อายุรกรรม 1</b></div>
-    <div><span class="r">แพทย์</span><b>นพ.ตัวอย่าง ใจดี</b></div><div><span class="r">วันที่</span><b>02/11/2569</b></div>
-    <div style="margin-left:auto;display:flex;gap:6px"><button class="b green">บันทึก</button><button class="b out">พิมพ์ ▾</button></div>
+    <p>หน้าเดิม <code>medical/logsdrug</code> (<code>kt-log-drug</code>) ส่วนที่เพิ่มอยู่ในกรอบประสีชมพู <b>จำนวนใบคิดจากยาที่สั่งยาวที่สุด ไม่ได้คิดจากวันนัด</b></p>
+    <p style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">ลองเปลี่ยน → จน. วันที่แพทย์สั่งยาหลัก: <select id="w1drug" class="in" style="width:auto;display:inline-block"><option value="appt">ตามวันนัด (ค่าเริ่มต้นของหน้าเดิม)</option><option value="92" selected>3 เดือน (92 วัน)</option><option value="151">5 เดือน (151 วัน)</option><option value="182">6 เดือน (182 วัน)</option></select> และเปลี่ยนวันนัดในหน้าจอ</p>
+    <p><b>แพทย์ไม่ต้องกดปุ่มเพิ่ม</b> ทำตามนี้: 1. สั่งยาตามปกติ 2. เลือก <b>นัดครั้งถัดไป</b> 3. ติ๊ก <b>☑ Refill</b> ระบบโชว์ว่าแบ่งได้กี่ใบ 4. กด <b>บันทึก</b> แล้วยืนยันใน W2 · แท็บใหม่ <b>ใบ Refill</b> ไว้ดูหรือแก้ใบที่ค้างอยู่ (W4)</p></div>
+  <div class="hx">
+    <div data-top="doctor"></div>
+    <div class="hx-body">
+      <div class="hx-tb"><button class="mb basic icon"><i class="las la-print i"></i></button><button class="mb save">บันทึก</button></div>
+      <div class="hx-row">
+        <div data-pc="doctor"></div>
+        <div class="kp"><div class="kp-h"><div class="ntabs"><span>Lab Monitor</span><span>นัดหมาย</span><span class="on">ใบสั่งยา</span><span class="nz" style="outline-offset:-2px">ใบ Refill</span></div></div>
+          <div class="kp-b">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="fc sel" style="width:180px">02/11/2569</div><button class="mb green icon"><i class="las la-plus i"></i></button></div>
+            <div class="tsc"><table class="ts">
+              <tr><th></th><th>Med.Order no.</th><th>วันที่สั่ง</th><th>ประเภทใบสั่งยา</th><th>สถานะ</th><th>ห้องตรวจ</th><th>แพทย์</th><th>ห้องยา</th><th class="n">จำนวนเงิน</th></tr>
+              <tr><td colspan="9" style="text-align:center;color:#b4b8c9">ยังไม่มีใบสั่งยาของวันนี้</td></tr>
+            </table></div>
+          </div></div>
+      </div>
+      <div class="hx-row">
+        <div class="kp"><div class="kp-h"><h3>การสั่งยา</h3>
+            <button class="mb green sm">สูตรสั่งยา</button><button class="mb green sm">Med Review</button><button class="mb blue sm">Re-Med</button>
+                        <button class="mb yellow sm">เครื่องมือ <i class="las la-angle-down"></i></button><button class="mb save sm">สั่ง</button></div>
+          <div class="kp-b"><div class="fgrid">
+            <div class="c6"><label class="lb">ประเภทใบสั่งยา</label><div class="fc sel fph">ประเภทใบสั่งยา</div></div>
+            <div class="c2"><label class="lb">ยาเหลือ</label><div class="fc"></div></div><div class="c4"></div>
+            <div class="c6"><label class="lb">รหัสยา/ชื่อยา</label><div class="fc sel fph">รหัสยา/ชื่อยา</div></div>
+            <div class="c2"><label class="lb">NED</label><div class="fc ro"></div></div>
+            <div class="c2"><label class="lb">จน. วัน</label><div class="fc ro" id="w1dur">30</div></div>
+            <div class="c2"><label class="lb">จน. ยา</label><div class="fc"></div></div>
+            <div class="c12"><label class="lb">วิธีใช้ยา :</label><div class="chkline"><span>Route A</span><span>Route B</span></div></div>
+            <div class="c4"><label class="lb">Dose</label><div class="fc"></div></div>
+            <div class="c4"><label class="lb">Unit</label><div class="fc sel"></div></div>
+            <div class="c4"><label class="lb">เวลาใช้ยา</label><div class="fc sel"></div></div>
+            <div class="c3"><label class="lb">บรรทัด#1</label><div class="fc"></div></div><div class="c3"><label class="lb">บรรทัด#2</label><div class="fc"></div></div>
+            <div class="c3"><label class="lb">บรรทัด#3</label><div class="fc"></div></div><div class="c3"><label class="lb">บรรทัด#4</label><div class="fc"></div></div>
+            <div class="c4"><label class="lb">ราคา</label><div class="fc ro"></div></div><div class="c4"><label class="lb">จำนวนเงิน</label><div class="fc ro"></div></div><div class="c4"><label class="lb">เบิกได้</label><div class="fc ro"></div></div>
+          </div></div></div>
+        <div class="kp"><div class="kp-h"><h3>Med.Order no. : –</h3><button class="mb accept">Accept</button></div>
+          <div class="kp-b">
+            <div class="nx">
+              <h5>นัดครั้งถัดไป</h5>
+              <select class="fc" style="width:200px" id="w1appt">
+                <option value="0">— ไม่มีนัด —</option>
+                <option value="2">02/มกราคม/2570</option>
+                <option value="3">02/กุมภาพันธ์/2570</option>
+                <option value="5">02/เมษายน/2570</option>
+                <option value="6" selected>03/พฤษภาคม/2570</option>
+              </select>
+              <h5>จำนวนวันนัด</h5><div class="fc ro" style="width:90px;text-align:right" id="w1days">151</div><h5>วัน</h5>
+              <span class="nz" style="margin-left:8px;padding:4px 8px;display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="mchk"><input type="checkbox" id="w1chk" checked> Refill (ใบละไม่เกิน 2 เดือน)</label></span>
+            </div>
+            <div class="nz" id="w1prev" style="padding:12px;display:grid;gap:10px">
+              <div class="alert in" id="w1msg"></div>
+              <div class="shs" id="w1sheets"></div>
+            </div>
+            <div class="tsc"><table class="ts">
+              <thead><tr id="w1head"></tr></thead>
+              <tbody id="w1rows"></tbody>
+            </table></div>
+            <div class="alert wa" id="w1note"><b>แพทย์ใส่จำนวนรวมครบทั้งหมด</b> แล้วระบบซอยให้เองทีละใบ · <b>จำนวนใบคิดจากยาที่สั่งยาวที่สุด</b> ไม่ใช่วันนัด จึงไม่มีใบว่าง · ยาที่สั้นกว่าอยู่แค่ใบแรก ๆ จนครบวัน (ป้ายเทา) · ยาเม็ด = ขนาด × ความถี่ × จำนวนวันของใบ · ยาที่กรอกจำนวนเอง (ปากกาอินซูลิน ยาน้ำ ยาทา) แบ่งตามสัดส่วนวัน เศษปัดไปใบที่ได้สัดส่วนมากที่สุด · <b>คิดเงินเฉพาะใบที่ 1</b> ใบ Refill ยังไม่คิดเงิน</div>
+          </div></div>
+      </div>
+    </div>
   </div>
-
-  <div class="port"><div class="ph"><h3>การสั่งยา</h3>
-      <button class="b green">สูตรสั่งยา</button><button class="b green">Med Review</button><button class="b blue">Re-Med</button>
-      <span class="newzone"><button class="b refill">Refill</button></span>
-      <button class="b warn">เครื่องมือ ▾</button><button class="b black">สั่ง</button></div>
-    <div class="pb grid g6">
-      <div class="fl span3"><label>ประเภทใบสั่งยา</label><div class="in">ใบสั่งยาทั่วไป</div></div>
-      <div class="fl"><label>ยาเหลือ</label><div class="in"></div></div><div></div><div></div>
-      <div class="fl span3"><label>รหัสยา/ชื่อยา</label><div class="in">ค้นหายา...</div></div>
-      <div class="fl"><label>จน. วัน</label><div class="in ro" id="w1dur">30</div></div>
-      <div class="fl"><label>จน. ยา</label><div class="in"></div></div>
-      <div class="fl"><label>Route</label><div class="in">A</div></div>
-      <div class="fl span3"><label>วิธีใช้ยา</label><div class="in"></div></div>
-      <div class="fl"><label>Dose</label><div class="in"></div></div>
-      <div class="fl"><label>Unit</label><div class="in"></div></div>
-      <div class="fl"><label>เวลาใช้ยา</label><div class="in"></div></div>
-    </div></div>
-
-  <div class="port"><div class="ph"><h3>รายการยา</h3><button class="b out">Accept</button></div>
-    <div class="pb grid">
-      <div class="apptrow">
-        <h5>นัดครั้งถัดไป</h5>
-        <select class="in" style="width:170px" id="w1appt">
-          <option value="2">02/01/2570 (2 เดือน)</option>
-          <option value="3">02/02/2570 (3 เดือน)</option>
-          <option value="5" selected>02/04/2570 (5 เดือน)</option>
-          <option value="6">03/05/2570 (6 เดือน)</option>
-        </select>
-        <h5>จำนวนวันนัด</h5><div class="in ro" style="width:80px;text-align:right" id="w1days">151</div><h5>วัน</h5>
-        <span class="newzone" style="margin-left:14px;padding:2px 8px">
-          <label class="chk"><input type="checkbox" id="w1chk" checked> Refill (ซอยใบละไม่เกิน 2 เดือน)</label>
-        </span>
-      </div>
-
-      <div class="newzone" id="w1prev" style="padding:10px">
-        <div class="msg info" id="w1msg"></div>
-        <div class="sheets" id="w1sheets"></div>
-      </div>
-
-      <div class="tw"><table>
-        <tr><th>รายการยาเวชภัณฑ์</th><th>วิธีใช้</th><th class="n">จน. วัน</th><th class="n">จำนวน</th><th>ห้องยา</th><th class="n">จำนวนเงิน</th><th class="n">เบิกได้</th><th class="n">เบิกไม่ได้</th></tr>
-        <tbody id="w1rows"></tbody>
-      </table></div>
-      <div class="msg warn" id="w1note">ตารางนี้คือ <b>ใบที่ 1</b> เท่านั้น ใบ Refill จะถูกสร้างตอนกดบันทึก (ยืนยันใน W2)</div>
-    </div></div>
 </section>
 
 <!-- ================= W2 CONFIRM ================= -->
 <section class="page" id="w2">
   <div class="guide"><span class="who">แพทย์</span><h2 style="display:inline">W2 · ยืนยันการซอยใบ (ก่อนบันทึก)</h2>
     <p>เด้งขึ้นเมื่อกด <b>บันทึก</b> และติ๊ก Refill ไว้ แพทย์ตรวจและแก้จำนวนต่อใบได้ก่อนบันทึก ระบบจะบันทึกใบที่ 1 พร้อมใบ Refill ในคำสั่งเดียว</p></div>
-  <div class="dlg-wrap"><div class="dlg">
-    <div class="dh"><h3>ยืนยันการสั่งยาแบบ Refill · 5 เดือน → 3 ใบ</h3><button class="x">×</button></div>
-    <div class="db">
-      <div class="grid g4">
-        <div class="sheet s1"><h4>ใบที่ 1 · ใบสั่งยา</h4><div class="d">02/11/2569 → 02/12/2569</div><div class="big">30 วัน</div><span class="tag t-re">คิดเงินวันนี้</span></div>
-        <div class="sheet sr"><h4>ใบที่ 2 · Refill</h4><div class="d">วัน Refill 02/12/2569 (พ.)</div><div class="big">62 วัน</div><span class="tag t-wait">ยังไม่คิดเงิน</span></div>
-        <div class="sheet sr"><h4>ใบที่ 3 · Refill</h4><div class="d">วัน Refill 02/02/2570 (อ.)</div><div class="big">59 วัน</div><span class="tag t-wait">ยังไม่คิดเงิน</span></div>
-        <div class="sheet"><h4>นัดพบแพทย์</h4><div class="d">ครั้งถัดไป</div><div class="big">02/04/2570</div><span class="tag t-exp">151 วัน</span></div>
+  <div class="hx" style="min-height:820px">
+    <div data-top="doctor"></div>
+    <div data-ghost></div>
+    <div class="ov"><div class="md">
+      <div class="md-t"><h2>ยืนยันการสั่งยาแบบ Refill · 5 เดือน → 3 ใบ</h2><i class="las la-times"></i></div>
+      <div class="shs" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+        <div class="sh s1"><h4>ใบที่ 1 · ใบสั่งยา</h4><div class="d">02/11/2569 → 02/12/2569</div><div class="big">30 วัน</div><span><span class="chip ok">คิดเงินวันนี้</span></span></div>
+        <div class="sh sr"><h4>ใบที่ 2 · Refill 2/3</h4><div class="d">วัน Refill 02/12/2569 (พ.)</div><div class="big">62 วัน</div><span><span class="chip rf">ยังไม่คิดเงิน</span></span></div>
+        <div class="sh sr"><h4>ใบที่ 3 · Refill 3/3</h4><div class="d">วัน Refill 02/02/2570 (อ.)</div><div class="big">59 วัน</div><span><span class="chip rf">ยังไม่คิดเงิน</span></span></div>
+        <div class="sh"><h4>นัดพบแพทย์</h4><div class="d">ครั้งถัดไป</div><div class="big">02/04/2570</div><span><span class="chip old">151 วัน</span></span></div>
       </div>
-      <div class="tw"><table>
-        <tr><th>ยา</th><th>วิธีใช้</th><th class="n">ใบที่ 1<br>(30 วัน)</th><th class="n">Refill 2<br>(62 วัน)</th><th class="n">Refill 3<br>(59 วัน)</th><th class="n">รวม</th></tr>
-        <tr><td>Amlodipine 5 mg tab</td><td>1 เม็ด เช้า หลังอาหาร</td><td class="n">30</td><td class="n"><input class="in" style="width:70px;text-align:right" value="62"></td><td class="n"><input class="in" style="width:70px;text-align:right" value="59"></td><td class="n">151</td></tr>
-        <tr><td>Metformin 500 mg tab</td><td>1 เม็ด เช้า-เย็น หลังอาหาร</td><td class="n">60</td><td class="n"><input class="in" style="width:70px;text-align:right" value="124"></td><td class="n"><input class="in" style="width:70px;text-align:right" value="118"></td><td class="n">302</td></tr>
-        <tr><td>Simvastatin 20 mg tab</td><td>1 เม็ด ก่อนนอน</td><td class="n">30</td><td class="n"><input class="in" style="width:70px;text-align:right" value="62"></td><td class="n"><input class="in" style="width:70px;text-align:right" value="59"></td><td class="n">151</td></tr>
-        <tr><td>Insulin glargine pen 300 u <span class="tag t-warn">ไม่ใช่เม็ด</span></td><td>10 u ก่อนนอน</td><td class="n">1</td><td class="n"><input class="in" style="width:70px;text-align:right;border-color:var(--warn)" value=""></td><td class="n"><input class="in" style="width:70px;text-align:right;border-color:var(--warn)" value=""></td><td class="n">–</td></tr>
+      <div class="tsc"><table class="ts">
+        <tr><th>รายการยาเวชภัณฑ์</th><th class="n">ใบที่ 1<br>30 วัน</th><th class="n">Refill 2/3<br>62 วัน</th><th class="n">Refill 3/3<br>59 วัน</th><th class="n">รวม</th></tr>
+        <tr><td>Amlodipine 5 mg tab<div class="sub">1 เม็ด เช้า หลังอาหาร</div></td><td class="n">30</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="62"></td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="59"></td><td class="n">151</td></tr>
+        <tr><td>Metformin 500 mg tab<div class="sub">1 เม็ด เช้า-เย็น หลังอาหาร</div></td><td class="n">60</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="124"></td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="118"></td><td class="n">302</td></tr>
+        <tr><td>Simvastatin 20 mg tab<div class="sub">1 เม็ด ก่อนนอน</div></td><td class="n">30</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="62"></td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="59"></td><td class="n">151</td></tr>
+        <tr><td>Insulin glargine pen 300 u <span class="chip wt">กรอกจำนวนเอง</span><div class="sub">10 u ก่อนนอน</div></td><td class="n">1</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="2"></td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="2"></td><td class="n">5</td></tr>
       </table></div>
-      <div class="msg warn">ยาที่ไม่ใช่เม็ด ระบบคำนวณจำนวนให้ไม่ได้ (สูตรเดิมคำนวณเฉพาะ dosageFormMeaning = 1) <b>ต้องกรอกจำนวนต่อใบเอง</b> ถ้ายังว่างจะบันทึกไม่ได้</div>
-    </div>
-    <div class="df"><button class="b out">กลับไปแก้</button><button class="b green">บันทึก + พิมพ์ 3 ใบ</button></div>
-  </div></div>
+      <div class="alert in">ระบบซอยจากจำนวนรวมที่แพทย์สั่ง: ยาเม็ดคิดจาก ขนาด × ความถี่ × วันของใบ ส่วนยาที่กรอกจำนวนเอง (เช่น ปากกาอินซูลินรวม 5 ด้าม) แบ่งตามสัดส่วนวัน ได้ 1 / 2 / 2 · <b>ผลรวมทุกใบเท่ากับจำนวนที่สั่งเสมอ</b> แพทย์แก้รายใบได้ก่อนบันทึก</div>
+      <div class="md-a"><button class="mb basic">ยกเลิก</button><button class="mb save">บันทึก + พิมพ์ 3 ใบ</button></div>
+    </div></div>
+  </div>
 </section>
 
 <!-- ================= W3 PRINT ================= -->
@@ -379,86 +658,106 @@ ul.tight li{margin:2px 0}
   </div>
 </section>
 
-<!-- ================= W6 DOCTOR MANAGE ================= -->
+<!-- ================= W4 DOCTOR MANAGE ================= -->
 <section class="page" id="w6">
   <div class="guide"><span class="who">แพทย์</span><h2 style="display:inline">W4 · จัดการ / แก้ไขใบ Refill</h2>
-    <p>เปิดจากปุ่ม <b>Refill</b> ในหน้าสั่งยาของแพทย์ แก้ยาหรือจำนวนได้ ยกเลิก หรือพิมพ์ซ้ำได้เฉพาะใบที่ <b>รอแปลง</b> ใบที่แปลงแล้วให้แก้ใน order ปกติ</p></div>
-  <div class="dlg-wrap"><div class="dlg">
-    <div class="dh"><h3>ใบ Refill ของ นาย ตัวอย่าง ทดสอบระบบ (HN 1234/69)</h3><button class="x">×</button></div>
-    <div class="db">
-      <div class="tw"><table>
+    <p>เปิดจากแท็บใหม่ <b>ใบ Refill</b> (ข้างแท็บใบสั่งยา) ในหน้าสั่งยาของแพทย์ แก้ยาหรือจำนวนได้ ยกเลิก หรือพิมพ์ซ้ำได้เฉพาะใบที่ <b>รอแปลง</b> ใบที่แปลงแล้วให้แก้ใน order ปกติ ใบที่ค้างไม่มีวันหมดอายุ</p></div>
+  <div class="hx" style="min-height:860px">
+    <div data-top="doctor"></div>
+    <div data-ghost></div>
+    <div class="ov"><div class="md">
+      <div class="md-t"><h2>ใบ Refill · นาย ตัวอย่าง ทดสอบระบบ (HN 1234/69)</h2><i class="las la-times"></i></div>
+      <div class="tsc"><table class="ts">
         <tr><th>เลขที่</th><th>ครั้งที่</th><th>วันที่สั่ง</th><th>แพทย์ผู้สั่ง</th><th>วัน Refill</th><th class="n">วัน</th><th>สถานะ</th><th></th></tr>
-        <tr class="sel"><td>R-000123</td><td>2/3</td><td>02/11/2569</td><td>นพ.ตัวอย่าง ใจดี</td><td>02/12/2569</td><td class="n">62</td><td><span class="tag t-wait">รอแปลง</span></td><td><button class="b out">แก้ไข</button> <button class="b out">พิมพ์</button> <button class="b red">ยกเลิก</button></td></tr>
-        <tr><td>R-000124</td><td>3/3</td><td>02/11/2569</td><td>นพ.ตัวอย่าง ใจดี</td><td>02/02/2570</td><td class="n">59</td><td><span class="tag t-wait">รอแปลง</span></td><td><button class="b out">แก้ไข</button> <button class="b out">พิมพ์</button> <button class="b red">ยกเลิก</button></td></tr>
-        <tr class="dim"><td>R-000087</td><td>2/2</td><td>05/06/2569</td><td>พญ.ทดสอบ รักษา</td><td>05/08/2569</td><td class="n">61</td><td><span class="tag t-done">แปลงแล้ว 01/08/2569</span></td><td>Order 8812345</td></tr>
-        <tr class="dim"><td>R-000052</td><td>3/3</td><td>10/01/2569</td><td>พญ.ทดสอบ รักษา</td><td>10/05/2569</td><td class="n">61</td><td><span class="tag t-wait">รอแปลง (ค้าง)</span></td><td><button class="b out">พิมพ์</button> <button class="b red">ยกเลิก</button></td></tr>
+        <tr class="sel"><td>R-000123</td><td>2/3</td><td>02/11/2569</td><td>นพ.ตัวอย่าง ใจดี</td><td>02/12/2569</td><td class="n">62</td><td><span class="chip wt">รอแปลง</span></td><td style="white-space:nowrap"><button class="mb green sm">แก้ไข</button> <button class="mb basic sm"><i class="las la-print"></i></button> <button class="mb red sm">ยกเลิก</button></td></tr>
+        <tr><td>R-000124</td><td>3/3</td><td>02/11/2569</td><td>นพ.ตัวอย่าง ใจดี</td><td>02/02/2570</td><td class="n">59</td><td><span class="chip wt">รอแปลง</span></td><td style="white-space:nowrap"><button class="mb green sm">แก้ไข</button> <button class="mb basic sm"><i class="las la-print"></i></button> <button class="mb red sm">ยกเลิก</button></td></tr>
+        <tr class="dim"><td>R-000087</td><td>2/2</td><td>05/06/2569</td><td>พญ.ทดสอบ รักษา</td><td>05/08/2569</td><td class="n">61</td><td><span class="chip ok">แปลงแล้ว 01/08/2569</span></td><td>Order 8812345</td></tr>
+        <tr><td>R-000052</td><td>3/3</td><td>10/01/2569</td><td>พญ.ทดสอบ รักษา</td><td>10/05/2569</td><td class="n">61</td><td><span class="chip wt">รอแปลง (ค้าง)</span></td><td style="white-space:nowrap"><button class="mb basic sm"><i class="las la-print"></i></button> <button class="mb red sm">ยกเลิก</button></td></tr>
       </table></div>
-      <div class="port" style="box-shadow:none;border:1px solid var(--line)"><div class="ph"><h3>แก้ไข R-000123 · Refill 2/3</h3>
-        <label class="fl" style="display:flex;gap:6px;align-items:center;margin:0">วัน Refill <input class="in" style="width:130px" value="02/12/2569"></label></div>
-        <div class="pb tw"><table>
-          <tr><th>ยา</th><th>วิธีใช้</th><th class="n">วัน</th><th class="n">จำนวน</th><th></th></tr>
-          <tr><td>Amlodipine 5 mg tab</td><td>1 เม็ด เช้า หลังอาหาร</td><td class="n">62</td><td class="n"><input class="in" style="width:70px;text-align:right" value="62"></td><td><button class="b out">ลบ</button></td></tr>
-          <tr><td>Metformin 500 mg tab</td><td><input class="in" value="1 เม็ด เช้า-เย็น หลังอาหาร"></td><td class="n">62</td><td class="n"><input class="in" style="width:70px;text-align:right" value="124"></td><td><button class="b out">ลบ</button></td></tr>
-          <tr><td>Simvastatin 20 mg tab</td><td>1 เม็ด ก่อนนอน</td><td class="n">62</td><td class="n"><input class="in" style="width:70px;text-align:right" value="62"></td><td><button class="b out">ลบ</button></td></tr>
-          <tr><td colspan="5"><button class="b green">+ เพิ่มยา</button></td></tr>
-        </table></div></div>
-    </div>
-    <div class="df"><button class="b out">ปิด</button><button class="b green">บันทึกการแก้ไข</button></div>
-  </div></div>
-</section>
-
-<!-- ================= W4 PHARMACY SELECT ================= -->
-<section class="page" id="w4">
-  <div class="guide"><span class="who ph">เภสัช</span><h2 style="display:inline">W5 · คนไข้มารับยา Refill → เลือกใบ</h2>
-    <p>คนไข้ลงทะเบียนคลินิกไหนก็ได้ (ตัวอย่างนี้ <b>01/12/2569</b> มาก่อนวัน Refill 1 วัน) เภสัชเปิด <code>pharmacy/logdrugs</code> กดปุ่ม <b>Refill</b> (มีตัวเลขบอกจำนวนใบที่รอแปลง) แล้วเลือกใบทางซ้าย</p></div>
-
-  <div class="pbar"><div class="av">ภ</div>
-    <div><span class="r">ผู้ป่วย</span><b>นาย ตัวอย่าง ทดสอบระบบ</b></div><div><span class="r">HN</span><b>1234/69</b></div>
-    <div><span class="r">สิทธิวันนี้</span><b>ข้าราชการ (จ่ายตรง)</b></div><div><span class="r">ห้องตรวจ (visit วันนี้)</span><b>คลินิกรับยาต่อเนื่อง</b></div>
-    <div><span class="r">แพทย์ของ visit</span><b>– (ไม่ได้พบแพทย์)</b></div><div><span class="r">วันที่</span><b>01/12/2569</b></div>
+      <div class="kp" style="border:1px solid var(--hline);box-shadow:none"><div class="kp-h"><h3 style="font-size:17px">แก้ไข R-000123 · Refill 2/3</h3><label class="lb" style="margin:0">วัน Refill</label><div class="fc sel" style="width:160px">02/12/2569</div></div>
+        <div class="kp-b"><div class="tsc"><table class="ts">
+          <tr><th>รายการยาเวชภัณฑ์</th><th>วิธีใช้</th><th class="n">วัน</th><th class="n">จำนวน</th><th></th></tr>
+          <tr><td>Amlodipine 5 mg tab</td><td>1 เม็ด เช้า หลังอาหาร</td><td class="n">62</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="62"></td><td class="ic"><i class="las la-trash-alt"></i></td></tr>
+          <tr><td>Metformin 500 mg tab</td><td><input class="fc" value="1 เม็ด เช้า-เย็น หลังอาหาร"></td><td class="n">62</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="124"></td><td class="ic"><i class="las la-trash-alt"></i></td></tr>
+          <tr><td>Simvastatin 20 mg tab</td><td>1 เม็ด ก่อนนอน</td><td class="n">62</td><td class="n"><input class="fc" style="width:80px;display:inline-block;text-align:right" value="62"></td><td class="ic"><i class="las la-trash-alt"></i></td></tr>
+        </table></div><div><button class="mb green sm"><i class="las la-plus"></i> เพิ่มยา</button></div></div></div>
+      <div class="md-a"><button class="mb basic">ปิด</button><button class="mb save">บันทึกการแก้ไข</button></div>
+    </div></div>
   </div>
-  <div class="port"><div class="ph"><h3>การสั่งยา</h3><button class="b green">สูตรสั่งยา</button><button class="b green">Med Review</button><button class="b blue">Re-Med</button>
-    <span class="newzone"><button class="b refill">Refill <span class="cnt">2</span></button></span><button class="b black">สั่ง</button></div></div>
-
-  <div class="dlg-wrap"><div class="dlg">
-    <div class="dh"><h3>เลือกใบ Refill</h3><button class="x">×</button></div>
-    <div class="db"><div class="two">
-      <div class="grid" id="w4list">
-        <div class="card on" data-r="0"><div class="t">R-000123 · ครั้งที่ 2/3 <span class="tag t-wait">รอแปลง</span></div><div class="s">วัน Refill 02/12/2569</div><div class="s">สั่ง 02/11/2569 · นพ.ตัวอย่าง ใจดี · 3 รายการ</div></div>
-        <div class="card" data-r="1"><div class="t">R-000124 · ครั้งที่ 3/3 <span class="tag t-wait">รอแปลง</span></div><div class="s">วัน Refill 02/02/2570</div><div class="s">สั่ง 02/11/2569 · นพ.ตัวอย่าง ใจดี · 3 รายการ</div></div>
-        <div class="card" data-r="2"><div class="t">R-000052 · ครั้งที่ 3/3 <span class="tag t-wait">รอแปลง (ค้าง)</span></div><div class="s">วัน Refill 10/05/2569 · เลยมาแล้ว 205 วัน</div><div class="s">สั่ง 10/01/2569 · พญ.ทดสอบ รักษา · 3 รายการ</div></div>
-        <div class="card off"><div class="t">R-000087 · ครั้งที่ 2/2 <span class="tag t-done">แปลงแล้ว</span></div><div class="s">01/08/2569 · Order 8812345</div></div>
-      </div>
-      <div class="grid" style="align-content:start">
-        <div id="w4msg"></div>
-        <div class="tw"><table>
-          <tr><th>ยา</th><th>วิธีใช้</th><th class="n">วัน</th><th class="n">จำนวน</th></tr>
-          <tbody id="w4rows"></tbody>
-        </table></div>
-        <div class="msg info">กด <b>นำเข้าใบสั่งยา</b> แล้วยาจะเข้ารายการยาในหน้านี้ ราคาและสิทธิคิดตามสิทธิของ visit วันนี้ แต่<b>แพทย์ใน order เป็นแพทย์ผู้สั่งเดิม</b> ยังแก้ไขได้ก่อนกดบันทึก</div>
-      </div>
-    </div></div>
-    <div class="df"><button class="b out">ปิด</button><button class="b green" id="w4go">นำเข้าใบสั่งยา</button></div>
-  </div></div>
 </section>
 
-<!-- ================= W5 AFTER IMPORT ================= -->
-<section class="page" id="w5">
-  <div class="guide"><span class="who ph">เภสัช</span><h2 style="display:inline">W6 · นำเข้าแล้ว → บันทึกตาม flow ปกติ</h2>
-    <p>รายการยามีป้าย <span class="tag t-new">Refill 2/3</span> ข้างหน้า เมื่อกด <b>บันทึก</b> ระบบจะสร้างใบสั่งยาปกติ (เกิด Finance วันนี้) และเปลี่ยนใบ R-000123 เป็น <b>แปลงแล้ว</b> จากนั้นพิมพ์ Sticker ส่ง robot และชำระเงินเหมือนเดิม</p></div>
-
-  <div class="port"><div class="ph"><h3>รายการยา</h3><button class="b out">Accept</button><button class="b green">บันทึก</button><button class="b out">Sticker ยา</button></div>
-    <div class="pb grid">
-      <div class="tw"><table>
-        <tr><th></th><th>รายการยาเวชภัณฑ์</th><th>วิธีใช้</th><th class="n">จน. วัน</th><th class="n">จำนวน</th><th>ห้องยา</th><th class="n">จำนวนเงิน</th><th class="n">เบิกได้</th><th class="n">เบิกไม่ได้</th><th>แพทย์</th></tr>
-        <tr><td><span class="tag t-new">Refill 2/3</span></td><td>Amlodipine 5 mg tab</td><td>1 เม็ด เช้า หลังอาหาร</td><td class="n">62</td><td class="n">62</td><td>ห้องยา OPD</td><td class="n">62.00</td><td class="n">62.00</td><td class="n">0.00</td><td>นพ.ตัวอย่าง ใจดี <span class="tag t-new">ผู้สั่งเดิม</span></td></tr>
-        <tr><td><span class="tag t-new">Refill 2/3</span></td><td>Metformin 500 mg tab</td><td>1 เม็ด เช้า-เย็น หลังอาหาร</td><td class="n">62</td><td class="n">124</td><td>ห้องยา OPD</td><td class="n">124.00</td><td class="n">124.00</td><td class="n">0.00</td><td>นพ.ตัวอย่าง ใจดี <span class="tag t-new">ผู้สั่งเดิม</span></td></tr>
-        <tr><td><span class="tag t-new">Refill 2/3</span></td><td>Simvastatin 20 mg tab</td><td>1 เม็ด ก่อนนอน</td><td class="n">62</td><td class="n">62</td><td>ห้องยา OPD</td><td class="n">93.00</td><td class="n">93.00</td><td class="n">0.00</td><td>นพ.ตัวอย่าง ใจดี <span class="tag t-new">ผู้สั่งเดิม</span></td></tr>
-        <tr><td></td><td colspan="5"><b>รวม</b></td><td class="n"><b>279.00</b></td><td class="n"><b>279.00</b></td><td class="n"><b>0.00</b></td><td></td></tr>
-      </table></div>
-      <div class="msg ok">บันทึกสำเร็จ · Order 8823456 · ใบ Refill R-000123 เปลี่ยนเป็น <b>แปลงแล้ว</b> (TB_FINANCES.RefillId = R-000123)</div>
-      <div class="msg err">ตัวอย่างเมื่อแปลงซ้ำ: "ใบ Refill R-000123 ถูกแปลงแล้วเมื่อ 01/12/2569 10:42 โดย ภก.ตัวอย่าง" ระบบจะไม่บันทึก</div>
+<!-- ================= W5 PHARMACY SELECT ================= -->
+<section class="page" id="w4">
+  <div class="guide"><span class="who phx">เภสัช</span><h2 style="display:inline">W5 · คนไข้มารับยา Refill → เลือกใบ</h2>
+    <p>คนไข้ลงทะเบียนคลินิกไหนก็ได้ (ตัวอย่างนี้ <b>01/12/2569</b> มาก่อนวัน Refill 1 วัน) เภสัชเปิด <code>pharmacy/logdrugs</code> กดปุ่ม <b>ดึงใบ Refill</b> (ตัวเลขคือจำนวนใบที่รอแปลง) แล้วเลือกใบทางซ้าย</p></div>
+  <div class="hx" style="min-height:900px">
+    <div data-top="pharmacy"></div>
+    <div class="hx-body">
+      <div class="hx-tb"><button class="mb blue">Health Rider</button><button class="mb basic icon"><i class="las la-print i"></i></button><button class="mb save">บันทึก</button></div>
+      <div class="hx-row"><div data-pc="pharmacy"></div>
+        <div class="kp"><div class="kp-h"><h3>การสั่งยา</h3><button class="mb green sm">สูตรสั่งยา</button><button class="mb green sm">Med Review</button><button class="mb blue sm">Re-Med</button>
+          <span class="nz"><button class="mb green sm">ดึงใบ Refill <span class="cnt">3</span></button></span><button class="mb save sm">สั่ง</button></div><div class="kp-b"></div></div>
+      </div>
+    </div>
+    <div class="ov" style="top:56px"><div class="md">
+      <div class="md-t"><h2>เลือกใบ Refill · นาย ตัวอย่าง ทดสอบระบบ (HN 1234/69)</h2><i class="las la-times"></i></div>
+      <div class="md-2">
+        <div style="display:grid;gap:8px;align-content:start" id="w4list">
+          <div class="rc on" data-r="0"><div class="t">R-000123 · ครั้งที่ 2/3 <span class="chip wt">รอแปลง</span></div><div class="s">วัน Refill 02/12/2569</div><div class="s">สั่ง 02/11/2569 · นพ.ตัวอย่าง ใจดี · 3 รายการ</div></div>
+          <div class="rc" data-r="1"><div class="t">R-000124 · ครั้งที่ 3/3 <span class="chip wt">รอแปลง</span></div><div class="s">วัน Refill 02/02/2570</div><div class="s">สั่ง 02/11/2569 · นพ.ตัวอย่าง ใจดี · 3 รายการ</div></div>
+          <div class="rc" data-r="2"><div class="t">R-000052 · ครั้งที่ 3/3 <span class="chip wt">รอแปลง (ค้าง)</span></div><div class="s">วัน Refill 10/05/2569 · เลยมาแล้ว 205 วัน</div><div class="s">สั่ง 10/01/2569 · พญ.ทดสอบ รักษา · 3 รายการ</div></div>
+          <div class="rc off"><div class="t">R-000087 · ครั้งที่ 2/2 <span class="chip ok">แปลงแล้ว</span></div><div class="s">01/08/2569 · Order 8812345</div></div>
+        </div>
+        <div style="display:grid;gap:12px;align-content:start">
+          <div id="w4msg"></div>
+          <div class="tsc"><table class="ts">
+            <tr><th>รายการยาเวชภัณฑ์</th><th>วิธีใช้</th><th class="n">วัน</th><th class="n">จำนวน</th></tr>
+            <tbody id="w4rows"></tbody>
+          </table></div>
+          <div class="alert in">กด <b>นำเข้าใบสั่งยา</b> แล้วยาจะเข้ารายการยาในหน้านี้ ราคาและสิทธิคิดตามสิทธิของ visit วันนี้ แต่<b>แพทย์ใน order เป็นแพทย์ผู้สั่งเดิม</b> ยังแก้ไขได้ก่อนกดบันทึก</div>
+        </div>
+      </div>
+      <div class="md-a"><button class="mb basic">ปิด</button><button class="mb save" id="w4go">นำเข้าใบสั่งยา</button></div>
     </div></div>
+  </div>
+</section>
+
+<!-- ================= W6 AFTER IMPORT ================= -->
+<section class="page" id="w5">
+  <div class="guide"><span class="who phx">เภสัช</span><h2 style="display:inline">W6 · นำเข้าแล้ว → บันทึกตาม flow ปกติ</h2>
+    <p>รายการยามีป้าย <span class="chip rf">Refill 2/3</span> เมื่อกด <b>บันทึก</b> ระบบจะสร้างใบสั่งยาปกติ (เกิด Finance วันนี้) ใส่แพทย์ผู้สั่งเดิม และเปลี่ยนใบ R-000123 เป็น <b>แปลงแล้ว</b> จากนั้นพิมพ์ Sticker ส่ง robot และชำระเงินเหมือนเดิม</p></div>
+  <div class="hx">
+    <div data-top="pharmacy"></div>
+    <div class="hx-body">
+      <div class="hx-tb"><button class="mb blue">Health Rider</button><button class="mb basic icon"><i class="las la-print i"></i></button><button class="mb save">บันทึก</button></div>
+      <div class="hx-row"><div data-pc="pharmacy"></div>
+        <div class="kp"><div class="kp-h"><div class="ntabs"><span>Lab Monitor</span><span>นัดหมาย</span><span class="on">ใบสั่งยา</span></div></div>
+          <div class="kp-b"><div class="tsc"><table class="ts">
+            <tr><th></th><th>Med.Order no.</th><th>วันที่สั่ง</th><th>สถานะ</th><th>ห้องตรวจ</th><th>แพทย์</th><th>ห้องยา</th><th class="n">จำนวนเงิน</th></tr>
+            <tr class="sel"><td class="ic"><i class="las la-lock-open"></i></td><td>8823456 <span class="chip rf">Refill 2/3</span></td><td>01/12/2569</td><td>สั่งยา</td><td>คลินิกรับยาต่อเนื่อง</td><td>นพ.ตัวอย่าง ใจดี</td><td>ห้องยา OPD</td><td class="n">279.00</td></tr>
+          </table></div></div></div>
+      </div>
+      <div class="hx-row">
+        <div class="kp"><div class="kp-h"><h3>การสั่งยา</h3><button class="mb green sm">สูตรสั่งยา</button><button class="mb green sm">Med Review</button><button class="mb blue sm">Re-Med</button><span class="nz"><button class="mb green sm">ดึงใบ Refill <span class="cnt">2</span></button></span><button class="mb save sm">สั่ง</button></div>
+          <div class="kp-b"><div class="fgrid">
+            <div class="c6"><label class="lb">รหัสยา/ชื่อยา</label><div class="fc sel fph">รหัสยา/ชื่อยา</div></div>
+            <div class="c2"><label class="lb">จน. วัน</label><div class="fc ro"></div></div><div class="c2"><label class="lb">จน. ยา</label><div class="fc"></div></div><div class="c2"><label class="lb">NED</label><div class="fc ro"></div></div>
+          </div></div></div>
+        <div class="kp"><div class="kp-h"><h3>Med.Order no. : 8823456</h3><button class="mb basic sm">Sticker ยา</button><button class="mb accept">Accept</button></div>
+          <div class="kp-b">
+            <div class="tsc"><table class="ts">
+              <tr><th></th><th>รายการยาเวชภัณฑ์</th><th class="n">จำนวน</th><th>ห้องยา</th><th class="n">จำนวนเงิน</th><th class="n">เครดิต</th><th class="n">เบิกได้</th><th class="n">เบิกไม่ได้</th></tr>
+              <tr><td class="ic"><i class="las la-edit"></i><i class="las la-trash-alt"></i></td><td>Amlodipine 5 mg tab <span class="chip rf">Refill 2/3</span><div class="sub">1 เม็ด เช้า หลังอาหาร · 62 วัน</div></td><td class="n">62</td><td>ห้องยา OPD</td><td class="n">62.00</td><td class="n">62.00</td><td class="n">62.00</td><td class="n">0.00</td></tr>
+              <tr><td class="ic"><i class="las la-edit"></i><i class="las la-trash-alt"></i></td><td>Metformin 500 mg tab <span class="chip rf">Refill 2/3</span><div class="sub">1 เม็ด เช้า-เย็น หลังอาหาร · 62 วัน</div></td><td class="n">124</td><td>ห้องยา OPD</td><td class="n">124.00</td><td class="n">124.00</td><td class="n">124.00</td><td class="n">0.00</td></tr>
+              <tr><td class="ic"><i class="las la-edit"></i><i class="las la-trash-alt"></i></td><td>Simvastatin 20 mg tab <span class="chip rf">Refill 2/3</span><div class="sub">1 เม็ด ก่อนนอน · 62 วัน</div></td><td class="n">62</td><td>ห้องยา OPD</td><td class="n">93.00</td><td class="n">93.00</td><td class="n">93.00</td><td class="n">0.00</td></tr>
+              <tr><td></td><td><b>รวม</b></td><td></td><td></td><td class="n"><b>279.00</b></td><td class="n"><b>279.00</b></td><td class="n"><b>279.00</b></td><td class="n"><b>0.00</b></td></tr>
+            </table></div>
+            <div class="alert ok">บันทึกสำเร็จ · Order 8823456 · แพทย์ผู้สั่ง นพ.ตัวอย่าง ใจดี · ใบ Refill R-000123 เปลี่ยนเป็น <b>แปลงแล้ว</b> (TB_FINANCES.RefillId = R-000123)</div>
+            <div class="alert er">ตัวอย่างเมื่อแปลงซ้ำ: "ใบ Refill R-000123 ถูกแปลงแล้วเมื่อ 01/12/2569 10:42 โดย ภก.ตัวอย่าง" ระบบจะไม่บันทึก</div>
+          </div></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 </main>
@@ -471,11 +770,49 @@ document.querySelectorAll('.nb').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===b.dataset.p));
   window.scrollTo(0,0);
 }));
+/* theme: ehr-12 (purple) is the system default; ehr-13 (black) is selectable per user */
+document.querySelectorAll('.themebar button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.themebar button').forEach(x=>x.classList.toggle('on',x===b));
+  document.body.classList.toggle('th-black',b.dataset.t==='black');
+}));
+
+/* shared HA.OS chrome */
+const TOPS={
+  doctor:{menu:['ห้องตรวจ','สั่งยา','สั่ง Lab','สั่ง X-ray','นัดหมาย','ใบรับรองแพทย์'],on:1,crumb:'แพทย์ › สั่งยา',user:'นพ.ตัวอย่าง ใจดี'},
+  pharmacy:{menu:['Dashboard','สั่งยา/จ่ายยา','คัดกรองใบสั่งยา','ส่วนลดยา','ประวัติยา'],on:1,crumb:'ห้องยาผู้ป่วยนอก › สั่งยา/จ่ายยา',user:'ภก.ตัวอย่าง'}
+};
+document.querySelectorAll('[data-top]').forEach(el=>{
+  const t=TOPS[el.dataset.top];
+  el.outerHTML=`<div class="hx-top"><div class="lg">HA.OS</div><i class="las la-bars" style="font-size:22px;color:#959cb6"></i><div class="mn">${t.menu.map((m,i)=>`<span class="${i===t.on?'on':''}">${m}</span>`).join('')}</div><div class="us">${t.user}<i class="las la-user-circle"></i></div></div><div class="hx-sub"><b>${t.crumb.split(' › ').pop()}</b>${t.crumb}</div>`;
+});
+const PCS={
+  doctor:{clinic:'อายุรกรรม 1',doc:'นพ.ตัวอย่าง ใจดี',docro:true,date:'02/11/2569'},
+  pharmacy:{clinic:'คลินิกรับยาต่อเนื่อง',doc:'',docro:false,date:'01/12/2569'}
+};
+document.querySelectorAll('[data-pc]').forEach(el=>{
+  const p=PCS[el.dataset.pc];
+  el.outerHTML=`<div class="kp"><div class="pc"><div class="av"></div><div style="display:grid;gap:4px;min-width:0">
+    <div class="nm">นาย ตัวอย่าง ทดสอบระบบ <i class="las la-mars"></i></div>
+    <div class="kv"><span><b>HN :</b> 1234/69</span><span><b>เบอร์โทรศัพท์ :</b> 08x-xxx-xxxx</span><span><b>อายุ :</b> 62 ปี 3 เดือน</span><span><b>น้ำหนัก :</b> 68</span></div></div></div>
+    <div class="pr"><span><b>สิทธิ (1 สิทธิ)</b></span><div class="fc sel" style="width:190px;display:inline-block">ข้าราชการ (จ่ายตรง)</div><span><b>จำนวนเงิน</b>0.00</span><span><b>เครดิต</b>0.00</span><span><b>เบิกได้</b>0.00</span><span><b>เบิกไม่ได้</b>0.00</span><span><b>ส่วนลด</b>0.00</span></div>
+    <div class="pd"><div><label class="lb">ห้องตรวจ</label><div class="fc sel">${p.clinic} · ${p.date}</div></div>
+      <div><label class="lb">แพทย์ผู้สั่ง</label><div class="fc sel ${p.docro?'ro':'fph'}">${p.doc||'เลือกแพทย์'}</div></div>
+      <div><label class="lb">สาขาแพทย์</label><div class="fc ro">${p.doc?'อายุรศาสตร์':'•••'}</div></div><div><label class="lb">ประเภทแพทย์</label><div class="fc ro">${p.doc?'แพทย์ประจำ':'•••'}</div></div></div></div>`;
+});
+document.querySelectorAll('[data-ghost]').forEach(el=>{
+  el.outerHTML=`<div class="hx-body"><div class="hx-tb"><button class="mb basic icon"><i class="las la-print i"></i></button><button class="mb save">บันทึก</button></div><div class="hx-row"><div class="kp" style="height:260px"></div><div class="kp" style="height:260px"></div></div><div class="hx-row"><div class="kp" style="height:420px"></div><div class="kp" style="height:420px"></div></div></div>`;
+});
 
 /* W1: split sheets backwards from the appointment date, 2 months each; remainder goes to sheet 1; Sat/Sun -> previous Friday */
 const TODAY=new Date(2026,10,2);
 const APPTS={2:new Date(2027,0,2),3:new Date(2027,1,2),5:new Date(2027,3,2),6:new Date(2027,4,3)};
-const DRUGS=[{n:'Amlodipine 5 mg tab',u:'1 เม็ด เช้า หลังอาหาร',perDay:1,price:1},{n:'Metformin 500 mg tab',u:'1 เม็ด เช้า-เย็น หลังอาหาร',perDay:2,price:1},{n:'Simvastatin 20 mg tab',u:'1 เม็ด ก่อนนอน',perDay:1,price:1.5}];
+const DRUGS=[{n:'Amlodipine 5 mg tab',u:'1 เม็ด เช้า หลังอาหาร',perDay:1,price:1,unit:'เม็ด'},{n:'Metformin 500 mg tab',u:'1 เม็ด เช้า-เย็น หลังอาหาร',perDay:2,price:1,unit:'เม็ด'},{n:'Simvastatin 20 mg tab',u:'1 เม็ด ก่อนนอน',perDay:1,price:1.5,unit:'เม็ด'},{n:'Amoxicillin 500 mg cap',u:'1 แคปซูล วันละ 3 ครั้ง หลังอาหาร',perDay:3,price:2,unit:'แคปซูล',want:14}];
+/* a drug's days are capped at the refill period; a shorter drug fills the earliest sheets until its days run out */
+function allocDays(eff,sh){let left=eff;return sh.map(x=>{const d=Math.max(0,Math.min(left,x.days));left-=d;return d})}
+/* drugs whose quantity the doctor types (not dose x frequency) are split by share of days */
+const MANUAL=[{n:'Insulin glargine pen 300 u',u:'10 u ก่อนนอน',perMonth:1,price:350,unit:'ด้าม'}];
+/* largest-remainder split so the sheets always add up to the doctor's total */
+function splitQty(tot,w){const td=w.reduce((a,x)=>a+x,0)||1,raw=w.map(x=>tot*x/td),fl=raw.map(Math.floor);let rem=tot-fl.reduce((a,b)=>a+b,0);raw.map((v,i)=>[v-fl[i],i]).sort((a,b)=>b[0]-a[0]).slice(0,rem).forEach(([,i])=>fl[i]++);return fl}
 const TH=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
 const fmt=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+(d.getFullYear()+543);
 const days=(a,b)=>Math.round((b-a)/864e5);
@@ -489,43 +826,57 @@ function split(appt){
   return bounds.slice(0,-1).map((s,i)=>({start:s.d,shift:s.shift,end:bounds[i+1].d,days:days(s.d,bounds[i+1].d),refill:i>0}));
 }
 function renderW1(){
-  const m=document.getElementById('w1appt').value,appt=APPTS[m],on=document.getElementById('w1chk').checked;
-  const total=days(TODAY,appt);
-  document.getElementById('w1days').textContent=total;
-  const sh=on?split(appt):[{start:TODAY,end:appt,days:total,refill:false}];
-  const prev=document.getElementById('w1prev');
-  prev.style.display=on?'':'none';
-  document.getElementById('w1note').style.display=on&&sh.length>1?'':'none';
+  const sel=document.getElementById('w1appt').value,on=document.getElementById('w1chk').checked,noAppt=sel==='0';
+  const appt=noAppt?null:APPTS[sel],apptDays=appt?days(TODAY,appt):null;
+  const dsel=document.getElementById('w1drug').value;
+  const base=dsel==='appt'?(apptDays||30):+dsel;
+  document.getElementById('w1days').textContent=noAppt?'–':apptDays;
+  const items=[...DRUGS.map(d=>({d,want:d.want||base,man:false})),...MANUAL.map(d=>({d,want:base,man:true}))];
+  const maxDays=Math.max(...items.map(x=>x.want));
+  const end=new Date(TODAY);end.setDate(end.getDate()+maxDays);
+  const sh=on?split(end):[{start:TODAY,end,days:maxDays,refill:false}];
+  const N2=sh.length,multi=on&&N2>1;
+  document.getElementById('w1prev').style.display=on?'':'none';
+  document.getElementById('w1note').style.display=multi?'':'none';
   if(on){
-    document.getElementById('w1msg').innerHTML=sh.length>1
-      ?`นัด ${m} เดือน → ซอยเป็น <b>${sh.length} ใบ</b> (ใบสั่งยา 1 + Refill ${sh.length-1}) · ใบแรกได้เศษ ใบที่เหลือใบละ 2 เดือน`
-      :`นัดไม่เกิน 2 เดือน ไม่ต้องซอยใบ บันทึกเป็นใบสั่งยาปกติ`;
-    const N=sh.length;
+    let msg=N2>1?`ยาที่สั่งยาวที่สุด <b>${maxDays} วัน</b> → ซอยเป็น <b>${N2} ใบ</b> (ใบสั่งยา 1 + Refill ${N2-1}) · ใบแรกได้เศษ ใบที่เหลือใบละ 2 เดือน`
+                :`ยาที่สั่งยาวที่สุด ${maxDays} วัน ไม่เกิน 2 เดือน ไม่ต้องซอยใบ บันทึกเป็นใบสั่งยาปกติ`;
+    if(appt){const gap=days(end,appt);
+      if(gap>7)msg+=`<br><span class="chip wt">ยาหมดก่อนวันนัด ${gap} วัน</span> แจ้งให้ทราบเท่านั้น จำนวนใบไม่เปลี่ยน`;
+      else if(gap<-7)msg+=`<br><span class="chip wt">ยาเกินวันนัด ${-gap} วัน</span> ใบ Refill สุดท้ายจะเลยวันนัด วันนัดแพทย์จะเห็นในแท็บใบ Refill`;}
+    document.getElementById('w1msg').innerHTML=msg;
     document.getElementById('w1sheets').innerHTML=sh.map((s,i)=>s.refill
-      ?`<div class="sheet sr"><h4>ใบที่ ${i+1} · Refill ${i+1}/${N}</h4><div class="d">วัน Refill ${fmt(s.start)} (${TH[s.start.getDay()]})${s.shift?` <span class="tag t-warn">เลื่อนจาก ${s.shift}</span>`:''}</div><div class="big">${s.days} วัน</div><span class="tag t-wait">ยังไม่คิดเงิน</span></div>`
-      :`<div class="sheet s1"><h4>ใบที่ 1 · ใบสั่งยา</h4><div class="d">${fmt(s.start)} → ${fmt(s.end)}</div><div class="big">${s.days} วัน</div><span class="tag t-re">คิดเงินวันนี้</span></div>`).join('');
+      ?`<div class="sh sr"><h4>ใบที่ ${i+1} · Refill ${i+1}/${N2}</h4><div class="d">วัน Refill ${fmt(s.start)} (${TH[s.start.getDay()]})${s.shift?` <span class="chip wt">เลื่อนจาก ${s.shift}</span>`:''}</div><div class="big">${s.days} วัน</div><span><span class="chip rf">ยังไม่คิดเงิน</span></span></div>`
+      :`<div class="sh s1"><h4>ใบที่ 1 · ใบสั่งยา</h4><div class="d">${fmt(s.start)} → ${fmt(s.end)}</div><div class="big">${s.days} วัน</div><span><span class="chip ok">คิดเงินวันนี้</span></span></div>`).join('');
   }
-  const d1=sh[0].days;
-  document.getElementById('w1dur').textContent=d1;
-  document.getElementById('w1rows').innerHTML=DRUGS.map(d=>{const q=d.perDay*d1,a=(q*d.price).toFixed(2);return `<tr><td>${d.n}</td><td>${d.u}</td><td class="n">${d1}</td><td class="n">${q}</td><td>ห้องยา OPD</td><td class="n">${a}</td><td class="n">${a}</td><td class="n">0.00</td></tr>`}).join('');
+  document.getElementById('w1dur').textContent=base;
+  const shCols=multi?sh.map((x,i)=>i?`<th class="n">Refill ${i+1}/${N2}<div class="sub" style="color:inherit;opacity:.7">${fmt(x.start)} · ${x.days} วัน</div></th>`:`<th class="n">ใบที่ 1<div class="sub" style="color:inherit;opacity:.7">คิดเงินวันนี้ · ${x.days} วัน</div></th>`).join(''):'';
+  document.getElementById('w1head').innerHTML=`<th></th><th>รายการยาเวชภัณฑ์</th><th class="n">จำนวนรวม</th>${shCols}<th>ห้องยา</th><th class="n">จำนวนเงิน${multi?'<div class="sub" style="color:inherit;opacity:.7">เฉพาะใบที่ 1</div>':''}</th><th class="n">เบิกได้</th><th class="n">เบิกไม่ได้</th>`;
+  document.getElementById('w1rows').innerHTML=items.map(({d,want,man})=>{
+    const al=allocDays(want,sh);
+    const per=man?splitQty(d.perMonth*Math.max(1,Math.round(want/30.4)),al):al.map(x=>d.perDay*x);
+    const tot=per.reduce((a,b)=>a+b,0),q1=multi?per[0]:tot,a=(q1*d.price).toFixed(2);
+    const cells=multi?per.map((q,i)=>`<td class="n"${i?' style="color:var(--main)"':' style="font-weight:600"'}>${q}</td>`).join(''):'';
+    return `<tr><td class="ic"><i class="las la-edit"></i><i class="las la-trash-alt"></i></td><td>${d.n}${man?' <span class="chip wt">กรอกจำนวนเอง</span>':''}${multi&&want<maxDays?` <span class="chip old">${want} วัน · อยู่แค่ใบแรก ๆ</span>`:''}<div class="sub">${d.u} · ${want} วัน</div></td><td class="n"><b>${tot}</b> ${d.unit}</td>${cells}<td>ห้องยา OPD</td><td class="n">${a}</td><td class="n">${a}</td><td class="n">0.00</td></tr>`}).join('');
 }
 document.getElementById('w1appt').addEventListener('change',renderW1);
 document.getElementById('w1chk').addEventListener('change',renderW1);
+document.getElementById('w1drug').addEventListener('change',renderW1);
 renderW1();
 
-/* W4: pick a refill sheet */
+/* W5: pick a refill sheet */
 const RF=[
-  {days:62,msg:'<div class="msg ok">มาก่อนวัน Refill 1 วัน · แปลงได้</div>'},
-  {days:59,msg:'<div class="msg warn">มาก่อนวัน Refill 63 วัน · แปลงได้ (กติกาให้มาก่อนได้ตลอด) แต่ <b>Refill 2/3 ยังรอแปลงอยู่</b> ควรแปลงใบนั้นก่อน</div>'},
-  {days:61,msg:'<div class="msg warn">ใบเก่าที่ค้างจากการสั่งเมื่อ 10/01/2569 · ไม่มีวันหมดอายุ แปลงได้ แต่ <b>ควรดูว่ายังใช้ยาชุดนี้อยู่หรือไม่</b> (ดุลพินิจเภสัชกร)</div>'}
+  {days:62,msg:'<div class="alert ok">มาก่อนวัน Refill 1 วัน · แปลงได้</div>'},
+  {days:59,msg:'<div class="alert wa">มาก่อนวัน Refill 63 วัน · แปลงได้ (กติกาให้มาก่อนได้ตลอด) แต่ <b>Refill 2/3 ยังรอแปลงอยู่</b> ควรแปลงใบนั้นก่อน</div>'},
+  {days:61,msg:'<div class="alert wa">ใบเก่าที่ค้างจากการสั่งเมื่อ 10/01/2569 · ไม่มีวันหมดอายุ แปลงได้ แต่ <b>ควรดูว่ายังใช้ยาชุดนี้อยู่หรือไม่</b> (ดุลพินิจเภสัชกร)</div>'}
 ];
 function renderW4(i){
-  document.querySelectorAll('#w4list .card[data-r]').forEach(c=>c.classList.toggle('on',+c.dataset.r===i));
+  document.querySelectorAll('#w4list .rc[data-r]').forEach(c=>c.classList.toggle('on',+c.dataset.r===i));
   const r=RF[i];
   document.getElementById('w4msg').innerHTML=r.msg;
   document.getElementById('w4rows').innerHTML=DRUGS.map(d=>`<tr><td>${d.n}</td><td>${d.u}</td><td class="n">${r.days}</td><td class="n">${d.perDay*r.days}</td></tr>`).join('');
 }
-document.querySelectorAll('#w4list .card[data-r]').forEach(c=>c.addEventListener('click',()=>renderW4(+c.dataset.r)));
+document.querySelectorAll('#w4list .rc[data-r]').forEach(c=>c.addEventListener('click',()=>renderW4(+c.dataset.r)));
 document.getElementById('w4go').addEventListener('click',()=>document.querySelector('.nb[data-p="w5"]').click());
 renderW4(0);
 </script>
