@@ -1,0 +1,7 @@
+# มี repo ของตัวเองแยกอยู่แล้ว
+module/
+queue/
+new-queue/
+
+# เอกสารต้นทางจากผู้ขาย ไม่ขึ้น repo
+integrate-erp/data/

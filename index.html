@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light" style="color-scheme:light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HA.OS เอกสารโมดูลใหม่</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ef; --card:#ffffff; --ink:#1d1f23; --muted:#5d636e; --line:#dcdad3;
+  --accent:#0f6e6a; --accent-soft:#e2f1ef; --chip:#efeee9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Thai','Noto Sans Thai','Sarabun','Segoe UI',sans-serif;font-size:16px;line-height:1.6}
+.wrap{max-width:1040px;margin:0 auto;padding:40px 16px 56px}
+.kicker{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 6px}
+h1{font-size:34px;line-height:1.25;margin:0 0 10px}
+.lead{font-size:18px;color:var(--muted);margin:0 0 26px;max-width:760px}
+.group{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin:28px 0 10px}
+.decks{display:grid;gap:16px}
+a.deck{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:18px;align-items:center;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;transition:border-color .15s, box-shadow .15s}
+a.deck:hover,a.deck:focus-visible{border-color:var(--accent);box-shadow:0 2px 10px rgba(15,110,106,.12);outline:none}
+.num{width:56px;height:56px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700}
+h2{font-size:20px;margin:0 0 4px}
+.desc{margin:0 0 8px;color:var(--muted);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--chip);border-radius:999px;padding:1px 10px;font-size:13px;color:var(--muted)}
+.go{font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap}
+.note{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.note h3{font-size:16px;margin:0 0 8px}
+.note ul{margin:0;padding-left:20px;font-size:14.5px;color:var(--muted)}
+.note li{margin:3px 0}
+.note a{color:var(--accent)}
+@media (max-width:640px){
+  h1{font-size:26px}
+  a.deck{grid-template-columns:44px minmax(0,1fr);padding:16px}
+  .num{width:44px;height:44px;font-size:20px}
+  .go{grid-column:2}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">HA.OS · เอกสารประกอบโมดูล</p>
+  <h1>สารบัญเอกสาร</h1>
+  <p class="lead">รวม Slide และเอกสาร Flow ของงานการเงิน การเรียกเก็บ ห้องยา และการเชื่อมต่อ ERP</p>
+
+  <p class="group">การเงินและการเรียกเก็บ</p>
+  <div class="decks">
+    <a class="deck" href="eclaim/uc-eclaim-flow.html">
+      <div class="num">1</div>
+      <div>
+        <h2>เส้นทางเบิก UC e-Claim</h2>
+        <p class="desc">ตั้งแต่ขอ Authen Code ถึงได้เงินจาก e-Claim · รายละเอียดแต่ละด่าน · 16 แฟ้มมาจากด่านไหน · ผลที่ได้ · เช็กลิสต์ต่อเคสก่อนกดส่ง</p>
+        <div class="chips"><span class="chip">Flow 1 หน้า</span><span class="chip">ทีมเรียกเก็บ</span></div>
+      </div>
+      <span class="go">เปิด →</span>
+    </a>
+
+    <a class="deck" href="reimbursement/marketing-deck.html">
+      <div class="num">2</div>
+      <div>
+        <h2>HA.OS งานเรียกเก็บ สำหรับทีมการตลาด</h2>
+        <p class="desc">รักษาก่อน เก็บเงินทีหลัง · ใครจ่ายเงินให้โรงพยาบาล · 6 ขั้นตอนตั้งแต่เปิดบิลจนเงินเข้า</p>
+        <div class="chips"><span class="chip">27 หน้า</span><span class="chip">ทีมการตลาด</span></div>
+      </div>
+      <span class="go">เปิด →</span>
+    </a>
+  </div>
+
+  <p class="group">ห้องยา</p>
+  <div class="decks">
+    <a class="deck" href="refill/refill-plan.html">
+      <div class="num">3</div>
+      <div>
+        <h2>ใบยา Refill OPD</h2>
+        <p class="desc">สรุป Flow และกติกา · แผนจุดที่ต้องแก้ W1–W6 ตั้งแต่สั่งยาและติ๊ก Refill จนคนไข้มารับยา</p>
+        <div class="chips"><span class="chip">8 หน้า</span><span class="chip">ทีมพัฒนา</span></div>
+      </div>
+      <span class="go">เปิด →</span>
+    </a>
+  </div>
+
+  <p class="group">เชื่อมต่อ HIS ⇄ ERP</p>
+  <div class="decks">
+    <a class="deck" href="integrate-erp/slide/his-erp-integration.html">
+      <div class="num">4</div>
+      <div>
+        <h2>การเชื่อมต่อ HIS ⇄ ERP</h2>
+        <p class="desc">เจ้าของข้อมูลแต่ละระบบ · ขาออก 5 interface · ขาเข้า 8 interface · ส่งบัญชี GL · พัสดุและยาระหว่าง SAP กับ HIS</p>
+        <div class="chips"><span class="chip">35 หน้า</span><span class="chip">รายละเอียดทางเทคนิค</span></div>
+      </div>
+      <span class="go">เปิด →</span>
+    </a>
+
+    <a class="deck" href="integrate-erp/slide/his-erp-partner.html">
+      <div class="num">5</div>
+      <div>
+        <h2>แนวทางเชื่อมต่อ HIS ⇄ ERP</h2>
+        <p class="desc">สิ่งที่ HA.OS ทำได้แล้ว · สถาปัตยกรรมที่เสนอ · รายการ interface · Master data จาก ERP</p>
+        <div class="chips"><span class="chip">18 หน้า</span><span class="chip">คุยกับ Partner ERP</span></div>
+      </div>
+      <span class="go">เปิด →</span>
+    </a>
+  </div>
+
+  <div class="note">
+    <h3>เอกสารชุดอื่น</h3>
+    <ul>
+      <li><a href="https://github.com/auchareet-star/haos-module">haos-module</a> · เอกสารโมดูล 01–10</li>
+      <li><a href="https://github.com/auchareet-star/haos-queue">haos-queue</a> · ระบบคิวผู้ป่วยนอก</li>
+      <li><a href="https://github.com/auchareet-star/new-queue-nph">new-queue-nph</a> · คิวออนไลน์ รพ.นครปฐม</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

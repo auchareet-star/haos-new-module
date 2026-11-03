@@ -1,0 +1,380 @@
+<title>เส้นทางเบิก UC e-Claim</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: เส้นทางเดียวจากซ้ายไปขวา (สรุป) แล้วลงรายละเอียดทีละด่าน เส้นสีด้านซ้ายบอกว่าใครเป็นคนทำ */
+:root{
+  --bg:#f5f8f8; --surface:#ffffff; --fg:#14262b; --muted:#56696e; --line:#d6e1e2;
+  --accent:#0b6e6e; --accent-soft:#e0f0ef;
+  --reg:#2f6db5; --ward:#7a4fb0; --doc:#0b6e6e; --fin:#b5651d; --claim:#b0304a;
+  --warn-bg:#fff4e0; --warn-fg:#7a4a00;
+  --f-display:"Anuphan","Sarabun",system-ui,sans-serif;
+  --f-body:"Sarabun",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1a1c; --surface:#16252a; --fg:#e3eeee; --muted:#93a9ad; --line:#294046;
+  --accent:#4fc2bd; --accent-soft:#163a3b;
+  --reg:#6ea6ee; --ward:#b593e6; --doc:#4fc2bd; --fin:#e9a160; --claim:#f07891;
+  --warn-bg:#3a2d12; --warn-fg:#f5cf8a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1a1c; --surface:#16252a; --fg:#e3eeee; --muted:#93a9ad; --line:#294046;
+  --accent:#4fc2bd; --accent-soft:#163a3b;
+  --reg:#6ea6ee; --ward:#b593e6; --doc:#4fc2bd; --fin:#e9a160; --claim:#f07891;
+  --warn-bg:#3a2d12; --warn-fg:#f5cf8a; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.7}
+.wrap{max-width:1060px;margin:0 auto;padding-block:40px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:48px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:2.1rem;font-weight:700}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+.lead{color:var(--muted);max-width:68ch;margin-top:8px}
+.eyebrow{font-family:var(--f-display);font-size:.8rem;letter-spacing:.06em;color:var(--accent);font-weight:600}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+
+/* ผู้รับผิดชอบ */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;font-size:.92rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.reg{--c:var(--reg)} .ward{--c:var(--ward)} .doc{--c:var(--doc)} .fin{--c:var(--fin)} .claim{--c:var(--claim)}
+.dot{background:var(--c)}
+
+/* แถบสรุปด่าน */
+.track{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;counter-reset:st}
+.track a{display:grid;gap:2px;padding:12px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);
+  border-radius:6px;color:var(--fg);text-decoration:none;font-size:.9rem;line-height:1.45}
+.track a:hover,.track a:focus-visible{border-color:var(--c);outline:none}
+.track b{font-family:var(--f-display);font-size:.95rem}
+.track small{color:var(--muted)}
+.track .n{font-family:var(--f-mono);color:var(--c);font-size:.8rem}
+
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;overflow-x:auto}
+.diagram pre{margin:0;text-align:center;font-size:16px}
+.diagram svg{width:100%;max-width:720px!important;min-width:560px;height:auto;margin:0 auto;display:block}
+
+/* ด่าน */
+.stages{display:grid;gap:20px}
+.stage{display:grid;grid-template-columns:56px 1fr;gap:0 16px;padding:20px 20px 20px 0;
+  background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:6px}
+.stage .num{font-family:var(--f-mono);font-size:1.5rem;color:var(--c);text-align:right;line-height:1.2}
+.stage .body{display:grid;gap:12px;min-width:0}
+.who{font-size:.85rem;color:var(--c);font-weight:600}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.cols h4{margin:0 0 4px;font-family:var(--f-display);font-size:.88rem;color:var(--muted);font-weight:600;letter-spacing:.03em}
+ul{margin:0;padding-left:1.2em}
+li+li{margin-top:2px}
+.trap{background:var(--warn-bg);color:var(--warn-fg);padding:10px 14px;border-radius:6px;font-size:.93rem}
+.trap b{font-family:var(--f-display)}
+.branch{font-size:.8rem;font-family:var(--f-display);font-weight:600;padding:1px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);margin-left:6px;vertical-align:middle}
+
+/* ตาราง */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.93rem}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-display);font-weight:600;color:var(--muted);font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-family:var(--f-mono);white-space:nowrap;color:var(--accent)}
+
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.result div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px}
+.result b{font-family:var(--f-display);display:block;margin-bottom:4px}
+
+.check{columns:2 300px;column-gap:32px;list-style:none;padding:0}
+.check li{break-inside:avoid;padding:6px 0 6px 28px;position:relative;border-bottom:1px dashed var(--line)}
+.check li::before{content:"";position:absolute;left:2px;top:11px;width:13px;height:13px;border:2px solid var(--accent);border-radius:3px}
+
+.note{font-size:.88rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;max-width:80ch}
+section{display:grid;gap:16px}
+@media (max-width:560px){
+  .stage{grid-template-columns:1fr;padding:16px}
+  .stage .num{text-align:left;margin-bottom:4px}
+  h1{font-size:1.7rem}
+}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">HA.OS · สิทธิ UC (บัตรทอง)</div>
+  <h1>เส้นทางเบิก UC ตั้งแต่ขอ Authen Code ถึงได้เงินจาก e-Claim</h1>
+  <p class="lead">ผู้ป่วยสิทธิ UC หนึ่งคนต้องผ่าน 8 ด่านกว่าโรงพยาบาลจะได้เงิน ถ้าด่านไหนข้อมูลไม่ครบ เคสจะไปติดตอนส่ง e-Claim และต้องย้อนกลับมาแก้ หน้านี้บอกว่าแต่ละด่านใครทำ ต้องบันทึกอะไรลง HA.OS และจุดที่พลาดบ่อย</p>
+  <div class="legend">
+    <span class="reg"><i class="dot"></i>เวชระเบียน / ห้องบัตร</span>
+    <span class="ward"><i class="dot"></i>พยาบาล OPD / Ward</span>
+    <span class="doc"><i class="dot"></i>แพทย์ / Coder</span>
+    <span class="fin"><i class="dot"></i>การเงิน</span>
+    <span class="claim"><i class="dot"></i>ศูนย์จัดเก็บรายได้ (เบิกจ่าย)</span>
+  </div>
+</header>
+
+<nav class="track" aria-label="สรุปด่าน">
+  <a href="#s1" class="reg"><span class="n">1</span><b>ตรวจสิทธิ</b><small>สิทธิ UC + หน่วยบริการ</small></a>
+  <a href="#s2" class="reg"><span class="n">2</span><b>ขอ Authen Code</b><small>ยืนยันตัวตนกับ สปสช.</small></a>
+  <a href="#s3" class="reg"><span class="n">3</span><b>เปิด Visit</b><small>ผูก Authen กับ VN</small></a>
+  <a href="#s4" class="doc"><span class="n">4</span><b>ตรวจ / รักษา</b><small>Dx, หัตถการ, ยา, Lab</small></a>
+  <a href="#s5" class="ward"><span class="n">5</span><b>Admit (ถ้ามี)</b><small>AN + สรุปชาร์ต</small></a>
+  <a href="#s6" class="fin"><span class="n">6</span><b>ปิดค่าใช้จ่าย</b><small>ลงลูกหนี้ UC</small></a>
+  <a href="#s7" class="claim"><span class="n">7</span><b>ส่ง e-Claim</b><small>16 แฟ้ม / FDH</small></a>
+  <a href="#s8" class="claim"><span class="n">8</span><b>ตามผล</b><small>REP → แก้ → STM</small></a>
+</nav>
+
+<div class="diagram">
+<pre class="mermaid">
+%%{init: {"flowchart": {"nodeSpacing": 30, "rankSpacing": 36, "padding": 10}, "themeVariables": {"fontSize": "16px"}}}%%
+flowchart TD
+  A([ผู้ป่วยมาถึง]) --> B[ตรวจสิทธิ online<br/>UC / hmain / hsub]
+  B --> C{ยืนยันตัวตน<br/>ได้ Authen Code?}
+  C -- ได้ --> D[เปิด Visit ใน HA.OS<br/>บันทึก Authen Code]
+  C -- ไม่ได้ --> C2[ขอ Authen ทางเลือกอื่น<br/>เลข 13 หลัก / แอป / ย้อนหลังกรณีฉุกเฉิน]
+  C2 --> D
+  D --> E[ซักประวัติ ตรวจ<br/>ICD-10 / ICD-9-CM<br/>สั่งยา Lab X-ray]
+  E --> F{Admit?}
+  F -- OPD --> G[ปิดค่าใช้จ่าย<br/>ลงลูกหนี้ UC]
+  F -- IPD --> H[Admit → AN<br/>Discharge → สรุปชาร์ต<br/>Coder → DRG]
+  H --> G
+  G --> I[ส่งออก 16 แฟ้ม<br/>ส่ง e-Claim / FDH]
+  I --> J{ผลตรวจ REP}
+  J -- ผ่าน --> K([STM / รับเงินโอน])
+  J -- ติด C / Deny --> L[แก้ข้อมูลต้นทาง<br/>ใน HA.OS] --> I
+</pre>
+</div>
+
+<section>
+  <h2>รายละเอียดแต่ละด่าน</h2>
+  <div class="stages">
+
+    <article class="stage reg" id="s1">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="who">เวชระเบียน / ห้องบัตร</div>
+        <h3>ตรวจสิทธิ</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>ตรวจสิทธิออนไลน์กับ สปสช. ด้วยเลขบัตรประชาชน 13 หลัก</li>
+            <li>ดูว่าเป็น UC จริง และหน่วยบริการประจำ (hmain) / ปฐมภูมิ (hsub) อยู่ที่ไหน</li>
+            <li>แยกให้ได้ว่าเป็น UC ในเขต, นอกเขต (ต้องมีใบส่งตัว) หรือกรณีฉุกเฉิน</li>
+          </ul></div>
+          <div><h4>ต้องอยู่ใน HA.OS</h4><ul>
+            <li>สิทธิของ visit = UC (ไม่ใช่สิทธิค้างจากครั้งก่อน)</li>
+            <li>รหัส hmain / hsub ตามผลตรวจสิทธิวันนั้น</li>
+            <li>ใบส่งตัว (Refer in) ถ้าเป็นนอกเขต</li>
+          </ul></div>
+        </div>
+        <p class="trap"><b>พลาดบ่อย:</b> ใช้สิทธิที่ติดมาจาก visit เก่า ทั้งที่ผู้ป่วยย้ายสิทธิแล้ว ส่งไปจะติดเรื่องสิทธิไม่ตรงกับฐาน สปสช. ณ วันรับบริการ</p>
+      </div>
+    </article>
+
+    <article class="stage reg" id="s2">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="who">เวชระเบียน / ห้องบัตร (หรือผู้ป่วยทำเองที่ Kiosk)</div>
+        <h3>ขอ Authen Code (ยืนยันตัวตนเข้ารับบริการ)</h3>
+        <div class="cols">
+          <div><h4>ช่องทาง</h4><ul>
+            <li>เสียบบัตรประชาชนผ่านโปรแกรม Authen ของ สปสช. (Smart Card Agent)</li>
+            <li>ตู้ Kiosk ของโรงพยาบาล</li>
+            <li>แอป สปสช. / ThaiD สแกน QR</li>
+            <li>ไม่มีบัตร (เด็ก ผู้สูงอายุ ผู้พิการ ฯลฯ): ขอด้วยเลข 13 หลักผ่านหน้าเว็บ Authen พร้อมระบุเหตุผล</li>
+            <li>ฉุกเฉิน: ให้บริการก่อน แล้วขอ Authen ย้อนหลังภายในเวลาที่ สปสช. กำหนด</li>
+          </ul></div>
+          <div><h4>สิ่งที่ได้กลับมา</h4><ul>
+            <li>Authen Code รูปแบบ <code>PP</code> ตามด้วยตัวเลข เช่น <code>PP1234567890</code></li>
+            <li>ประเภทบริการ (claim type) เช่น <code>PG0060001</code> บริการทั่วไป</li>
+            <li>1 Authen Code ใช้กับ 1 การมารับบริการ ห้ามใช้ซ้ำข้ามวัน</li>
+          </ul></div>
+        </div>
+        <p class="trap"><b>พลาดบ่อย:</b> ผู้ป่วยเสียบบัตรแล้วแต่ Authen Code ไม่ถูกเก็บลง visit ใน HA.OS ตอนส่ง e-Claim ช่อง Authen ว่าง เคส OPD จะไม่ผ่าน</p>
+      </div>
+    </article>
+
+    <article class="stage reg" id="s3">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="who">เวชระเบียน / ห้องบัตร</div>
+        <h3>เปิด Visit และผูก Authen Code</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>ลงทะเบียนส่งตรวจ ได้ VN</li>
+            <li>บันทึก Authen Code + ประเภทบริการ ลง visit นั้น</li>
+            <li>เลือกคลินิก / ห้องตรวจ ตามนัดหรือ Walk-in</li>
+          </ul></div>
+          <div><h4>ต้องอยู่ใน HA.OS</h4><ul>
+            <li>VN, วันเวลามารับบริการ, คลินิก</li>
+            <li>สิทธิ UC + Authen Code บน visit เดียวกัน</li>
+            <li>เลขที่ใบส่งตัว (ถ้ามี)</li>
+          </ul></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="stage doc" id="s4">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="who">พยาบาล OPD + แพทย์</div>
+        <h3>ซักประวัติ ตรวจ รักษา</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>ซักประวัติ วัดสัญญาณชีพ</li>
+            <li>แพทย์ลงวินิจฉัยหลัก (ICD-10) และโรคร่วม</li>
+            <li>ลงหัตถการ (ICD-9-CM)</li>
+            <li>สั่งยา Lab X-ray และรายการค่าบริการอื่น</li>
+          </ul></div>
+          <div><h4>ต้องอยู่ใน HA.OS</h4><ul>
+            <li>Dx หลัก 1 ตัวเสมอ, รหัส ICD ถูกต้องตามปีที่ สปสช. ใช้</li>
+            <li>เลขใบประกอบวิชาชีพแพทย์ผู้ตรวจ</li>
+            <li>ยาต้อง map รหัสมาตรฐาน (TMT / รหัส 24 หลัก)</li>
+            <li>Lab / บริการพิเศษต้อง map รหัส ADP / หมวดค่าใช้จ่าย</li>
+          </ul></div>
+        </div>
+        <p class="trap"><b>พลาดบ่อย:</b> visit ไม่มี Dx (แพทย์ไม่ได้ลง) หรือยาใหม่ยังไม่ map รหัสมาตรฐาน แฟ้ม ODX / DRU ออกมาไม่ครบ</p>
+      </div>
+    </article>
+
+    <article class="stage ward" id="s5">
+      <div class="num">5</div>
+      <div class="body">
+        <div class="who">พยาบาล Ward + แพทย์ + Coder <span class="branch">เฉพาะ IPD</span></div>
+        <h3>Admit, จำหน่าย, สรุปชาร์ต</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>Admit ได้ AN (ขอ Authen ตามเงื่อนไข IPD ของ สปสช.)</li>
+            <li>จำหน่าย: ลงวันเวลา, สถานะ (discharge status) และวิธี (discharge type)</li>
+            <li>แพทย์สรุป Discharge Summary</li>
+            <li>Coder ลง ICD-10 / ICD-9-CM ตามชาร์ต แล้วจัดกลุ่ม DRG ได้ค่า AdjRW</li>
+          </ul></div>
+          <div><h4>ต้องอยู่ใน HA.OS</h4><ul>
+            <li>AN ผูกกับ HN และ visit ที่ admit</li>
+            <li>วันเวลา admit / discharge, จำนวนวันนอน, วันลากลับบ้าน</li>
+            <li>Dx หลัก + โรคร่วม + ภาวะแทรกซ้อน ครบตามชาร์ต</li>
+            <li>น้ำหนักแรกรับ สำหรับทารกแรกเกิด</li>
+          </ul></div>
+        </div>
+        <p class="trap"><b>พลาดบ่อย:</b> สรุปชาร์ตช้า ทำให้ส่งเกินกำหนด หรือ Dx ไม่ครบ DRG ออกมาต่ำกว่าที่ควรได้</p>
+      </div>
+    </article>
+
+    <article class="stage fin" id="s6">
+      <div class="num">6</div>
+      <div class="body">
+        <div class="who">การเงิน</div>
+        <h3>ปิดค่าใช้จ่ายและลงลูกหนี้ UC</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>ตรวจรายการค่าใช้จ่ายของ visit / AN ให้ครบ</li>
+            <li>ตั้งเป็นลูกหนี้สิทธิ UC (ผู้ป่วยไม่ต้องจ่าย ยกเว้นรายการที่สิทธิไม่ครอบคลุม)</li>
+            <li>แยกส่วนที่ผู้ป่วยต้องชำระเอง (ถ้ามี)</li>
+          </ul></div>
+          <div><h4>ต้องอยู่ใน HA.OS</h4><ul>
+            <li>ค่าใช้จ่ายแยกตามหมวดของ สปสช. (ใช้สร้างแฟ้ม CHT / CHA)</li>
+            <li>ยอดเบิกได้ / เบิกไม่ได้ แยกชัดเจน</li>
+            <li>visit ปิดแล้ว ไม่มีรายการค้างลง</li>
+          </ul></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="stage claim" id="s7">
+      <div class="num">7</div>
+      <div class="body">
+        <div class="who">ศูนย์จัดเก็บรายได้</div>
+        <h3>ส่งออก 16 แฟ้ม และส่ง e-Claim</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>เลือกช่วงวันที่ / AN ที่จะส่ง แล้วตรวจข้อมูลก่อนส่ง</li>
+            <li>ส่งออกไฟล์ 16 แฟ้มจาก HA.OS</li>
+            <li>นำเข้าที่ e-Claim (eclaim.nhso.go.th) หรือส่งผ่าน FDH ของ สธ. ซึ่งส่งต่อให้ สปสช.</li>
+            <li>ส่งให้ทันกำหนด (ปกติภายใน 30 วันนับจากวันรับบริการ / วันจำหน่าย ส่งช้าจะถูกลดอัตราจ่าย)</li>
+          </ul></div>
+          <div><h4>ตรวจก่อนส่ง</h4><ul>
+            <li>ทุก visit OPD มี Authen Code</li>
+            <li>ทุกรายมี Dx หลัก</li>
+            <li>ยอดเงินในแฟ้ม CHA ตรงกับ CHT</li>
+            <li>ไม่ส่งซ้ำ visit / AN ที่ผ่านไปแล้ว</li>
+          </ul></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="stage claim" id="s8">
+      <div class="num">8</div>
+      <div class="body">
+        <div class="who">ศูนย์จัดเก็บรายได้ + ทุกหน่วยที่ต้องแก้ข้อมูล</div>
+        <h3>ตามผล แก้ไข และรับเงิน</h3>
+        <div class="cols">
+          <div><h4>ทำอะไร</h4><ul>
+            <li>ดาวน์โหลดรายงานผลการตรวจสอบ (REP) จาก e-Claim</li>
+            <li>รายการที่ติด C: ส่งกลับไปให้ผู้รับผิดชอบด่านนั้นแก้ใน HA.OS แล้วส่งใหม่</li>
+            <li>รายการที่ถูกปฏิเสธ: พิจารณาอุทธรณ์</li>
+            <li>รับ Statement (STM) แล้วกระทบยอดกับลูกหนี้ UC</li>
+          </ul></div>
+          <div><h4>หลักการแก้</h4><ul>
+            <li>แก้ที่ต้นทางใน HA.OS เสมอ ไม่แก้เฉพาะในหน้าเว็บ e-Claim</li>
+            <li>ถ้าแก้แค่ปลายทาง ครั้งหน้าข้อมูลผิดแบบเดิมจะกลับมาอีก</li>
+          </ul></div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>16 แฟ้มมาจากด่านไหน</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>แฟ้ม</th><th>ข้อมูล</th><th>มาจากด่าน</th></tr></thead>
+    <tbody>
+      <tr><td>INS</td><td>สิทธิการรักษา หน่วยบริการประจำ</td><td>1 ตรวจสิทธิ</td></tr>
+      <tr><td>PAT</td><td>ข้อมูลผู้ป่วย</td><td>1–3 ห้องบัตร</td></tr>
+      <tr><td>OPD</td><td>การมารับบริการผู้ป่วยนอก</td><td>3 เปิด Visit</td></tr>
+      <tr><td>ORF</td><td>การส่งต่อผู้ป่วยนอก</td><td>1, 3 ใบส่งตัว</td></tr>
+      <tr><td>ODX</td><td>วินิจฉัยผู้ป่วยนอก</td><td>4 แพทย์</td></tr>
+      <tr><td>OOP</td><td>หัตถการผู้ป่วยนอก</td><td>4 แพทย์</td></tr>
+      <tr><td>IPD</td><td>ผู้ป่วยใน (admit / discharge)</td><td>5 Ward</td></tr>
+      <tr><td>IRF</td><td>การส่งต่อผู้ป่วยใน</td><td>5 Ward</td></tr>
+      <tr><td>IDX</td><td>วินิจฉัยผู้ป่วยใน</td><td>5 Coder</td></tr>
+      <tr><td>IOP</td><td>หัตถการผู้ป่วยใน</td><td>5 Coder</td></tr>
+      <tr><td>CHT</td><td>ยอดรวมค่าใช้จ่ายต่อครั้ง</td><td>6 การเงิน</td></tr>
+      <tr><td>CHA</td><td>ค่าใช้จ่ายแยกตามหมวด</td><td>6 การเงิน</td></tr>
+      <tr><td>AER</td><td>อุบัติเหตุ ฉุกเฉิน และ Authen</td><td>2–3 ห้องบัตร / ER</td></tr>
+      <tr><td>ADP</td><td>ค่าบริการเพิ่มเติม (รายการที่เบิกแยก)</td><td>4, 6</td></tr>
+      <tr><td>LVD</td><td>วันลากลับบ้าน (IPD)</td><td>5 Ward</td></tr>
+      <tr><td>DRU</td><td>รายการยา</td><td>4 แพทย์ / ห้องยา</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>ผลที่ได้จาก e-Claim</h2>
+  <div class="result">
+    <div><b>ผ่าน</b>รอรวมใน Statement แล้วรับเงินโอน ไม่ต้องทำอะไรเพิ่ม</div>
+    <div><b>ติด C</b>ข้อมูลไม่สมบูรณ์หรือขัดกัน ดูรหัสข้อผิดพลาดใน REP แก้ที่ HA.OS แล้วส่งใหม่</div>
+    <div><b>ปฏิเสธการจ่าย</b>ไม่ตรงเงื่อนไขสิทธิ ตรวจเหตุผล ถ้ามีหลักฐานให้ยื่นอุทธรณ์</div>
+  </div>
+</section>
+
+<section>
+  <h2>เช็กลิสต์ต่อเคส ก่อนกดส่ง</h2>
+  <ul class="check">
+    <li>สิทธิ = UC ณ วันรับบริการ</li>
+    <li>มี Authen Code บน visit นี้ ไม่ซ้ำกับ visit อื่น</li>
+    <li>นอกเขต: มีเลขใบส่งตัว</li>
+    <li>มี Dx หลัก รหัส ICD-10 ถูกต้อง</li>
+    <li>หัตถการลง ICD-9-CM ครบ</li>
+    <li>มีเลขใบประกอบวิชาชีพแพทย์</li>
+    <li>ยาทุกตัว map รหัสมาตรฐานแล้ว</li>
+    <li>ค่าใช้จ่ายแยกหมวดครบ ยอดรวมตรงกัน</li>
+    <li>IPD: วันเวลา admit / discharge และสถานะจำหน่ายครบ</li>
+    <li>IPD: สรุปชาร์ตและจัดกลุ่ม DRG แล้ว</li>
+    <li>ยังอยู่ในกำหนดส่ง</li>
+    <li>visit / AN นี้ยังไม่เคยส่งผ่าน</li>
+  </ul>
+</section>
+
+<p class="note">หมายเหตุ: ขั้นตอนนี้สรุปตามแนวทางของ สปสช. สำหรับสิทธิ UC ทั่วไป เงื่อนไขปลีกย่อย (ประเภทบริการ, ข้อยกเว้นการยืนยันตัวตน, กำหนดส่ง, อัตราจ่าย) เปลี่ยนตามประกาศแต่ละปีงบประมาณ ให้ยึดคู่มือ e-Claim และคู่มือการขอ Authen ฉบับล่าสุดของ สปสช. เป็นหลัก ชื่อเมนูในแต่ละด่านของ HA.OS ยังไม่ได้ใส่ไว้ในหน้านี้</p>
+
+</div>

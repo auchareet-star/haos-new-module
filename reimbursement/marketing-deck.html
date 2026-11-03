@@ -1,0 +1,682 @@
+<title>HA.OS งานเรียกเก็บ สำหรับทีมการตลาด</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: 1280×720 stage scaled to the window, paged left↔right. Motif = the hospital bill: receipt tear-edge, dashed invoice tags, round status stamps. Section dividers in solid accent. Light only (user preference). */
+:root{
+  --paper:#eef0ec;
+  --sheet:#ffffff;
+  --ink:#1b2430;
+  --muted:#5b6672;
+  --faint:#97a0a8;
+  --line:#e2e5e1;
+  --accent:#bf4300;
+  --accent-deep:#8f3200;
+  --accent-soft:#fcefe7;
+  --money:#0f7a5c;
+  --money-soft:#e5f4ed;
+  --warn:#a35b00; --warn-soft:#fdf3e1;
+  --stop:#b3261e; --stop-soft:#fcebe9;
+  --sky:#2f5d8a; --sky-soft:#e9f0f7;
+  --f-display:'Bai Jamjuree','IBM Plex Sans Thai','Noto Sans Thai',Tahoma,sans-serif;
+  --f-body:'IBM Plex Sans Thai','Noto Sans Thai','Sarabun',Tahoma,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);overflow:hidden}
+.viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top,0px) 16px calc(64px + env(safe-area-inset-bottom,0px))}
+.stage{width:1280px;height:720px;position:relative;flex:none;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--sheet);border-radius:10px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 24px 50px -30px rgba(27,36,48,.45);
+  padding:52px 72px 40px;display:none;flex-direction:column;overflow:hidden}
+.slide.is-on{display:flex}
+@media (prefers-reduced-motion:no-preference){
+  .slide.is-on .body>*{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+  .slide.is-on .body>*:nth-child(2){animation-delay:.06s}
+  .slide.is-on .body>*:nth-child(3){animation-delay:.12s}
+  @keyframes rise{from{opacity:.0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px;min-height:0}
+
+/* type */
+.eyebrow{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;display:flex;gap:10px;align-items:center}
+.eyebrow::before{content:"";width:26px;height:2px;background:currentColor}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.22}
+h1{font-size:64px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:40px;font-weight:700}
+h3{font-size:21px;font-weight:600}
+p{margin:0;line-height:1.62;font-size:18px}
+.lead{font-size:22px;color:var(--muted);max-width:56ch;line-height:1.55}
+.small{font-size:15px;color:var(--muted);line-height:1.55}
+b{font-weight:600}
+.em{color:var(--accent);font-weight:600}
+.money{color:var(--money)}
+.foot{padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--faint)}
+.foot .pg{font-family:var(--f-mono)}
+.brand{font-family:var(--f-display);font-weight:600;color:var(--muted)}
+.brand i{font-style:normal;color:var(--accent)}
+
+/* icons */
+.ic{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:var(--accent-soft);color:var(--accent);flex:none}
+.ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ic.g{background:var(--money-soft);color:var(--money)}
+.ic.r{background:var(--stop-soft);color:var(--stop)}
+.ic.w{background:var(--warn-soft);color:var(--warn)}
+.ic.s{background:var(--sky-soft);color:var(--sky)}
+.ic.lg{width:58px;height:58px;border-radius:16px}.ic.lg svg{width:30px;height:30px}
+
+/* grids & cards */
+.cols{display:grid;gap:20px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fafbf9;border-radius:12px;padding:22px 22px 20px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.card p{font-size:16px;color:var(--muted);line-height:1.55}
+.card.r{background:var(--stop-soft)}.card.w{background:var(--warn-soft)}.card.g{background:var(--money-soft)}.card.s{background:var(--sky-soft)}.card.a{background:var(--accent-soft)}
+ul.dots{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+ul.dots li{position:relative;padding-left:22px;font-size:16.5px;line-height:1.5}
+ul.dots li::before{content:"";position:absolute;left:3px;top:.6em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+ul.ticks{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+ul.ticks li{position:relative;padding-left:32px;font-size:17px;line-height:1.5}
+ul.ticks li::before{content:"";position:absolute;left:0;top:.18em;width:20px;height:20px;border-radius:50%;background:var(--money) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+ul.cross{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+ul.cross li{position:relative;padding-left:32px;font-size:17px;line-height:1.5;color:var(--muted)}
+ul.cross li::before{content:"";position:absolute;left:0;top:.18em;width:20px;height:20px;border-radius:50%;background:#c9ced2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 8l8 8M16 8l-8 8' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center/12px no-repeat}
+ul.cross.red li::before{background-color:var(--stop)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:12.5px;padding:3px 9px;border-radius:4px;border:1px dashed currentColor;color:var(--accent);width:max-content}
+
+/* step tracker */
+.track{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:22px}
+.track span{font-size:12.5px;color:var(--faint);padding-top:8px;border-top:4px solid var(--line);font-weight:500}
+.track span.done{border-color:#e8b394;color:var(--muted)}
+.track span.now{border-color:var(--accent);color:var(--accent);font-weight:600}
+
+/* before / after */
+.ba{display:grid;grid-template-columns:1fr 64px 1.25fr;align-items:stretch}
+.ba .old{background:#f4f5f3;border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;gap:14px}
+.ba .new{background:var(--money-soft);border-radius:12px;padding:24px 28px;display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 0 0 2px #bfe2d1}
+.ba .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.ba .arrow svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ba .k{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.ba .new .k{color:var(--money)}
+.ba h3{font-size:22px}
+.ba .old h3{color:var(--muted)}
+.say{display:flex;gap:14px;align-items:flex-start;background:var(--accent-soft);border-radius:10px;padding:14px 18px}
+.say .q{font-family:var(--f-display);font-size:40px;line-height:.8;color:var(--accent)}
+.say p{font-size:17px}
+
+/* table */
+.tbl{border-radius:12px;overflow:hidden;background:#fafbf9}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{padding:12px 16px;text-align:left;vertical-align:top}
+th{font-size:12.5px;letter-spacing:.08em;color:var(--muted);font-weight:600;background:#f0f2ef;text-transform:uppercase}
+tbody tr+tr td{border-top:1px solid var(--line)}
+td:first-child{font-weight:600;white-space:nowrap}
+
+/* stamps */
+.stamp{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;border:3px double currentColor;font-family:var(--f-mono);font-weight:600;font-size:20px;flex:none;transform:rotate(-8deg)}
+.status{display:flex;gap:16px;align-items:center;background:#fafbf9;border-radius:12px;padding:12px 18px}
+.status p{font-size:17px}
+
+/* process ribbon */
+.ribbon{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.rib{position:relative;background:#fafbf9;border-radius:12px;padding:18px 16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rib .n{font-family:var(--f-mono);font-size:13px;color:var(--accent)}
+.rib h3{font-size:19px}
+.rib p{font-size:14.5px;color:var(--muted);line-height:1.5}
+.rib:last-child{background:var(--money-soft)}.rib:last-child .n{color:var(--money)}
+.rib:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:8px;height:8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);transform:translateY(-50%) rotate(45deg);z-index:1}
+
+/* timeline */
+.sky{height:10px;border-radius:10px;background:linear-gradient(90deg,#f6c27a 0%,#e07b39 30%,#5a4a8a 60%,#22305a 100%);margin:4px 0 0}
+.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tick{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tick .t{font-family:var(--f-mono);font-weight:600;font-size:34px;color:var(--ink);line-height:1}
+.tick .t small{font-size:14px;color:var(--faint);font-weight:500;margin-left:6px}
+.tick h3{font-size:19px;color:var(--accent)}
+.tick p{font-size:15.5px;color:var(--muted);line-height:1.5}
+.hourly{display:flex;gap:18px;align-items:center;background:var(--money-soft);border-radius:12px;padding:18px 22px}
+
+/* cover */
+.cover{padding:0;flex-direction:row}
+.cover .left{flex:1.15;padding:64px 64px 48px 72px;display:flex;flex-direction:column;justify-content:space-between}
+.cover .right{flex:.85;background:var(--accent);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cover .right::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.18),transparent 45%),radial-gradient(circle at 10% 95%,rgba(0,0,0,.18),transparent 50%)}
+.receipt{position:relative;width:330px;background:#fff;padding:26px 26px 78px;font-family:var(--f-mono);font-size:13.5px;color:var(--muted);transform:rotate(-4deg);box-shadow:0 30px 50px -20px rgba(0,0,0,.45);
+  -webkit-mask:radial-gradient(circle 7px at 50% 100%,transparent 6.5px,#000 7px) bottom/18px 100% repeat-x;
+          mask:radial-gradient(circle 7px at 50% 100%,transparent 6.5px,#000 7px) bottom/18px 100% repeat-x}
+.receipt .hd{font-family:var(--f-display);font-size:17px;color:var(--ink);font-weight:700}
+.receipt .sub{font-size:12px;margin:2px 0 14px}
+.receipt .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line)}
+.receipt .row.t{color:var(--ink);font-weight:600;border-bottom:none}
+.receipt .paid{position:absolute;right:18px;bottom:22px;color:var(--money);font-family:var(--f-display);font-weight:700;font-size:20px;border:3px double var(--money);border-radius:8px;padding:4px 12px;transform:rotate(-12deg);background:rgba(255,255,255,.85)}
+.cover h1{font-size:68px}
+.cover .lead{font-size:23px;margin-top:20px}
+.cover .meta{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+.cover .meta b{display:block;color:var(--ink);font-family:var(--f-display);font-size:26px}
+
+/* divider */
+.divider{background:var(--accent);color:#fff;justify-content:center;padding:64px 88px}
+.divider .big{font-family:var(--f-display);font-weight:700;font-size:200px;line-height:.8;color:rgba(255,255,255,.22);position:absolute;right:70px;bottom:40px}
+.divider .eyebrow{color:#ffd9c4}
+.divider h2{font-size:60px;color:#fff;max-width:16ch}
+.divider p{color:#ffe7da;font-size:21px;margin-top:20px;max-width:46ch}
+.divider .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.divider .chips span{border:1px solid rgba(255,255,255,.45);border-radius:30px;padding:6px 14px;font-size:15px;color:#fff}
+
+/* closing */
+.closing{background:var(--ink);color:#fff}
+.closing .eyebrow{color:#ffb38a}
+.closing h1{font-size:50px;max-width:20ch;color:#fff}
+.closing h1 span{color:#ffb38a}
+.closing .card{background:rgba(255,255,255,.06)}
+.closing .card h3{color:#fff}
+.closing .card p{color:#c6ccd3}
+.closing .foot{border-color:rgba(255,255,255,.15);color:#8e98a3}
+.closing .brand{color:#c6ccd3}
+
+/* glossary */
+.gl{display:grid;grid-template-columns:repeat(2,1fr);gap:0 36px;margin:0}
+.gl div{display:grid;grid-template-columns:156px 1fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:16px;line-height:1.5}
+.gl dt{font-weight:600;color:var(--accent);margin:0;font-family:var(--f-display)}
+.gl dd{margin:0}
+
+/* claim lines */
+.claims{display:grid;gap:12px}
+.claim{display:grid;grid-template-columns:56px 1fr;gap:18px;align-items:center;background:#fafbf9;border-radius:12px;padding:14px 20px}
+.claim .no{font-family:var(--f-display);font-weight:700;font-size:34px;color:var(--accent);line-height:1}
+.claim p{font-size:19px}
+
+/* controls */
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:14px}
+.bar button{font-family:var(--f-body);font-size:15px;border:none;background:#fff;color:var(--ink);border-radius:30px;padding:9px 20px;cursor:pointer;box-shadow:0 2px 8px -4px rgba(0,0,0,.25)}
+.bar button:hover{color:var(--accent)}
+.bar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar button:disabled{opacity:.4;cursor:default}
+.count{font-family:var(--f-mono);font-size:14px;color:var(--muted);min-width:76px;text-align:center}
+.prog{position:fixed;left:0;top:env(safe-area-inset-top,0px);height:4px;background:var(--accent);transition:width .3s}
+</style>
+
+<div class="prog" id="prog"></div>
+<div class="viewport"><div class="stage" id="stage">
+
+<!-- ปก -->
+<section class="slide cover" data-nofoot>
+  <div class="left">
+    <div>
+      <p class="eyebrow">คู่มือสำหรับทีมการตลาด</p>
+      <h1>HA.OS<br>งานเรียกเก็บ</h1>
+      <p class="lead">ระบบที่ช่วยโรงพยาบาล<b>ตามเงินค่ารักษาที่ยังไม่ได้รับ</b> ตั้งแต่ผู้ป่วยกลับบ้าน จนเงินเข้าบัญชี</p>
+    </div>
+    <div class="meta">
+      <div><b>6</b>ขั้นตอน ในระบบเดียว</div>
+      <div><b>3 รอบ/วัน</b>ออกบิลให้อัตโนมัติ</div>
+      <div><b>9</b>รูปแบบไฟล์เบิก</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="receipt" aria-hidden="true">
+      <div class="hd">ใบเรียกเก็บ</div>
+      <div class="sub">ตัวอย่าง · สิทธิบัตรทอง</div>
+      <div class="row"><span>ค่าตรวจ</span><span>300.00</span></div>
+      <div class="row"><span>ค่ายา</span><span>1,250.00</span></div>
+      <div class="row"><span>ค่าแล็บ</span><span>300.00</span></div>
+      <div class="row"><span>ผู้ป่วยจ่ายเอง</span><span>0.00</span></div>
+      <div class="row t"><span>เรียกเก็บ สปสช.</span><span>1,850.00</span></div>
+      <div class="paid">รับเงินแล้ว</div>
+    </div>
+  </div>
+</section>
+
+<!-- สารบัญ -->
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ในชุดนี้</p><h2>เล่า 4 เรื่อง จากง่ายไปหาลึก</h2></div>
+    <div class="cols c4">
+      <div class="card"><span class="ic" data-i="book"></span><span class="tag">ตอน 1</span><h3>เข้าใจเรื่องก่อน</h3><p>โรงพยาบาลเก็บเงินค่ารักษาอย่างไร ใครเป็นคนจ่าย ทำไมถึงยาก</p></div>
+      <div class="card"><span class="ic" data-i="flow"></span><span class="tag">ตอน 2</span><h3>ระบบทำอะไร</h3><p>6 ขั้นตอน จากเปิดบิลจนเงินเข้า เทียบแบบเดิมกับใน HA.OS</p></div>
+      <div class="card"><span class="ic" data-i="user"></span><span class="tag">ตอน 3</span><h3>ใครได้อะไร</h3><p>ประโยชน์ต่อผู้บริหาร เจ้าหน้าที่ ฝ่ายบัญชี และจุดขายหลัก</p></div>
+      <div class="card"><span class="ic" data-i="chat"></span><span class="tag">ตอน 4</span><h3>ไปคุยกับลูกค้า</h3><p>เรื่องเล่าสาธิต คำถามที่เจอบ่อย สิ่งที่พูดได้ และคำศัพท์</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ตอน 1 -->
+<section class="slide divider" data-nofoot>
+  <span class="big">01</span>
+  <p class="eyebrow">ตอน 1</p>
+  <h2>เข้าใจเรื่องก่อน</h2>
+  <p>ก่อนจะขายระบบ ต้องเข้าใจก่อนว่าโรงพยาบาลได้เงินค่ารักษามาอย่างไร และติดตรงไหน</p>
+  <div class="chips"><span>รักษาก่อน เก็บเงินทีหลัง</span><span>ใครเป็นผู้จ่าย</span><span>ปัญหาที่โรงพยาบาลเจอ</span></div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 1 · เข้าใจเรื่องก่อน</p><h2>รักษาก่อน เก็บเงินทีหลัง</h2></div>
+    <div class="cols c2" style="gap:36px;align-items:center">
+      <div style="display:grid;gap:18px">
+        <p>คนไทยส่วนใหญ่ไปโรงพยาบาลแล้ว<b>ไม่ต้องจ่ายเงินเอง</b> เพราะมี “สิทธิการรักษา” เช่น บัตรทอง ประกันสังคม หรือสิทธิข้าราชการ</p>
+        <p>แต่โรงพยาบาลมีค่าใช้จ่ายจริง ทั้งยา เวชภัณฑ์ ค่าแล็บ ค่าบุคลากร จึงต้อง<b>ส่งบิลไปเก็บเงินจากหน่วยงานที่ดูแลสิทธินั้น</b>ในภายหลัง</p>
+        <p>ช่วงที่ส่งบิลไปแล้วแต่เงินยังไม่เข้า เงินก้อนนั้นเรียกว่า <span class="em">“ลูกหนี้”</span> ของโรงพยาบาล</p>
+      </div>
+      <div class="card s" style="padding:28px">
+        <div style="display:flex;gap:14px;align-items:center"><span class="ic s lg" data-i="shop"></span><h3>เปรียบเทียบให้เห็นภาพ</h3></div>
+        <p style="color:var(--ink);font-size:17px">เหมือน<b>ร้านค้าที่ส่งของให้บริษัทก่อน</b> แล้วสิ้นเดือนค่อยวางบิลเก็บเงิน</p>
+        <ul class="dots"><li>บิลต้องถูกต้อง ไม่อย่างนั้นถูกตีกลับ</li><li>ต้องส่งให้ทันรอบ ไม่อย่างนั้นเงินเลื่อนไปอีกเดือน</li><li>ต้องตามว่าจ่ายครบหรือยัง</li></ul>
+        <p>ต่างกันตรงที่โรงพยาบาลมีบิล<b style="color:var(--ink)">หลักร้อยถึงหลักพันใบต่อวัน</b> และมีผู้จ่ายหลายราย กติกาคนละแบบ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 1 · เข้าใจเรื่องก่อน</p><h2>ใครเป็นคนจ่ายเงินให้โรงพยาบาล</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>ผู้จ่าย</th><th>ดูแลใคร</th><th>ส่งบิลอย่างไร</th></tr></thead>
+      <tbody>
+        <tr><td>สปสช. (บัตรทอง)</td><td>ประชาชนทั่วไปที่ใช้สิทธิหลักประกันสุขภาพ</td><td>ยืนยันตัวผู้ป่วย → ยืนยันยอด → ส่งข้อมูลเข้าระบบกลาง</td></tr>
+        <tr><td>กรมบัญชีกลาง</td><td>ข้าราชการ และครอบครัว</td><td>ส่งไฟล์ตามแบบของกรมบัญชีกลาง ได้ผลกลับเป็นไฟล์</td></tr>
+        <tr><td>ประกันสังคม</td><td>ผู้ประกันตน (คนทำงาน)</td><td>ส่งไฟล์ตามแบบของประกันสังคม</td></tr>
+        <tr><td>กรณีอุบัติเหตุ</td><td>ผู้ประสบภัยจากรถ / กองทุนทดแทน</td><td>ต้องระบุข้อมูลอุบัติเหตุ คู่กรณี ทะเบียนรถ</td></tr>
+        <tr><td>หน่วยงานอื่น ๆ</td><td>สิทธิพิเศษที่โรงพยาบาลตกลงไว้</td><td>ตามรูปแบบของแต่ละหน่วยงาน</td></tr>
+      </tbody>
+    </table></div>
+    <div class="say"><span class="q">“</span><p>ผู้จ่ายแต่ละรายมี<b>แบบฟอร์ม รอบเวลา และกติกาไม่เหมือนกัน</b> ถ้าทำด้วยมือจะผิดง่ายมาก — ลูกค้าจะเข้าใจประโยคนี้ทันที</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 1 · เข้าใจเรื่องก่อน</p><h2>โรงพยาบาลเจ็บตรงไหน</h2></div>
+    <div class="cols c2">
+      <div class="card r" style="flex-direction:row;gap:18px"><span class="ic r lg" data-i="clock"></span><div style="display:grid;gap:6px"><h3>เงินเข้าช้า</h3><p>บิลออกไม่ทันรอบ หรือส่งไปแล้วถูกตีกลับต้องส่งใหม่ เงินที่ควรได้เดือนนี้เลื่อนไปเดือนหน้า</p></div></div>
+      <div class="card r" style="flex-direction:row;gap:18px"><span class="ic r lg" data-i="alert"></span><div style="display:grid;gap:6px"><h3>ถูกปฏิเสธบ่อย แต่ไม่รู้ว่าเพราะอะไร</h3><p>ผลที่ได้กลับมาเป็นรหัส เจ้าหน้าที่ต้องไปเปิดคู่มือเองว่าแปลว่าอะไร แก้อย่างไร</p></div></div>
+      <div class="card w" style="flex-direction:row;gap:18px"><span class="ic w lg" data-i="hand"></span><div style="display:grid;gap:6px"><h3>งานมือเยอะ ทำหลายโปรแกรม</h3><p>ตรวจสิทธิที่หนึ่ง ทำไฟล์อีกที่ กระทบยอดเงินในตารางคำนวณ ทุกขั้นมีโอกาสพิมพ์ผิด</p></div></div>
+      <div class="card w" style="flex-direction:row;gap:18px"><span class="ic w lg" data-i="eye"></span><div style="display:grid;gap:6px"><h3>ผู้บริหารมองไม่เห็นภาพรวม</h3><p>ไม่รู้ว่าตอนนี้มีเงินค้างรับเท่าไร ค้างกับใคร ค้างมากี่วัน จนกว่าจะได้รายงานสิ้นเดือน</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ตอน 2 -->
+<section class="slide divider" data-nofoot>
+  <span class="big">02</span>
+  <p class="eyebrow">ตอน 2</p>
+  <h2>ระบบทำอะไร</h2>
+  <p>ตามเงินทุกบาท ตั้งแต่เปิดบิลจนเงินเข้า ในระบบเดียว — อธิบายทีละขั้น เทียบแบบเดิมกับใน HA.OS</p>
+  <div class="chips"><span>6 ขั้นตอน</span><span>ทำงานเองตอนกลางคืน</span><span>เชื่อมต่อหน่วยงาน</span><span>หน้าสรุปผู้บริหาร</span></div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ภาพรวม</p><h2>6 ขั้นตอน ตั้งแต่เปิดบิลจนเงินเข้า</h2></div>
+    <p class="lead">HA.OS งานเรียกเก็บต่อกับงานการเงินและเวชระเบียนของโรงพยาบาลอยู่แล้ว ข้อมูลค่ารักษาจึงไหลมาเอง ไม่ต้องพิมพ์ซ้ำ</p>
+    <div class="ribbon">
+      <div class="rib"><span class="ic" data-i="doc"></span><span class="n">ขั้น 1</span><h3>เปิดบิล</h3><p>สร้างใบเรียกเก็บจากยอดที่สิทธิต้องจ่าย</p></div>
+      <div class="rib"><span class="ic" data-i="lock"></span><span class="n">ขั้น 2</span><h3>ยืนยัน</h3><p>ยืนยันกับ สปสช. และล็อกยอดไม่ให้เปลี่ยน</p></div>
+      <div class="rib"><span class="ic" data-i="stack"></span><span class="n">ขั้น 3</span><h3>รวมรอบ</h3><p>รวมบิลเป็นชุด และตรวจก่อนส่ง</p></div>
+      <div class="rib"><span class="ic" data-i="send"></span><span class="n">ขั้น 4</span><h3>ส่งเบิก</h3><p>ส่งเข้าระบบกลางโดยตรง หรือออกไฟล์</p></div>
+      <div class="rib"><span class="ic" data-i="search"></span><span class="n">ขั้น 5</span><h3>รับผล</h3><p>รู้ว่าบิลไหนผ่าน ไม่ผ่าน เพราะอะไร</p></div>
+      <div class="rib"><span class="ic g" data-i="coin"></span><span class="n">ขั้น 6</span><h3>รับเงิน</h3><p>บันทึกเงินเข้า ปิดยอดลูกหนี้</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-step="1">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ขั้นที่ 1</p><h2>เปิดบิล — ระบบออกให้เองทุกวัน</h2></div>
+    <div class="ba">
+      <div class="old"><span class="k">แบบเดิม</span><h3>เจ้าหน้าที่ออกบิลทีละราย</h3>
+        <ul class="cross"><li>เปิดดูค่ารักษาของผู้ป่วยแต่ละคน</li><li>คำนวณเองว่าส่วนไหนสิทธิจ่าย ส่วนไหนผู้ป่วยจ่าย</li><li>คนไข้นอกวันละหลายร้อยราย มีโอกาสหลุด</li></ul></div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="new"><span class="k">ใน HA.OS</span><h3>ระบบออกบิลให้อัตโนมัติ</h3>
+        <ul class="ticks"><li>ทุกเย็นและกลางคืน ระบบเก็บผู้ป่วยนอกที่ใช้สิทธิมาออกบิลให้เอง</li><li>แยกยอด “สิทธิจ่าย” กับ “ผู้ป่วยจ่าย” ไว้แล้วตั้งแต่ตอนคิดเงิน</li><li>เคสที่ต้องดูละเอียด เช่น ผู้ป่วยใน ออกเองได้จากหน้าเดียว หรือออกเป็นชุดหลายรายพร้อมกัน</li></ul></div>
+    </div>
+    <div class="say"><span class="q">“</span><p><b>บิลผู้ป่วยนอกที่ใช้สิทธิ ไม่ต้องมีคนนั่งออกทีละใบ</b> · โรงพยาบาลเลือกได้ว่าสิทธิไหนจะให้ระบบออกเอง</p></div>
+  </div>
+</section>
+
+<section class="slide" data-step="2">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ขั้นที่ 2</p><h2>ยืนยันกับ สปสช. และล็อกยอด</h2></div>
+    <div class="ba">
+      <div class="old"><span class="k">แบบเดิม</span><h3>เข้าเว็บ สปสช. แยกต่างหาก</h3>
+        <ul class="cross"><li>คัดลอกยอดไปกรอกอีกระบบ</li><li>ยอดในโรงพยาบาลยังแก้ได้ ส่งไปแล้วตัวเลขไม่ตรงกัน</li><li>ลืมขอรหัสยืนยันตัวผู้ป่วย บิลถูกตีกลับ</li></ul></div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="new"><span class="k">ใน HA.OS</span><h3>กดปุ่มเดียวจากหน้าค่ารักษา</h3>
+        <ul class="ticks"><li>ปุ่ม <b>ปิดสิทธิ</b> ส่งยอดไปยืนยันกับ สปสช. ได้เลขยืนยันกลับมา</li><li>มีหน้ารวมรายการที่<b>ยังไม่ได้ยืนยัน</b> และที่<b>ยังไม่มีรหัสยืนยันตัวผู้ป่วย</b> ให้เก็บตกทุกเช้า</li><li><b>ปิดบัญชี</b> ล็อกไม่ให้ใครเพิ่มค่าใช้จ่ายเข้ามาหลังส่งบิล</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-step="3">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ขั้นที่ 3</p><h2>รวมรอบ และตรวจก่อนส่ง</h2></div>
+    <div class="ba">
+      <div class="old"><span class="k">แบบเดิม</span><h3>รวบรวมบิลในตารางคำนวณ</h3>
+        <ul class="cross"><li>คัดบิลตามสิทธิ ตามช่วงวันที่ด้วยมือ</li><li>ไม่มีใครตรวจก่อนส่ง รู้ว่าผิดเมื่อผลกลับมา เสียไปหนึ่งรอบ</li></ul></div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="new"><span class="k">ใน HA.OS</span><h3>“รอบส่งเบิก” จัดการให้</h3>
+        <ul class="ticks"><li>เลือกสิทธิและช่วงวันที่ ระบบดึงบิลที่ตรงเงื่อนไขเข้ารอบ บอกจำนวนก่อนยืนยัน</li><li><b>ตรวจก่อนส่ง</b>ตามกติกาของสิทธิ เช่น ส่งต่อข้ามจังหวัด ฉุกเฉิน โรคเรื้อรัง มะเร็ง บอกว่าบิลไหนน่าจะไม่ผ่าน</li><li>ปิดรอบแล้วบิลในรอบถูกล็อก กันการแก้ไขย้อนหลัง</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-step="4">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ขั้นที่ 4</p><h2>ส่งเบิก — ส่งตรงเข้าระบบกลาง หรือออกไฟล์</h2></div>
+    <div class="cols c2" style="gap:24px">
+      <div class="card g" style="padding:28px;gap:14px">
+        <div style="display:flex;gap:14px;align-items:center"><span class="ic g lg" data-i="send"></span><h3>บัตรทอง: ส่งเข้าระบบกลางได้ทันที</h3></div>
+        <p style="color:var(--ink);font-size:17px">กดปุ่มเดียว ระบบจัดทำข้อมูล <b>16 แฟ้ม</b> ตามมาตรฐานกระทรวงแล้วส่งให้เลย ไม่ต้องดาวน์โหลดไปอัปโหลดเอง</p>
+        <ul class="ticks"><li>“จองเคลม” ให้อัตโนมัติทุกชั่วโมง</li><li>ส่งไม่ผ่าน ลองใหม่ให้เองทุก 6 ชั่วโมง นานสูงสุด 7 วัน</li></ul>
+      </div>
+      <div class="card" style="padding:28px;gap:14px">
+        <div style="display:flex;gap:14px;align-items:center"><span class="ic lg" data-i="file"></span><h3>ผู้จ่ายรายอื่น: ออกไฟล์ได้ 9 รูปแบบ</h3></div>
+        <ul class="dots"><li>e-Claim (แบบเดิม · แบบใหม่ · ผ่าตัดวันเดียวกลับ)</li><li>ข้าราชการ ผู้ป่วยนอก / ผู้ป่วยใน</li><li>ประกันสังคม</li><li>กรุงเทพมหานคร และแบบเฉพาะอื่น ๆ</li></ul>
+        <p>ได้เป็นไฟล์บีบอัดพร้อมส่ง ตั้งชื่อตามเลขรอบ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-step="5">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ขั้นที่ 5</p><h2>รับผล — รู้ทันทีว่าบิลไหนติด และต้องแก้อะไร</h2></div>
+    <div class="cols c2" style="gap:30px;align-items:center">
+      <div style="display:grid;gap:12px">
+        <p class="small" style="font-size:16px">ผู้จ่ายส่งไฟล์ผลกลับมา นำเข้า HA.OS แล้วระบบจับคู่กับบิลให้เอง พร้อมประทับสถานะ</p>
+        <div class="status" style="color:var(--money)"><span class="stamp">A</span><p style="color:var(--ink)"><b>ผ่าน</b> — รอรับเงิน</p></div>
+        <div class="status" style="color:var(--warn)"><span class="stamp">V</span><p style="color:var(--ink)"><b>ผ่าน แต่ขอเอกสารเพิ่ม</b></p></div>
+        <div class="status" style="color:var(--stop)"><span class="stamp">C</span><p style="color:var(--ink)"><b>ข้อมูลไม่ถูกต้อง</b> — แก้แล้วส่งใหม่ได้</p></div>
+        <div class="status" style="color:var(--stop)"><span class="stamp">D</span><p style="color:var(--ink)"><b>ปฏิเสธการจ่าย</b> — พิจารณาอุทธรณ์</p></div>
+      </div>
+      <div class="card a" style="padding:30px;gap:16px">
+        <div style="display:flex;gap:14px;align-items:center"><span class="ic lg" data-i="star"></span><h3>จุดเด่นที่ควรเน้น</h3></div>
+        <ul class="ticks"><li>บิลที่ติด ระบบแสดง <b>“อธิบาย”</b> และ <b>“วิธีแก้ไข”</b> เป็นภาษาคน ไม่ใช่แค่รหัส</li><li>แก้เสร็จ ย้ายบิลเข้ารอบใหม่เพื่อส่งซ้ำได้ในไม่กี่คลิก</li><li>มีรายงานสรุปว่า<b>ติดเรื่องอะไรบ่อยที่สุด</b> ใช้แก้ที่ต้นเหตุ</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-step="6">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ขั้นที่ 6</p><h2>รับเงิน — ปิดยอดลูกหนี้ให้ตรงทุกใบ</h2></div>
+    <div class="ba">
+      <div class="old"><span class="k">แบบเดิม</span><h3>กระทบยอดในตารางคำนวณ</h3>
+        <ul class="cross"><li>เงินโอนมาเป็นก้อน ต้องไล่จับคู่ว่าเป็นของบิลไหน</li><li>ได้ไม่ครบ ไม่รู้ว่าขาดใบไหน เท่าไร</li></ul></div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="new"><span class="k">ใน HA.OS</span><h3>นำเข้ายอดโอน แล้วบันทึกรับเงิน</h3>
+        <ul class="ticks"><li>นำเข้ารายการโอนเงินของ สปสช. หรือผลของกรมบัญชีกลาง ระบบจับคู่กับบิลให้</li><li>บันทึกรับเงินหลายบิลในครั้งเดียว รองรับโอน เงินสด เช็ค บัตร คิวอาร์</li><li>ส่วนที่ผู้จ่ายตัดไม่จ่าย บันทึกเป็น “ส่วนขาด” ยอดค้างจึงตรงจริง</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · ระบบทำงานแทนตอนกลางคืน</p><h2>หนึ่งวันของระบบ โดยไม่ต้องมีคนกด</h2></div>
+    <div class="sky"></div>
+    <div class="clock">
+      <div class="tick"><span class="t">18:00</span><h3>ออกบิลรอบแรก</h3><p>ผู้ป่วยนอกที่มารับบริการก่อน 15:00 ของวันนี้</p></div>
+      <div class="tick"><span class="t">20:00</span><h3>ย้ายค่าใช้จ่ายตามโรค</h3><p>โรคที่โรงพยาบาลกำหนดให้เบิกสิทธิพิเศษ ระบบย้ายค่าใช้จ่ายไปให้ถูกสิทธิ</p></div>
+      <div class="tick"><span class="t">21:00</span><h3>ออกบิลรอบสอง</h3><p>เก็บผู้ป่วยที่มารับบริการถึง 18:00</p></div>
+      <div class="tick"><span class="t">01:00<small>วันถัดไป</small></span><h3>เก็บตกทั้งวัน</h3><p>ออกบิลที่เหลือของเมื่อวาน · ส่งข้อมูลบริการตรวจเลือดเบาหวาน-ความดัน และวัคซีน</p></div>
+    </div>
+    <div class="hourly"><span class="ic g lg" data-i="repeat"></span><div><h3 style="color:var(--money)">ทุกชั่วโมง</h3><p>ส่ง “จองเคลม” บัตรทองเข้าระบบกลาง ส่งไม่ผ่านลองใหม่ให้เอง · เช้ามาเจ้าหน้าที่ดูแค่รายการที่ยังค้าง</p></div></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · เชื่อมต่อภายนอก</p><h2>คุยกับหน่วยงานผู้จ่ายได้โดยตรง</h2></div>
+    <div class="cols c4">
+      <div class="card"><span class="ic" data-i="shield"></span><h3>สปสช.</h3><p>ยืนยันยอด / ปิดสิทธิ · ตรวจสถานะเคลมล่าสุด เช่น รับข้อมูล อนุมัติ โอนเงินแล้ว</p></div>
+      <div class="card"><span class="ic" data-i="hub"></span><h3>ระบบกลาง FDH</h3><p>จองเคลม · ส่ง 16 แฟ้ม · ส่งจำนวนผู้มารับบริการรายวัน</p></div>
+      <div class="card"><span class="ic" data-i="bank"></span><h3>กรมบัญชีกลาง</h3><p>ส่งไฟล์ข้าราชการ · นำผลกลับมาอัปเดตสถานะบิล</p></div>
+      <div class="card"><span class="ic" data-i="heart"></span><h3>บริการส่งเสริมสุขภาพ</h3><p>ส่งข้อมูลตรวจเลือดเบาหวาน-ความดัน วัคซีนเด็กและผู้ใหญ่ เพื่อเบิกค่าบริการ</p></div>
+    </div>
+    <div class="say"><span class="q">“</span><p><b>ไม่ต้องเปิดหลายเว็บ ไม่ต้องดาวน์โหลดแล้วอัปโหลดไฟล์เอง</b></p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 2 · มองเห็นภาพรวม</p><h2>หน้าสรุปสำหรับหัวหน้าและผู้บริหาร</h2></div>
+    <div class="cols c3">
+      <div class="card"><span class="ic" data-i="list"></span><h3>งานค้างรายวัน</h3><ul class="dots"><li>ผู้ป่วยที่ออกบิลแล้ว / ยังไม่ออก</li><li>ผู้ป่วยในที่จำหน่ายแล้วแต่ยังไม่ปิดบัญชี</li><li>คลิกแล้วไปแก้ที่รายนั้นได้เลย</li></ul></div>
+      <div class="card"><span class="ic" data-i="chart"></span><h3>ภาพรวมรายได้</h3><ul class="dots"><li>รายได้แยกตามกลุ่มสิทธิ</li><li>ยอดเรียกเก็บ → ส่งเบิก → ได้ผล</li><li>เทียบรายเดือน รายปี</li></ul></div>
+      <div class="card"><span class="ic" data-i="hourglass"></span><h3>เงินค้างรับ</h3><ul class="dots"><li>แยกอายุ 30 / 60 / 90 วัน และนานกว่านั้น</li><li>สัดส่วนบิลที่ผ่าน / ติด / ถูกปฏิเสธ</li></ul></div>
+    </div>
+    <p class="small">มีรายงานส่งฝ่ายบัญชีอีก 16 แบบ เช่น ลูกหนี้แยกตามสิทธิ ตามผังบัญชี และรายการที่ยังไม่ปิดบัญชี ออกเป็น Excel หรือ PDF</p>
+  </div>
+</section>
+
+<!-- ตอน 3 -->
+<section class="slide divider" data-nofoot>
+  <span class="big">03</span>
+  <p class="eyebrow">ตอน 3</p>
+  <h2>ใครได้อะไร</h2>
+  <p>คนในโรงพยาบาลแต่ละตำแหน่งเจ็บไม่เหมือนกัน ขายให้ตรงคน</p>
+  <div class="chips"><span>ผู้บริหาร</span><span>หัวหน้างาน</span><span>เจ้าหน้าที่</span><span>การเงิน</span><span>ฝ่ายบัญชี</span></div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 3 · ใครได้อะไร</p><h2>ประโยชน์แยกตามคนในโรงพยาบาล</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>ใคร</th><th>ปัญหาเดิม</th><th>ได้อะไรจาก HA.OS</th></tr></thead>
+      <tbody>
+        <tr><td>ผู้อำนวยการ / ผู้บริหาร</td><td>ไม่รู้ว่าเงินค้างรับเท่าไร จนสิ้นเดือน</td><td>เห็นยอดลูกหนี้ แยกสิทธิ แยกอายุ ได้ทุกเมื่อ</td></tr>
+        <tr><td>หัวหน้างานประกัน / เรียกเก็บ</td><td>ไม่รู้ว่าทีมติดงานตรงไหน</td><td>หน้าสรุปงานค้าง · รายงานสาเหตุที่ถูกปฏิเสธ</td></tr>
+        <tr><td>เจ้าหน้าที่เรียกเก็บ</td><td>ออกบิลด้วยมือ ทำไฟล์เอง ตามผลเอง</td><td>บิลออกเอง · ส่งตรงระบบกลาง · ผลกลับมาพร้อมวิธีแก้</td></tr>
+        <tr><td>การเงิน</td><td>ยอดที่ผู้ป่วยจ่ายกับยอดที่สิทธิจ่ายปนกัน</td><td>ระบบแยกให้ตั้งแต่คิดค่ารักษา</td></tr>
+        <tr><td>ฝ่ายบัญชี</td><td>กระทบยอดลูกหนี้ด้วยมือ</td><td>รายงานลูกหนี้ตามผังบัญชี · ทำเครื่องหมายว่าส่งบัญชีแล้ว กันนับซ้ำ</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 3 · จุดขายหลัก</p><h2>5 ประโยคที่อยากให้ลูกค้าจำได้</h2></div>
+    <div class="claims">
+      <div class="claim"><span class="no">1</span><p><b>บิลผู้ป่วยนอกออกเอง</b> ทุกเย็นและกลางคืน ไม่ต้องมีคนนั่งออกทีละใบ</p></div>
+      <div class="claim"><span class="no">2</span><p><b>ส่งบัตรทองตรงเข้าระบบกลางได้ในคลิกเดียว</b> ไม่ต้องดาวน์โหลด-อัปโหลดไฟล์</p></div>
+      <div class="claim"><span class="no">3</span><p><b>ตรวจก่อนส่ง</b> และเมื่อถูกตีกลับ บอกเหตุผลกับวิธีแก้เป็นภาษาคน</p></div>
+      <div class="claim"><span class="no">4</span><p><b>รองรับผู้จ่ายหลายราย</b> บัตรทอง ข้าราชการ ประกันสังคม อุบัติเหตุ ในระบบเดียว</p></div>
+      <div class="claim"><span class="no">5</span><p><b>ผู้บริหารเห็นเงินค้างรับทันที</b> แยกสิทธิ แยกอายุหนี้</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ตอน 4 -->
+<section class="slide divider" data-nofoot>
+  <span class="big">04</span>
+  <p class="eyebrow">ตอน 4</p>
+  <h2>ไปคุยกับลูกค้า</h2>
+  <p>เรื่องเล่าสำหรับสาธิต คำถามที่จะเจอ ขอบเขตคำโฆษณา และศัพท์ที่ต้องรู้</p>
+  <div class="chips"><span>เรื่องเล่าสาธิต</span><span>คำถามที่พบบ่อย</span><span>พูดได้ / ยังไม่ควรพูด</span><span>ตัวเลขที่ต้องเก็บ</span><span>คำศัพท์</span></div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 4 · เรื่องเล่าสำหรับสาธิต</p><h2>หนึ่งวันของ “คุณสมศรี” ผู้ป่วยบัตรทอง</h2>
+      <p class="small" style="margin-top:6px">ชื่อและตัวเลขเป็นตัวอย่างสำหรับเล่าเรื่องเท่านั้น</p></div>
+    <div class="ribbon">
+      <div class="rib"><span class="n">10:00</span><h3>มาตรวจ</h3><p>มาตรวจความดัน ค่ารักษา 1,850 บาท ใช้บัตรทอง ไม่ต้องจ่ายเอง</p></div>
+      <div class="rib"><span class="n">18:00</span><h3>บิลออกเอง</h3><p>ระบบออกใบเรียกเก็บ 1,850 บาท เข้ารอบของบัตรทอง</p></div>
+      <div class="rib"><span class="n">18:30</span><h3>จองเคลม</h3><p>ระบบส่งจองเคลมเข้าระบบกลาง ได้เลขยืนยันกลับมา</p></div>
+      <div class="rib"><span class="n">ปลายงวด</span><h3>ส่ง 16 แฟ้ม</h3><p>เจ้าหน้าที่ตรวจรอบ แล้วกดส่งเข้าระบบกลาง</p></div>
+      <div class="rib"><span class="n">ผลกลับ</span><h3>ผ่าน (A)</h3><p>นำเข้าผลตรวจ บิลของคุณสมศรีขึ้นป้าย “ผ่าน”</p></div>
+      <div class="rib"><span class="n">เงินเข้า</span><h3>ปิดยอด</h3><p>นำเข้ายอดโอน บันทึกรับเงิน ลูกหนี้รายนี้เป็นศูนย์</p></div>
+    </div>
+    <div class="say"><span class="q">“</span><p>จุดที่ลูกค้าจะว้าว: ตั้งแต่ 10:00 จนจองเคลมเสร็จ <b>ไม่มีใครต้องกดอะไรเลย</b></p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 4 · คำถามที่ลูกค้าถามบ่อย</p><h2>เตรียมคำตอบไว้ก่อน</h2></div>
+    <div class="cols c3" style="gap:16px">
+      <div class="card"><h3>ต้องเปลี่ยนวิธีทำงานเยอะไหม</h3><p>ขั้นตอนเหมือนที่ทำอยู่ เปิดบิล ส่ง รับผล รับเงิน แต่อยู่ในระบบเดียว และหลายขั้นระบบทำให้เอง</p></div>
+      <div class="card"><h3>ผู้ป่วยในออกบิลเองด้วยไหม</h3><p>ผู้ป่วยในยังให้เจ้าหน้าที่ตรวจและออกเอง เพราะยอดซับซ้อนกว่า ออกได้จากหน้าเดียว และออกเป็นชุดได้</p></div>
+      <div class="card"><h3>ส่ง สปสช. ไม่ผ่านทำอย่างไร</h3><p>ระบบลองใหม่ให้เองนานสูงสุด 7 วัน และมีหน้ารวมรายการที่ค้างให้กดส่งใหม่</p></div>
+      <div class="card"><h3>รองรับข้าราชการ ประกันสังคมไหม</h3><p>รองรับ ออกไฟล์ได้ 9 รูปแบบ และนำผลของกรมบัญชีกลางกลับเข้าระบบได้</p></div>
+      <div class="card"><h3>บิลถูกตีกลับต้องทำอย่างไร</h3><p>ระบบบอกเหตุผลและวิธีแก้ แก้ข้อมูลแล้วย้ายเข้ารอบใหม่เพื่อส่งซ้ำ</p></div>
+      <div class="card"><h3>ต้องพิมพ์ข้อมูลซ้ำไหม</h3><p>ไม่ต้อง งานเรียกเก็บต่อจากงานการเงินและเวชระเบียนของ HA.OS ข้อมูลไหลต่อกันเอง</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 4 · ขอบเขตคำโฆษณา</p><h2>พูดได้เต็มปาก กับ ยังไม่ควรพูด</h2></div>
+    <div class="cols c2" style="gap:24px">
+      <div class="card g" style="padding:28px;gap:16px"><div style="display:flex;gap:14px;align-items:center"><span class="ic g lg" data-i="check"></span><h3>พูดได้</h3></div>
+        <ul class="ticks"><li>ออกบิลผู้ป่วยนอกที่ใช้สิทธิให้อัตโนมัติวันละ 3 รอบ</li><li>ส่งบัตรทองเข้าระบบกลาง 16 แฟ้มได้จากในระบบ</li><li>ตรวจก่อนส่ง และบอกเหตุผล-วิธีแก้เมื่อถูกตีกลับ</li><li>ออกไฟล์เบิกได้ 9 รูปแบบ</li><li>เห็นเงินค้างรับแยกสิทธิและอายุหนี้</li></ul></div>
+      <div class="card r" style="padding:28px;gap:16px"><div style="display:flex;gap:14px;align-items:center"><span class="ic r lg" data-i="x"></span><h3>ยังไม่ควรพูด</h3></div>
+        <ul class="cross red"><li style="color:var(--ink)">“ไม่มีบิลตกหล่นเลย” — ผู้ป่วยในและผ่าตัดวันเดียวกลับยังต้องออกเอง</li><li style="color:var(--ink)">“ไม่ถูกปฏิเสธอีกแล้ว” — ระบบช่วยลด ไม่ได้รับประกัน</li><li style="color:var(--ink)">“ย้ายรอบทีละมาก ๆ ด้วยไฟล์ Excel” — อยู่ระหว่างปรับปรุง</li><li style="color:var(--ink)">ตัวเลขประหยัดเวลา หรือเงินเข้าเร็วขึ้น — จนกว่าจะมีข้อมูลจริง</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 4 · หลักฐานที่ยังต้องเก็บ</p><h2>ตัวเลขที่จะทำให้คำโฆษณาหนักแน่น</h2></div>
+    <div class="cols" style="grid-template-columns:1.3fr 1fr;gap:24px;align-items:start">
+      <div class="tbl"><table>
+        <thead><tr><th>ตัวเลข</th><th>วัดอย่างไร</th></tr></thead>
+        <tbody>
+          <tr><td>บิลที่ระบบออกเองต่อวัน</td><td>นับจากรอบอัตโนมัติ</td></tr>
+          <tr><td>สัดส่วนบิลที่ถูกตีกลับ</td><td>ก่อน เทียบ หลังใช้ระบบ</td></tr>
+          <tr><td>เวลาเตรียมส่งเบิกต่อรอบ</td><td>สอบถามทีมเรียกเก็บ</td></tr>
+          <tr><td>จำนวนวันจนเงินเข้า</td><td>วันออกบิล → วันรับเงิน</td></tr>
+          <tr><td>เงินค้างรับเกิน 90 วัน</td><td>จากรายงานอายุหนี้</td></tr>
+        </tbody>
+      </table></div>
+      <div class="card w" style="padding:28px;gap:14px"><div style="display:flex;gap:14px;align-items:center"><span class="ic w lg" data-i="alert"></span><h3>ข้อควรระวัง</h3></div>
+        <ul class="dots"><li>ใช้เฉพาะ<b>ข้อมูลจริง</b>จากโรงพยาบาลที่ใช้งานอยู่</li><li>ต้องได้<b>อนุญาตจากโรงพยาบาล</b>ก่อนเผยแพร่ชื่อหรือตัวเลข</li><li>ทีม HA.OS ช่วยดึงตัวเลขจากระบบให้ได้ แจ้งช่วงเวลาที่ต้องการ</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="body">
+    <div><p class="eyebrow">ตอน 4 · คำศัพท์ที่จะได้ยิน</p><h2>แปลศัพท์หน้างานเป็นภาษาคน</h2></div>
+    <dl class="gl">
+      <div><dt>ลูกหนี้</dt><dd>เงินค่ารักษาที่ส่งบิลไปแล้ว แต่ยังไม่ได้รับ</dd></div>
+      <div><dt>ใบเรียกเก็บ</dt><dd>บิลที่โรงพยาบาลส่งไปเก็บเงินจากผู้จ่าย</dd></div>
+      <div><dt>สิทธิการรักษา</dt><dd>บัตรทอง ประกันสังคม ข้าราชการ ฯลฯ บอกว่าใครจ่าย</dd></div>
+      <div><dt>รอบส่งเบิก</dt><dd>ชุดของบิลสิทธิเดียวกันที่ส่งพร้อมกัน</dd></div>
+      <div><dt>ปิดสิทธิ</dt><dd>ยืนยันยอดของการมารักษาครั้งนั้นกับ สปสช.</dd></div>
+      <div><dt>ปิดบัญชี</dt><dd>ล็อกไม่ให้เพิ่มค่าใช้จ่ายหลังส่งบิล</dd></div>
+      <div><dt>จองเคลม</dt><dd>แจ้ง สปสช. ล่วงหน้าว่าจะเบิกรายการนี้</dd></div>
+      <div><dt>FDH</dt><dd>ระบบกลางรับข้อมูลเบิกจ่ายของกระทรวงสาธารณสุข</dd></div>
+      <div><dt>16 แฟ้ม</dt><dd>ชุดข้อมูลมาตรฐานที่ใช้ส่งเบิกบัตรทอง</dd></div>
+      <div><dt>รหัสยืนยันตัวตน</dt><dd>เลขที่ได้เมื่อยืนยันตัวผู้ป่วยกับ สปสช. ต้องมีจึงเบิกผ่าน</dd></div>
+      <div><dt>ไฟล์ผลตรวจ</dt><dd>ผลจากผู้จ่ายว่าบิลไหนผ่านหรือติด</dd></div>
+      <div><dt>ติด C / ปฏิเสธ</dt><dd>ข้อมูลผิดต้องแก้ส่งใหม่ / ผู้จ่ายไม่จ่าย</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ปิดท้าย -->
+<section class="slide closing">
+  <div class="body">
+    <p class="eyebrow">สรุป</p>
+    <h1>ช่วยให้โรงพยาบาล<span>ได้เงินครบ เร็วขึ้น</span> และเห็นทุกบาทที่ยังค้าง</h1>
+    <div class="cols c3">
+      <div class="card"><span class="ic lg" data-i="moon"></span><h3>งานมือน้อยลง</h3><p>บิลออกเอง · จองเคลมเอง · ส่งตรงระบบกลาง</p></div>
+      <div class="card"><span class="ic lg" data-i="check"></span><h3>ผิดน้อยลง</h3><p>ตรวจก่อนส่ง · ผลกลับมาพร้อมวิธีแก้</p></div>
+      <div class="card"><span class="ic lg" data-i="eye"></span><h3>เห็นชัดขึ้น</h3><p>เงินค้างรับแยกสิทธิ แยกอายุ ดูได้ทันที</p></div>
+    </div>
+    <p style="color:#c6ccd3;font-size:16px">สอบถามรายละเอียดเพิ่มหรือขอสาธิตระบบ ติดต่อทีม HA.OS</p>
+  </div>
+</section>
+
+</div></div>
+
+<nav class="bar" aria-label="เลื่อนสไลด์">
+  <button id="prev" type="button">← ก่อนหน้า</button>
+  <span class="count" id="count">1 / 1</span>
+  <button id="next" type="button">ถัดไป →</button>
+</nav>
+
+<script>
+(function(){
+  var I={
+    book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 7h6"/>',
+    flow:'<rect x="3" y="4" width="6" height="6" rx="1.5"/><rect x="15" y="14" width="6" height="6" rx="1.5"/><path d="M9 7h4a2 2 0 0 1 2 2v5"/>',
+    user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8"/>',
+    shop:'<path d="M3 9l2-5h14l2 5"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M10 20v-6h4v6"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.5"/>',
+    hand:'<path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12"/><path d="M11 11V4.5a1.5 1.5 0 0 1 3 0V12"/><path d="M14 11.5V6a1.5 1.5 0 0 1 3 0v8a7 7 0 0 1-7 7h-.5a6 6 0 0 1-4.6-2.2L3 16.2a1.6 1.6 0 0 1 2.4-2.1L8 16"/>',
+    eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/>',
+    lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    stack:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+    send:'<path d="M4 12l16-8-6 16-3-6z"/><path d="M11 14l9-10"/>',
+    search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+    coin:'<circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M15 9.2c-.6-.8-1.7-1.2-3-1.2-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .9 3 2.1-1.3 2-3 2c-1.4 0-2.5-.5-3.1-1.3"/>',
+    file:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M10 13l2 2 2-2M12 10v5"/>',
+    star:'<path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.3L12 17.5 6.5 20.4l1-6.3L3 9.7l6.2-.9z"/>',
+    repeat:'<path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/>',
+    shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+    hub:'<circle cx="12" cy="12" r="3"/><circle cx="4" cy="5" r="2"/><circle cx="20" cy="5" r="2"/><circle cx="4" cy="19" r="2"/><circle cx="20" cy="19" r="2"/><path d="M5.5 6.5l4.3 3.7M18.5 6.5l-4.3 3.7M5.5 17.5l4.3-3.7M18.5 17.5l-4.3-3.7"/>',
+    bank:'<path d="M3 10l9-6 9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 21h18"/>',
+    heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M8 12h2l1-2 2 4 1-2h2"/>',
+    list:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+    chart:'<path d="M4 20V10M10 20V4M16 20v-7"/><path d="M2 20h20"/>',
+    hourglass:'<path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 10 5 10 9s-10 4-10 9"/><path d="M17 3c0 5-10 5-10 9s10 4 10 9"/>',
+    check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+    x:'<path d="M6 6l12 12M18 6L6 18"/>',
+    moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>'
+  };
+  [].forEach.call(document.querySelectorAll('[data-i]'),function(el){
+    el.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+(I[el.getAttribute('data-i')]||'')+'</svg>';
+  });
+  var STEPS=['เปิดบิล','ยืนยัน','รวมรอบ','ส่งเบิก','รับผล','รับเงิน'];
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  slides.forEach(function(s,k){
+    var st=s.getAttribute('data-step');
+    if(st){
+      var t=document.createElement('div'); t.className='track';
+      STEPS.forEach(function(name,j){var sp=document.createElement('span');sp.textContent=(j+1)+' · '+name;if(j+1<+st)sp.className='done';if(j+1===+st)sp.className='now';t.appendChild(sp);});
+      s.insertBefore(t,s.firstChild);
+    }
+    if(!s.hasAttribute('data-nofoot')){
+      var f=document.createElement('div'); f.className='foot';
+      f.innerHTML='<span class="brand">HA.<i>OS</i> · งานเรียกเก็บ</span><span class="pg">'+(k+1)+' / '+slides.length+'</span>';
+      s.appendChild(f);
+    }
+  });
+  var stage=document.getElementById('stage'), count=document.getElementById('count'), prog=document.getElementById('prog');
+  var prev=document.getElementById('prev'), next=document.getElementById('next');
+  var i=0;
+  var m=/^#s(\d+)$/.exec(location.hash||''); if(m){i=Math.min(slides.length-1,Math.max(0,parseInt(m[1],10)-1));}
+  function fit(){var s=Math.min((window.innerWidth-32)/1280,(window.innerHeight-84)/720);stage.style.transform='scale('+s+')';}
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(el,k){el.classList.toggle('is-on',k===i);});
+    count.textContent=(i+1)+' / '+slides.length;
+    prog.style.width=((i+1)/slides.length*100)+'%';
+    prev.disabled=i===0; next.disabled=i===slides.length-1;
+    try{history.replaceState(null,'','#s'+(i+1));}catch(e){}
+  }
+  prev.addEventListener('click',function(){show(i-1);});
+  next.addEventListener('click',function(){show(i+1);});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1);}
+    else if(e.key==='Home'){show(0);}else if(e.key==='End'){show(slides.length-1);}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)show(i+(dx<0?1:-1));x0=null;});
+  window.addEventListener('resize',fit);
+  fit(); show(i);
+})();
+</script>
