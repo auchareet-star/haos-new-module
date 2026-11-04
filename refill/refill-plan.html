@@ -33,6 +33,14 @@ code{font-family:Consolas,monospace;font-size:13px;background:var(--soft);border
 .nb:hover{background:var(--soft)}
 .nb.on{background:var(--green);color:#fff;font-weight:600}
 .nb .k{min-width:26px;font-size:12px;font-weight:700;opacity:.7}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 8px;padding-top:16px;border-top:1px solid var(--line)}
+.pgb{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px 14px;font-size:14px;text-align:left;cursor:pointer;min-width:0;max-width:45%}
+.pgb.pgnx{text-align:right;margin-left:auto}
+.pgb:hover:not(:disabled){border-color:var(--green);color:var(--green)}
+.pgb:disabled{opacity:.35;cursor:default}
+.pgb small{display:block;font-size:12px;color:var(--muted)}
+.pgb small .k{font-weight:700;margin-right:4px}
+.pgn{flex:1;text-align:center;font-size:12.5px;color:var(--muted);white-space:nowrap}
 
 .main{padding:16px 16px 48px;display:grid;gap:14px;align-content:start;min-width:0}
 .page{display:none;gap:14px}
@@ -144,9 +152,8 @@ ul.tight{margin:4px 0;padding-left:20px}
 ul.tight li{margin:2px 0}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}
 
-/* ===== HA.OS app frame: values copied from WebClient assets/sass/custom (theme ehr-12 default, ehr-13 black) ===== */
-.hx{--main:#4600BF;--soft:#E9DCFF;--dark:#24008A;--bdin:#9F8BC2;--hline:#ebedf2;background:#f3f3f3;color:#595d6e;font:16px/1.5 "Sarabun",sans-serif;border:1px solid #d9d9d9;border-radius:6px;overflow:hidden;position:relative}
-body.th-black .hx{--main:#000;--soft:#dedede;--dark:#000;--bdin:#000}
+/* ===== HA.OS app frame: values copied from WebClient assets/sass/custom (theme ehr-13 black) ===== */
+.hx{--main:#000;--soft:#dedede;--dark:#000;--bdin:#000;--hline:#ebedf2;background:#f3f3f3;color:#595d6e;font:16px/1.5 "Sarabun",sans-serif;border:1px solid #d9d9d9;border-radius:6px;overflow:hidden;position:relative}
 .hx *{box-sizing:border-box}
 .hx-top{height:56px;background:#fff;display:flex;align-items:center;gap:14px;padding:0 20px;border-bottom:1px solid var(--hline)}
 .hx-top .lg{width:34px;height:34px;border-radius:50%;background:var(--main);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:700}
@@ -270,19 +277,17 @@ select.fc{padding:0 8px}
 .rc .t{display:flex;gap:8px;align-items:center;font-weight:600;color:#434349;flex-wrap:wrap}
 .rc .s{font-size:14px;color:#959cb6}
 .hx-dim{filter:none}
-.themebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
-.themebar button{border:1px solid #ccc;background:#fff;border-radius:14px;padding:2px 12px;font-size:13.5px}
-.themebar button.on{border-color:#111;background:#111;color:#fff}
 </style>
 </head>
 <body>
 <div class="app">
 <nav class="nav">
   <div class="brand"><div class="blogo">HA.OS</div><div><b>ใบยา Refill OPD</b><span>แผนแก้โค้ด + Wireframe</span></div></div>
-  <div class="themebar">ธีม: <button class="on" data-t="purple">ม่วง (ค่าเริ่มต้น)</button><button data-t="black">ดำ</button></div>
   <h4>ภาพรวม</h4>
   <button class="nb on" data-p="p0"><span class="k">0</span>สรุป flow และกติกา</button>
   <button class="nb" data-p="pa"><span class="k">A</span>Activity Diagram</button>
+  <button class="nb" data-p="ps"><span class="k">S</span>Scenario (Case หลัก)</button>
+  <a class="nb" href="refill-prototype.html" style="text-decoration:none;color:var(--green);font-weight:700"><span class="k">▶</span>เล่น Scenario กับหน้าจอ</a>
   <button class="nb" data-p="p1"><span class="k">1</span>แผนจุดที่ต้องแก้</button>
   <h4>แพทย์ (เมนูสั่งยา OPD)</h4>
   <button class="nb" data-p="w1"><span class="k">W1</span>สั่งยา + ติ๊ก Refill</button>
@@ -469,6 +474,50 @@ select.fc{padding:0 8px}
   </table></div></div>
 </section>
 
+<!-- ================= PS SCENARIOS ================= -->
+<section class="page" id="ps">
+  <div class="guide"><h2>Scenario · Case หลักที่ไปได้จนจบ</h2>
+    <p><a href="refill-prototype.html" style="display:inline-block;background:var(--green);color:#fff;font-weight:700;text-decoration:none;border-radius:4px;padding:4px 14px">▶ เล่น Scenario ไปพร้อมหน้าจอ (refill-prototype.html)</a> กดตามทีละขั้นบนหน้าจอจำลองได้จริง ข้อมูลต่อเนื่องจากหน้าแพทย์ไปหน้าเภสัช</p>
+    <p>แต่ละ scenario ไล่จากจุดเริ่มต้นจนจบ ใช้ทั้งอธิบายหน้างานและเป็น test case ได้ · วันที่ตั้งต้น 02/11/2569 และวันที่คำนวณตามกติกาเดียวกับ W1</p>
+    <p style="font-size:14px"><a href="#sc-S1" style="color:var(--green);font-weight:600;text-decoration:none">S1</a> สั่ง Refill ปกติ ครบวงจร (ตัวอย่างจากที่ประชุม) · <a href="#sc-S2" style="color:var(--green);font-weight:600;text-decoration:none">S2</a> ยากินสั้นกว่าวันนัด · <a href="#sc-S3" style="color:var(--green);font-weight:600;text-decoration:none">S3</a> ไม่มีนัดครั้งถัดไป · <a href="#sc-S4" style="color:var(--green);font-weight:600;text-decoration:none">S4</a> ติ๊ก Refill แต่ยาไม่เกิน 2 เดือน · <a href="#sc-S5" style="color:var(--green);font-weight:600;text-decoration:none">S5</a> ยาหลายตัว ความยาวไม่เท่ากัน + ยาที่กรอกจำนวนเอง · <a href="#sc-S6" style="color:var(--green);font-weight:600;text-decoration:none">S6</a> คนไข้มาก่อนวัน Refill · <a href="#sc-S7" style="color:var(--green);font-weight:600;text-decoration:none">S7</a> แพทย์แก้ หรือยกเลิกใบ Refill ก่อนแปลง · <a href="#sc-S8" style="color:var(--green);font-weight:600;text-decoration:none">S8</a> กันผิดพลาดตอนแปลง · <a href="#sc-S9" style="color:var(--green);font-weight:600;text-decoration:none">S9</a> คนไข้ไม่มารับ / admit ระหว่างทาง / สิทธิเปลี่ยน</p></div>
+  <div class="port" id="sc-S1"><div class="ph"><h3>S1 · สั่ง Refill ปกติ ครบวงจร (ตัวอย่างจากที่ประชุม)</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> ยา Amlodipine 1×1 และ Metformin 1×2 นาน 6 เดือน (182 วัน) · นัดครั้งถัดไป 03/05/2570</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>02/11/2569 สั่งยา 2 ตัว เลือกนัด 03/05/2570 (จน. วัน = 182) แล้วติ๊ก Refill</td><td>preview: ยาที่ยาวที่สุด 182 วัน → 3 ใบ · 60 / 61 / 61 วัน · Refill 01/01/2570 (เลื่อนจาก อา.) และ 03/03/2570</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>กดบันทึก แล้วยืนยันใน W2</td><td>Amlodipine 60/61/61 เม็ด, Metformin 120/122/122 เม็ด · ผลรวม = จำนวนที่สั่ง</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#5d78ff;color:#fff">ระบบ</span></td><td>บันทึก</td><td>ใบที่ 1 = ใบสั่งยา + TB_FINANCES · R-1 (2/3) และ R-2 (3/3) สถานะรอแปลง ไม่มี Finance · พิมพ์ใบสั่งยา 1 ใบ + ใบ Refill 2 ใบ · แท็บใบ Refill มี 2 แถว</td></tr><tr><td class="n" style="width:36px">4</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช/การเงิน</span></td><td>คัดกรอง ชำระเงิน จ่ายยาใบที่ 1</td><td>flow เดิม</td></tr><tr><td class="n" style="width:36px">5</td><td style="white-space:nowrap"><span class="tag" style="background:#e0a100;color:#fff">คนไข้</span></td><td>01/01/2570 ลงทะเบียน (คลินิกไหนก็ได้)</td><td>visit วันนี้ ไม่ต้องพบแพทย์</td></tr><tr><td class="n" style="width:36px">6</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>กด &quot;ดึงใบ Refill&quot; (ตัวเลข 2) เลือก R-1 → นำเข้า → บันทึก</td><td>ใบสั่งยาใหม่ + Finance วันนี้ · แพทย์ = นพ.ผู้สั่งเดิม · TB_FINANCES.RefillId = R-1 · R-1 = แปลงแล้ว · ปุ่มเหลือ 1</td></tr><tr><td class="n" style="width:36px">7</td><td style="white-space:nowrap"><span class="tag" style="background:#e0a100;color:#fff">คนไข้</span></td><td>03/03/2570 มารับยาอีกครั้ง → เภสัชดึง R-2 → บันทึก → จ่ายยา</td><td>R-2 = แปลงแล้ว · ปุ่มเหลือ 0</td></tr><tr><td class="n" style="width:36px">8</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>03/05/2570 พบแพทย์ตามนัด</td><td>แท็บใบ Refill: R-1, R-2 แปลงแล้วทั้งคู่ · สั่งยารอบใหม่ได้</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> ได้ยาครบ 182 วัน ใน 3 ครั้ง คิดเงิน 3 ครั้งตามสิทธิของแต่ละวัน</div></div></div>
+  <div class="port" id="sc-S2"><div class="ph"><h3>S2 · ยากินสั้นกว่าวันนัด</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> ยากิน 3 เดือน (92 วัน) แต่นัดอีก 6 เดือน (03/05/2570)</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>เลือกนัด 03/05/2570 ระบบตั้ง จน. วัน = 182 ให้ยาทุกตัว แพทย์แก้เป็น 92 วัน แล้วติ๊ก Refill</td><td>preview: 2 ใบ · 30 / 62 วัน · Refill 02/12/2569 · ข้อความ &quot;ยาหมดก่อนวันนัด 90 วัน&quot;</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>บันทึก + ยืนยัน</td><td>ใบที่ 1 + R-1 (2/2) · ไม่มีใบว่าง</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>02/12/2569 ดึง R-1 → บันทึก → จ่ายยา</td><td>R-1 แปลงแล้ว</td></tr><tr><td class="n" style="width:36px">4</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>03/05/2570 พบแพทย์ตามนัด</td><td>ช่วง 02/02–03/05/2570 คนไข้ไม่มียา ตามที่แพทย์ตั้งใจ (ระบบแจ้งแล้วตอนสั่ง)</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> จำนวนใบคิดจากยา ไม่ใช่วันนัด</div></div></div>
+  <div class="port" id="sc-S3"><div class="ph"><h3>S3 · ไม่มีนัดครั้งถัดไป</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> ไม่เลือกนัด · สั่งยา 151 วัน (ประมาณ 5 เดือน)</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>ใส่ จน. วัน = 151 ให้ยา แล้วติ๊ก Refill</td><td>preview: 3 ใบ · 30 / 62 / 59 วัน (เศษ 1 เดือนอยู่ใบแรก) · Refill 02/12/2569, 02/02/2570 · ไม่มีข้อความเรื่องนัด</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>บันทึก + ยืนยัน</td><td>ใบที่ 1 + R-1 (2/3) + R-2 (3/3)</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>วันรับยาแต่ละรอบ ดึงทีละใบ → บันทึก</td><td>เหมือน S1</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> ใช้ได้โดยไม่ต้องมีนัด ไม่ต้องกรอกระยะเวลารวม</div></div></div>
+  <div class="port" id="sc-S4"><div class="ph"><h3>S4 · ติ๊ก Refill แต่ยาไม่เกิน 2 เดือน</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> สั่งยา 60 วัน</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>ติ๊ก Refill</td><td>preview: &quot;ไม่เกิน 2 เดือน ไม่ต้องซอยใบ&quot;</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>บันทึก</td><td>ใบสั่งยาปกติ 1 ใบ ไม่มีใบ Refill · ไม่เปิดหน้ายืนยัน W2</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> เหมือนการสั่งยาปกติทุกอย่าง</div></div></div>
+  <div class="port" id="sc-S5"><div class="ph"><h3>S5 · ยาหลายตัว ความยาวไม่เท่ากัน + ยาที่กรอกจำนวนเอง</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> Metformin 1×2 นาน 182 วัน · Amoxicillin 1×3 นาน 14 วัน · Insulin pen กรอกเอง 6 ด้าม</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>สั่งยาทั้ง 3 ตัว ติ๊ก Refill</td><td>3 ใบ (ตาม Metformin ที่ยาวที่สุด) · 60 / 61 / 61 วัน</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#5d78ff;color:#fff">ระบบ</span></td><td>ซอยจำนวน</td><td>Metformin 120/122/122 · Amoxicillin 42/0/0 (อยู่แค่ใบแรก ป้ายเทา) · Insulin 2/2/2 (แบ่งตามสัดส่วนวัน)</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>ตรวจใน W2 แล้วบันทึก</td><td>ใบ Refill 2/3 และ 3/3 ไม่มี Amoxicillin</td></tr><tr><td class="n" style="width:36px">4</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>ดึงใบตามรอบ</td><td>ได้เฉพาะยาที่อยู่ในใบนั้น</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> ยาสั้นไม่ทำให้เกิดใบเพิ่ม ยากรอกเองผลรวมเท่าที่สั่งเสมอ</div></div></div>
+  <div class="port" id="sc-S6"><div class="ph"><h3>S6 · คนไข้มาก่อนวัน Refill</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> มี R-1 (Refill 01/01/2570) และ R-2 (Refill 03/03/2570) รอแปลง</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#e0a100;color:#fff">คนไข้</span></td><td>15/12/2569 มารับยา (ก่อนวัน Refill 17 วัน)</td><td>ลงทะเบียนได้ตามปกติ</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>ดึงใบ เลือก R-1</td><td>ข้อความ &quot;มาก่อนวัน Refill 17 วัน · แปลงได้&quot; → บันทึกได้</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>(กรณีเลือก R-2 ทั้งที่ R-1 ยังรอแปลง)</td><td>เตือน &quot;Refill 2/3 ยังรอแปลงอยู่ ควรแปลงใบนั้นก่อน&quot; แต่ไม่บล็อก (ดุลพินิจเภสัช)</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> มาก่อนได้เสมอ และไม่มีวันหมดอายุ</div></div></div>
+  <div class="port" id="sc-S7"><div class="ph"><h3>S7 · แพทย์แก้ หรือยกเลิกใบ Refill ก่อนแปลง</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> R-2 (3/3) ยังรอแปลง · คนไข้มาพบแพทย์ก่อนวัน Refill</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>เปิดแท็บใบ Refill → แก้ไข R-2 ลด Metformin เหลือ 1×1 (61 เม็ด) → บันทึก → พิมพ์ซ้ำ</td><td>R-2 เป็นค่าใหม่ ใบที่พิมพ์ใหม่แทนใบเดิม</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>วันรับยา ดึง R-2</td><td>ได้ Metformin 61 เม็ดตามที่แก้</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#111;color:#fff">แพทย์</span></td><td>(อีกกรณี) กดยกเลิก R-2 ใส่เหตุผล</td><td>R-2 = ยกเลิก · ปุ่มดึงใบของเภสัชไม่นับ และเลือกไม่ได้</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> แก้หรือยกเลิกได้เฉพาะใบรอแปลง ใบที่แปลงแล้วต้องแก้ที่ order ปกติ</div></div></div>
+  <div class="port" id="sc-S8"><div class="ph"><h3>S8 · กันผิดพลาดตอนแปลง</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> R-1 รอแปลง</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช 2 เครื่อง</span></td><td>ดึง R-1 เข้าฟอร์มพร้อมกัน แล้วกดบันทึก</td><td>เครื่องแรกสำเร็จ · เครื่องที่สองขึ้น &quot;ใบ Refill R-1 ถูกแปลงแล้วเมื่อ ... โดย ...&quot; และไม่บันทึก</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>พบว่าแปลงผิดคน/ผิดใบ จึงลบใบสั่งยาที่แปลง</td><td>ใบ R-1 กลับเป็น &quot;รอแปลง&quot; ดึงใหม่ได้</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> ไม่มีการจ่ายยาซ้ำจากใบเดียว และแก้ความผิดพลาดได้</div></div></div>
+  <div class="port" id="sc-S9"><div class="ph"><h3>S9 · คนไข้ไม่มารับ / admit ระหว่างทาง / สิทธิเปลี่ยน</h3></div><div class="pb" style="display:grid;gap:8px">
+    <div><b>ตั้งต้น:</b> R-1, R-2 รอแปลง</div>
+    <div class="tw"><table><tr><th>#</th><th>ใคร</th><th>ทำอะไร</th><th>ผลที่ต้องได้</th></tr><tr><td class="n" style="width:36px">1</td><td style="white-space:nowrap"><span class="tag" style="background:#e0a100;color:#fff">คนไข้</span></td><td>admit ก่อนวัน Refill</td><td>ใบ Refill ไม่ถูกยกเลิก ค้างเป็นหลักฐาน</td></tr><tr><td class="n" style="width:36px">2</td><td style="white-space:nowrap"><span class="tag" style="background:#e0a100;color:#fff">คนไข้</span></td><td>ไม่มารับเลย</td><td>ใบค้าง &quot;รอแปลง&quot; ตลอด ไม่มีวันหมดอายุ · แพทย์เห็นในแท็บใบ Refill ตอนมาครั้งหน้า</td></tr><tr><td class="n" style="width:36px">3</td><td style="white-space:nowrap"><span class="tag" style="background:#0abb87;color:#fff">เภสัช</span></td><td>มารับหลังวัน Refill นานมาก ดึงใบที่ค้าง</td><td>ขึ้น &quot;เลยวัน Refill มา X วัน&quot; ให้ใช้ดุลพินิจ แปลงได้</td></tr><tr><td class="n" style="width:36px">4</td><td style="white-space:nowrap"><span class="tag" style="background:#e0a100;color:#fff">คนไข้</span></td><td>วันสั่งใช้สิทธิข้าราชการ วันรับยาเป็นบัตรทอง</td><td>ราคา/เบิกคิดตามสิทธิ visit วันรับยา · แพทย์ = ผู้สั่งเดิม</td></tr></table></div>
+    <div class="msg ok"><b>จบที่:</b> ไม่มีอะไรถูกยกเลิกอัตโนมัติ ค่าใช้จ่ายเกิดตามสิทธิของวันที่รับยาจริง</div></div></div>
+</section>
+
 <!-- ================= P1 PLAN ================= -->
 <section class="page" id="p1">
   <div class="guide"><h2>แผนจุดที่ต้องแก้</h2>
@@ -513,7 +562,7 @@ select.fc{padding:0 8px}
       <tr><td><span class="tag t-mod">แก้</span></td><td><code>log-drug.component.html</code> แถวนัดครั้งถัดไป (968-993)</td><td>เพิ่ม checkbox <b>Refill</b> (แสดงเฉพาะ OPD + module doctor) และแถบ preview ใบที่จะถูกซอย (W1) · ไม่มีช่องระยะเวลารวม เพราะคิดจากยาที่สั่ง</td></tr>
       <tr><td><span class="tag t-mod">แก้</span></td><td><code>log-drug.component.ts</code> <code>calculateDateCount/calculateDate/setQtyAllInList</code> (3177-3222)</td><td>เมื่อติ๊ก Refill ให้ <code>buildRefillSheets()</code> หาจำนวนวันของยาที่ยาวที่สุดใน <code>inputModel.drugList</code> (ไม่ใช้ <code>countAppointDate</code>) แล้วคำนวณวัน Refill ถอยหลังจากวันที่ยาตัวนั้นหมดทีละ 2 เดือน เลื่อนเสาร์/อาทิตย์เป็นศุกร์ ใบแรกได้เศษ ถ้าใบแรกสั้นกว่า 7 วันให้รวมเข้ากับใบถัดไป · เปรียบเทียบกับวันนัดเพื่อขึ้นข้อความแจ้งเท่านั้น · คำนวณใหม่ทุกครั้งที่เพิ่ม/ลบ/แก้ยา</td></tr>
       <tr><td><span class="tag t-mod">แก้</span></td><td><code>onSaveDrugOrder()</code> (1351)</td><td>แพทย์สั่งด้วย<b>จำนวนรวม</b> (duration ต่อยาตามที่แพทย์สั่ง ค่าเริ่มต้นมาจากวันนัดตามที่ <code>setQtyAllInList</code> ทำอยู่แล้ว) ถ้าติ๊ก Refill ให้เปิด dialog ยืนยัน (W2) แล้ว clone drugList ต่อใบ: ยาเม็ดตั้ง duration ของใบแล้วเรียก <code>onChangeCalculateQuantityDrugList</code> (3715) โดยยาแต่ละตัวเติมลงใบตามลำดับจนครบจำนวนวันที่สั่ง (ยาสั้นจึงอยู่แค่ใบแรก ๆ) ส่วนยาที่กรอกจำนวนเองแบ่งตามสัดส่วนวันแบบ largest remainder (ผลรวมเท่าจำนวนรวม) แล้ว <code>setDrugLabelList</code> (3362) และคิดราคาใหม่ของใบที่ 1 · ส่งใบที่ 1 เป็น drugList และใบที่เหลือใส่ <code>inputModel.refillSheets</code> หักยาเหลือ (drugLeft) เฉพาะใบที่ 1 เมื่อบันทึกสำเร็จให้พิมพ์ใบสั่งยา + ใบ Refill ทุกใบ</td></tr>
-      <tr><td><span class="tag t-new">ใหม่</span></td><td>ปุ่ม <b>ดึงใบ Refill</b> ข้าง Re-Med (html:344) <b>แสดงเฉพาะ module pharmacy</b> + <code>refill-select</code> dialog (โครงตาม <code>re-med</code>)</td><td>แสดงใบ Refill ของคนไข้ เลือกใบที่รอแปลงได้ 1 ใบ แล้ว map items เข้าฟอร์มแบบเดียวกับ <code>onOpenReMed</code> (2132-2165): ใช้ rightId/serviceId ของ visit นี้ แต่<b>แพทย์ = แพทย์ผู้สั่งในใบ Refill</b> (ต่างจาก Re-Med ที่ใช้แพทย์ของ visit) ตั้ง <code>refillId</code> ต่อรายการ แล้วผ่าน <code>submitDrugFromFormula</code> เพื่อคำนวณราคา จากนั้นเภสัชกดบันทึกปกติ (W5, W6)</td></tr>
+      <tr><td><span class="tag t-new">ใหม่</span></td><td>ปุ่ม <b>ดึงใบ Refill</b> ข้าง Re-Med (html:344) <b>แสดงเฉพาะ module pharmacy</b> + <code>refill-select</code> dialog (โครงตาม <code>re-med</code>)</td><td>แสดงใบ Refill ของคนไข้ เลือกใบที่รอแปลงได้ 1 ใบ แล้ว map items เข้าฟอร์มแบบเดียวกับ <code>onOpenReMed</code> (2132-2165): ใช้ rightId/serviceId ของ visit นี้ แต่<b>แพทย์ = แพทย์ผู้สั่งในใบ Refill</b> (ต่างจาก Re-Med ที่ใช้แพทย์ของ visit) ตั้ง <code>refillId</code> ต่อรายการ แล้วผ่าน <code>submitDrugFromFormula</code> เพื่อคำนวณราคา จากนั้นเภสัชกดบันทึกปกติ (W5, W6) · ปิดปุ่มเมื่อในฟอร์มมีรายการที่ยังไม่บันทึก (1 ใบ Refill = 1 ใบสั่งยา) · ตัวเลขบนปุ่ม = จำนวนใบรอแปลง</td></tr>
       <tr><td><span class="tag t-new">ใหม่</span></td><td><code>refill-manage</code> dialog</td><td>แพทย์ดู/แก้/ยกเลิก/พิมพ์ซ้ำใบ Refill (W4) เปิดจากแท็บใหม่ "ใบ Refill" ใน portlet แท็บ Lab Monitor/นัดหมาย/ใบสั่งยา (แสดงเฉพาะ module doctor)</td></tr>
       <tr><td><span class="tag t-mod">แก้</span></td><td>เมนูพิมพ์ (html:12-85) + <code>print-report.service.ts</code></td><td>เพิ่มรายการ "ใบสั่งยา Refill" ตาม pattern <code>Order_Drug_opd</code> (2128-2145)</td></tr>
       <tr><td><span class="tag t-mod">แก้</span></td><td><code>core/api</code> (models + drug.service)</td><td>gen client ใหม่สำหรับ endpoint และ model ที่เพิ่ม</td></tr>
@@ -539,19 +588,28 @@ select.fc{padding:0 8px}
   <div class="guide"><span class="who">แพทย์</span><h2 style="display:inline">W1 · สั่งยา OPD + ติ๊ก Refill</h2>
     <p>หน้าเดิม <code>medical/logsdrug</code> (<code>kt-log-drug</code>) ส่วนที่เพิ่มอยู่ในกรอบประสีชมพู <b>จำนวนใบคิดจากยาที่สั่งยาวที่สุด ไม่ได้คิดจากวันนัด</b></p>
     <p style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">ลองเปลี่ยน → จน. วันที่แพทย์สั่งยาหลัก: <select id="w1drug" class="in" style="width:auto;display:inline-block"><option value="appt">ตามวันนัด (ค่าเริ่มต้นของหน้าเดิม)</option><option value="92" selected>3 เดือน (92 วัน)</option><option value="151">5 เดือน (151 วัน)</option><option value="182">6 เดือน (182 วัน)</option></select> และเปลี่ยนวันนัดในหน้าจอ</p>
-    <p><b>แพทย์ไม่ต้องกดปุ่มเพิ่ม</b> ทำตามนี้: 1. สั่งยาตามปกติ 2. เลือก <b>นัดครั้งถัดไป</b> 3. ติ๊ก <b>☑ Refill</b> ระบบโชว์ว่าแบ่งได้กี่ใบ 4. กด <b>บันทึก</b> แล้วยืนยันใน W2 · แท็บใหม่ <b>ใบ Refill</b> ไว้ดูหรือแก้ใบที่ค้างอยู่ (W4)</p></div>
+    <p><b>แพทย์ไม่ต้องกดปุ่มเพิ่ม</b> ทำตามนี้: 1. สั่งยาตามปกติ 2. เลือก <b>นัดครั้งถัดไป</b> 3. ติ๊ก <b>☑ Refill</b> ระบบโชว์ว่าแบ่งได้กี่ใบ 4. กด <b>บันทึก</b> แล้วยืนยันใน W2 · แท็บใหม่ <b>ใบ Refill</b> (กดดูได้) แสดงใบ Refill ทุกใบของคนไข้ ใบที่สร้างวันนี้จะขึ้นหลังกดบันทึก ใช้ดูว่ามีใบค้างไหมก่อนสั่งยาซ้ำ และแก้/ยกเลิก/พิมพ์ซ้ำใบที่รอแปลง (W4)</p></div>
   <div class="hx">
     <div data-top="doctor"></div>
     <div class="hx-body">
       <div class="hx-tb"><button class="mb basic icon"><i class="las la-print i"></i></button><button class="mb save">บันทึก</button></div>
       <div class="hx-row">
         <div data-pc="doctor"></div>
-        <div class="kp"><div class="kp-h"><div class="ntabs"><span>Lab Monitor</span><span>นัดหมาย</span><span class="on">ใบสั่งยา</span><span class="nz" style="outline-offset:-2px">ใบ Refill</span></div></div>
-          <div class="kp-b">
+        <div class="kp"><div class="kp-h"><div class="ntabs" id="w1tabs"><span>Lab Monitor</span><span>นัดหมาย</span><span class="on" data-t="order" style="cursor:pointer">ใบสั่งยา</span><span class="nz" data-t="refill" style="outline-offset:-2px;cursor:pointer">ใบ Refill</span></div></div>
+          <div class="kp-b" id="w1tab-order">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="fc sel" style="width:180px">02/11/2569</div><button class="mb green icon"><i class="las la-plus i"></i></button></div>
             <div class="tsc"><table class="ts">
               <tr><th></th><th>Med.Order no.</th><th>วันที่สั่ง</th><th>ประเภทใบสั่งยา</th><th>สถานะ</th><th>ห้องตรวจ</th><th>แพทย์</th><th>ห้องยา</th><th class="n">จำนวนเงิน</th></tr>
               <tr><td colspan="9" style="text-align:center;color:#b4b8c9">ยังไม่มีใบสั่งยาของวันนี้</td></tr>
+            </table></div>
+          </div>
+          <div class="kp-b" id="w1tab-refill" style="display:none">
+            <div class="alert in">ใบ Refill ทั้งหมดของคนไข้ (ทุก visit) ใบที่สร้างวันนี้จะขึ้นหลังกด <b>บันทึก</b> · แก้ไข/ยกเลิก/พิมพ์ได้เฉพาะใบ <b>รอแปลง</b></div>
+            <div class="tsc"><table class="ts">
+              <tr><th>เลขที่</th><th>ครั้งที่</th><th>วันที่สั่ง</th><th>แพทย์ผู้สั่ง</th><th>วัน Refill</th><th class="n">วัน</th><th>สถานะ</th><th></th></tr>
+              <tbody id="w1rfnew"></tbody>
+              <tr><td>R-000052</td><td>3/3</td><td>10/01/2569</td><td>พญ.ทดสอบ รักษา</td><td>10/05/2569</td><td class="n">61</td><td><span class="chip wt">รอแปลง (ค้าง)</span></td><td style="white-space:nowrap"><button class="mb basic sm"><i class="las la-print"></i></button> <button class="mb red sm">ยกเลิก</button></td></tr>
+              <tr class="dim"><td>R-000087</td><td>2/2</td><td>05/06/2569</td><td>พญ.ทดสอบ รักษา</td><td>05/08/2569</td><td class="n">61</td><td><span class="chip ok">แปลงแล้ว 01/08/2569</span></td><td>Order 8812345</td></tr>
             </table></div>
           </div></div>
       </div>
@@ -689,7 +747,8 @@ select.fc{padding:0 8px}
 <!-- ================= W5 PHARMACY SELECT ================= -->
 <section class="page" id="w4">
   <div class="guide"><span class="who phx">เภสัช</span><h2 style="display:inline">W5 · คนไข้มารับยา Refill → เลือกใบ</h2>
-    <p>คนไข้ลงทะเบียนคลินิกไหนก็ได้ (ตัวอย่างนี้ <b>01/12/2569</b> มาก่อนวัน Refill 1 วัน) เภสัชเปิด <code>pharmacy/logdrugs</code> กดปุ่ม <b>ดึงใบ Refill</b> (ตัวเลขคือจำนวนใบที่รอแปลง) แล้วเลือกใบทางซ้าย</p></div>
+    <p>คนไข้ลงทะเบียนคลินิกไหนก็ได้ (ตัวอย่างนี้ <b>01/12/2569</b> มาก่อนวัน Refill 1 วัน) เภสัชเปิด <code>pharmacy/logdrugs</code> กดปุ่ม <b>ดึงใบ Refill</b> (ตัวเลขคือจำนวนใบที่รอแปลง) แล้วเลือกใบทางซ้าย</p>
+    <p><b>ปุ่มทำงานแบบนี้:</b> 1. แสดงใบ Refill ทุกใบของคนไข้ เลือกได้เฉพาะใบ "รอแปลง" 2. กดนำเข้า ยาเข้าฟอร์ม คิดราคา/สิทธิของวันนี้ แพทย์ = ผู้สั่งเดิม 3. <b>ยังไม่บันทึก</b> จนกว่าเภสัชกดบันทึก (W6) · ปุ่มใช้ไม่ได้ถ้าในฟอร์มมียาที่ยังไม่บันทึก · 1 ใบ Refill = 1 ใบสั่งยา</p></div>
   <div class="hx" style="min-height:900px">
     <div data-top="pharmacy"></div>
     <div class="hx-body">
@@ -725,7 +784,8 @@ select.fc{padding:0 8px}
 <!-- ================= W6 AFTER IMPORT ================= -->
 <section class="page" id="w5">
   <div class="guide"><span class="who phx">เภสัช</span><h2 style="display:inline">W6 · นำเข้าแล้ว → บันทึกตาม flow ปกติ</h2>
-    <p>รายการยามีป้าย <span class="chip rf">Refill 2/3</span> เมื่อกด <b>บันทึก</b> ระบบจะสร้างใบสั่งยาปกติ (เกิด Finance วันนี้) ใส่แพทย์ผู้สั่งเดิม และเปลี่ยนใบ R-000123 เป็น <b>แปลงแล้ว</b> จากนั้นพิมพ์ Sticker ส่ง robot และชำระเงินเหมือนเดิม</p></div>
+    <p>รายการยามีป้าย <span class="chip rf">Refill 2/3</span> เมื่อกด <b>บันทึก</b> ระบบจะสร้างใบสั่งยาปกติ (เกิด Finance วันนี้) ใส่แพทย์ผู้สั่งเดิม และเปลี่ยนใบ R-000123 เป็น <b>แปลงแล้ว</b> จากนั้นพิมพ์ Sticker ส่ง robot และชำระเงินเหมือนเดิม</p>
+    <p>ตัวเลขบนปุ่ม <b>ดึงใบ Refill</b> ลดจาก 3 เหลือ <b>2</b> (R-000124, R-000052) ถ้าจะดึงอีกใบในวันเดียวกัน ให้เปิดใบสั่งยาใหม่ (ปุ่ม +) ก่อน แล้วค่อยกดดึง</p></div>
   <div class="hx">
     <div data-top="pharmacy"></div>
     <div class="hx-body">
@@ -765,16 +825,30 @@ select.fc{padding:0 8px}
 
 <script>
 /* nav */
-document.querySelectorAll('.nb').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.nb').forEach(x=>x.classList.toggle('on',x===b));
+document.querySelectorAll('.nb[data-p]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.nb[data-p]').forEach(x=>x.classList.toggle('on',x===b));
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===b.dataset.p));
   window.scrollTo(0,0);
 }));
-/* theme: ehr-12 (purple) is the system default; ehr-13 (black) is selectable per user */
-document.querySelectorAll('.themebar button').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.themebar button').forEach(x=>x.classList.toggle('on',x===b));
-  document.body.classList.toggle('th-black',b.dataset.t==='black');
-}));
+
+/* pager: ก่อนหน้า / ถัดไป ท้ายทุกหน้า + ปุ่มลูกศร ← → */
+const NBS=[...document.querySelectorAll('.nb[data-p]')];
+const go=i=>{if(i>=0&&i<NBS.length)NBS[i].click();};
+NBS.forEach((b,i)=>{
+  const pg=document.getElementById(b.dataset.p); if(!pg)return;
+  const lab=x=>x?`<span class="k">${x.querySelector('.k').textContent}</span>${x.textContent.replace(x.querySelector('.k').textContent,'')}`:'';
+  const d=document.createElement('div'); d.className='pager';
+  d.innerHTML=`<button class="pgb" ${i?'':'disabled'} data-i="${i-1}"><i class="las la-arrow-left"></i> ก่อนหน้า${i?'<br><small>'+lab(NBS[i-1])+'</small>':''}</button>
+    <span class="pgn">${i+1} / ${NBS.length}</span>
+    <button class="pgb pgnx" ${i<NBS.length-1?'':'disabled'} data-i="${i+1}">ถัดไป <i class="las la-arrow-right"></i>${i<NBS.length-1?'<br><small>'+lab(NBS[i+1])+'</small>':''}</button>`;
+  d.querySelectorAll('.pgb').forEach(x=>x.addEventListener('click',()=>go(+x.dataset.i)));
+  pg.appendChild(d);
+});
+document.addEventListener('keydown',e=>{
+  if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  const i=NBS.findIndex(b=>b.classList.contains('on'));
+  if(e.key==='ArrowRight')go(i+1); else if(e.key==='ArrowLeft')go(i-1);
+});
 
 /* shared HA.OS chrome */
 const TOPS={
@@ -849,6 +923,7 @@ function renderW1(){
       ?`<div class="sh sr"><h4>ใบที่ ${i+1} · Refill ${i+1}/${N2}</h4><div class="d">วัน Refill ${fmt(s.start)} (${TH[s.start.getDay()]})${s.shift?` <span class="chip wt">เลื่อนจาก ${s.shift}</span>`:''}</div><div class="big">${s.days} วัน</div><span><span class="chip rf">ยังไม่คิดเงิน</span></span></div>`
       :`<div class="sh s1"><h4>ใบที่ 1 · ใบสั่งยา</h4><div class="d">${fmt(s.start)} → ${fmt(s.end)}</div><div class="big">${s.days} วัน</div><span><span class="chip ok">คิดเงินวันนี้</span></span></div>`).join('');
   }
+  document.getElementById('w1rfnew').innerHTML=multi?sh.slice(1).map((x,i)=>`<tr><td><span class="chip old">หลังบันทึก</span></td><td>${i+2}/${N2}</td><td>02/11/2569</td><td>นพ.ตัวอย่าง ใจดี</td><td>${fmt(x.start)}</td><td class="n">${x.days}</td><td><span class="chip wt">รอแปลง</span></td><td style="white-space:nowrap"><button class="mb green sm">แก้ไข</button> <button class="mb basic sm"><i class="las la-print"></i></button> <button class="mb red sm">ยกเลิก</button></td></tr>`).join(''):'';
   document.getElementById('w1dur').textContent=base;
   const shCols=multi?sh.map((x,i)=>i?`<th class="n">Refill ${i+1}/${N2}<div class="sub" style="color:inherit;opacity:.7">${fmt(x.start)} · ${x.days} วัน</div></th>`:`<th class="n">ใบที่ 1<div class="sub" style="color:inherit;opacity:.7">คิดเงินวันนี้ · ${x.days} วัน</div></th>`).join(''):'';
   document.getElementById('w1head').innerHTML=`<th></th><th>รายการยาเวชภัณฑ์</th><th class="n">จำนวนรวม</th>${shCols}<th>ห้องยา</th><th class="n">จำนวนเงิน${multi?'<div class="sub" style="color:inherit;opacity:.7">เฉพาะใบที่ 1</div>':''}</th><th class="n">เบิกได้</th><th class="n">เบิกไม่ได้</th>`;
@@ -862,6 +937,11 @@ function renderW1(){
 document.getElementById('w1appt').addEventListener('change',renderW1);
 document.getElementById('w1chk').addEventListener('change',renderW1);
 document.getElementById('w1drug').addEventListener('change',renderW1);
+document.querySelectorAll('#w1tabs [data-t]').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('#w1tabs [data-t]').forEach(x=>x.classList.toggle('on',x===t));
+  document.getElementById('w1tab-order').style.display=t.dataset.t==='order'?'':'none';
+  document.getElementById('w1tab-refill').style.display=t.dataset.t==='refill'?'':'none';
+}));
 renderW1();
 
 /* W5: pick a refill sheet */
